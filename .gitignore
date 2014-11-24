@@ -2,3 +2,4 @@
 *.pyc
 *Thumbs.db
 *.dblite
+samples/*/main/res/*
