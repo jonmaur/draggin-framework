@@ -1,0 +1,4 @@
+*.sublime-workspace
+*.pyc
+*Thumbs.db
+*.dblite

@@ -1,0 +1,218 @@
+# Copyright (c) 2014 Jon Maur
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+
+import os
+import os.path
+import glob
+import shutil
+from fnmatch import fnmatch
+import spritecompiler
+import tilemapcompiler
+import box2dcompiler
+
+env = Environment(tools = [])
+
+#the full path to this SConscript file
+this_sconscript_file = (lambda x:x).func_code.co_filename
+
+#TODO: fail condition
+# the assets base dir
+ASSETS_DIR = None
+if 'ASSETS_DIR' in ARGUMENTS:
+	ASSETS_DIR = ARGUMENTS["ASSETS_DIR"]
+# the base output dir
+RES_DIR = None
+if 'RES_DIR' in ARGUMENTS:
+	RES_DIR = ARGUMENTS["RES_DIR"]
+
+# matches anything in the list
+def fnmatchList(_name, _filters):
+
+	for f in _filters:
+		if fnmatch(_name, f):
+			# found one match so get out of here
+			return True
+
+	# no matches
+	return False
+
+###################################################################################################
+# sprite compiler builder
+sprites = []
+def spritesAction( target, source, env ):
+	spr = spritecompiler.Sprite()
+	spr.importImages(source)
+	spr.packTight(2)
+	spr.saveMoaiLua(os.path.splitext(str(target[0]))[0])
+
+spritesBuilder = Builder(action = spritesAction)
+env.Append(BUILDERS = {'spriteCompiler' : spritesBuilder})
+
+for root, dirs, files in os.walk(ASSETS_DIR+"/sprites"):
+	for d in dirs:
+		spritefiles = []
+		for r, dirs2, files2 in os.walk(os.path.join(root, d)):
+			for f in files2:
+				filename = os.path.join(r, f)
+
+				pattern_check = fnmatch(filename, "*.png")
+				if pattern_check:
+					#print filename
+					spritefiles.append(str(filename))
+
+		#print "directory "+str(d)
+
+		if len(spritefiles) > 0:
+			outputfiles = []
+			outputfiles.append(str(RES_DIR+"/sprites/" + os.path.basename(d) + ".lua"))
+			outputfiles.append(str(RES_DIR+"/sprites/" + os.path.basename(d) + ".png"))
+			sprites.append(env.spriteCompiler(outputfiles, spritefiles))
+
+if len(sprites) > 0:
+	Default(sprites)
+
+###################################################################################################
+# tilemap compiler builder
+tilemaps = []
+def tilemapsAction( target, source, env ):
+	print "tilemapsAction"
+	print source[0]
+	print target[0]
+	print target[1]
+	tm = tilemapcompiler.TileMap(str(source[0]), 16, 16)
+	tm.saveMoaiLua(os.path.splitext(str(target[0]))[0])
+
+tilemapsBuilder = Builder(action = tilemapsAction)
+env.Append(BUILDERS = {'tilemapCompiler' : tilemapsBuilder})
+
+for root, dirs, files in os.walk(ASSETS_DIR+"/tilemaps"):
+	for f in files:
+		tilemapfile = ""
+		filename = os.path.join(root, f)
+
+		pattern_check = fnmatch(filename, "*.png")
+		if pattern_check:
+			# print filename
+			tilemapfile = str(filename)
+
+		# print "directory "+str(root)
+
+		if tilemapfile != "":
+			outputfiles = []
+			outputfiles.append(str(RES_DIR+"/tilemaps/" + os.path.splitext(os.path.basename(filename))[0] + ".lua"))
+			outputfiles.append(str(RES_DIR+"/tilemaps/" + os.path.splitext(os.path.basename(filename))[0] + "_tileset.png"))
+			tilemaps.append(env.tilemapCompiler(outputfiles, tilemapfile))
+
+if len(tilemaps) > 0:
+	Default(tilemaps)
+
+###################################################################################################
+# box2d compiler builder
+svgs = []
+def svgsAction( target, source, env ):
+	print "svgsAction"
+	print source[0]
+	print target[0]
+
+	w = box2dcompiler.World(str(source[0]))
+	w.saveMoaiLua(os.path.splitext(str(target[0]))[0])
+
+svgsBuilder = Builder(action = svgsAction)
+env.Append(BUILDERS = {'box2dCompiler' : svgsBuilder})
+
+for root, dirs, files in os.walk(ASSETS_DIR+"/tilemaps"):
+	for f in files:
+		svgfile = ""
+		filename = os.path.join(root, f)
+
+		pattern_check = fnmatch(filename, "*.svg")
+		if pattern_check:
+			# print filename
+			svgfile = str(filename)
+
+		# print "directory "+str(root)
+
+		if svgfile != "":
+			outputfiles = []
+			outputfiles.append(str(RES_DIR+"/tilemaps/" + os.path.splitext(os.path.basename(filename))[0] + ".lua"))
+			svgs.append(env.box2dCompiler(outputfiles, svgfile))
+
+if len(svgs) > 0:
+	Default(svgs)
+
+
+###################################################################################################
+# audio files builder
+def audioAction( target, source, env ):
+	print "Copying "+str(target[0])
+	try:
+		shutil.copyfile(str(source[0]), str(target[0]))
+	except (IOError, os.error), why:
+		#easygui.exceptionbox(str(source[0])+", "+str(target[0])+" FAILED")
+		raw_input(str(source[0])+", "+str(target[0])+" FAILED: "+str(why))
+
+AudioBuilder = Builder(action = audioAction)
+env.Append(BUILDERS = {'audioCompiler' : AudioBuilder})
+
+sounds = []
+
+audioPath = ASSETS_DIR+"/audio"
+
+if os.path.exists(audioPath):
+	for item in os.listdir(audioPath):
+		if fnmatchList(item, ("*.mp3", "*.wav")):
+			fullPath = os.path.join(audioPath, item)
+
+			outputPath = os.path.join(RES_DIR+"/audio/", item)
+
+			sounds.append(env.audioCompiler(outputPath, fullPath))
+
+if len(sounds) > 0:
+	Default(sounds)
+
+###################################################################################################
+# font files builder
+def fontAction( target, source, env ):
+	print "Copying "+str(target[0])
+	try:
+		shutil.copyfile(str(source[0]), str(target[0]))
+	except (IOError, os.error), why:
+		#easygui.exceptionbox(str(source[0])+", "+str(target[0])+" FAILED")
+		raw_input(str(source[0])+", "+str(target[0])+" FAILED: "+str(why))
+
+FontBuilder = Builder(action = fontAction)
+env.Append(BUILDERS = {'fontCompiler' : FontBuilder})
+
+fonts = []
+
+fontPath = ASSETS_DIR+"/fonts"
+
+if os.path.exists(fontPath):
+	for item in os.listdir(fontPath):
+		if fnmatchList(item, ("*.fnt", "*.png", "*.ttf")):
+			fullPath = os.path.join(fontPath, item)
+
+			outputPath = os.path.join(RES_DIR+"/fonts/", item)
+
+			fonts.append(env.fontCompiler(outputPath, fullPath))
+
+if len(fonts) > 0:
+	Default(fonts)
