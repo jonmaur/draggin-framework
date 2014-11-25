@@ -92,7 +92,7 @@ function Sprite.new(_strSprite)
 		self.anim:setSpeed(_speed)
 		self.anim:start()
 
-		self.anim:setListener(_mode, function() sprite.sig_animationcomplete:emit() end)
+		self.anim:setListener(MOAITimer.EVENT_TIMER_END_SPAN, function() sprite.sig_animationcomplete:emit() end)
 
 
 		currAnimationName = _strAnim
