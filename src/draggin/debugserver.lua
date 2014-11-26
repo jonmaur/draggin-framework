@@ -36,8 +36,6 @@ THE SOFTWARE.
 -- end
 
 local Socket = require "socket"
-local TableExt = require "draggin/tableext"
-
 
 local DebugServer = {}
 
