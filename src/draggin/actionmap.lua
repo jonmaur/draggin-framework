@@ -166,11 +166,13 @@ function ActionMap.new()
 	-- unmapped actions are logged but ignored.
 	-- this is how a virtual gamepad might work.
 	-- @param _action string, the action to inject
-	-- @param _state the state to give it
+	-- @param _state optional, the state to give it, defaults to "down"
 	function map:injectAction(_action, _state)
 		if not enabled then
 			return
 		end
+
+		_state = _state or "down"
 
 		local act = actionMap[_action]
 		if act then
