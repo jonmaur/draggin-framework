@@ -13,7 +13,7 @@ This module helps you setup a display with a "virtual res" stretched across the 
 with black bars to help keep the original aspect ratio
 
 ##Debug Server
-Simple server which accepts telnet connections. Sends print outs to the client.
+Simple server which accepts up to 4 telnet connections. Can send strings to the clients.
 Executes lua code sent by the client.
 
 ##Font Manager

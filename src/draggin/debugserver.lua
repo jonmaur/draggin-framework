@@ -23,6 +23,18 @@ THE SOFTWARE.
 
 -- TODO: handle clients disconnecting properly!
 
+-- Here is an example of how to send all prints to all the clients
+-- local realPrint = print
+-- print = function (...)
+-- 	realPrint(...)
+-- 	local msg = ""
+-- 	local args = { ... }
+-- 	for k, v in pairs(args) do
+-- 		msg = msg..tostring(v)
+-- 	end
+-- 	debugserver:send(msg.."\r\n")
+-- end
+
 local Socket = require "socket"
 local TableExt = require "draggin/tableext"
 
