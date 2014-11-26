@@ -20,6 +20,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ]]
 
+
+-- TODO: handle clients disconnecting properly!
+
 local Socket = require "socket"
 local TableExt = require "draggin/tableext"
 
@@ -33,6 +36,7 @@ function DebugServer.new()
 
 	local dbServer = {}
 
+	local maxClients = 4
 	local clients = {}
 	local clientThreads = {}
 
@@ -76,31 +80,27 @@ function DebugServer.new()
 			local client = server:accept()
 
 			if client then
-				if TableExt.empty(clients) then
-					print("Accepted new client", 1)
-					clients[1] = client
+				for i = 1, maxClients do
+					if clients[i] == nil then
+						print("Accepted new client number", i)
+						clients[i] = client
 
-					client:settimeout(0)
+						client:settimeout(0)
 
-					clientThreads[1] = MOAIThread.new()
-					clientThreads[1]:run(handleClient, client)
-				else
-					for k, v in pairs(clients) do
-						if v == nil then
-							print("Accepted new client", k)
-							clients[k] = client
-
-							client:settimeout(0)
-
-							clientThreads[k] = MOAIThread.new()
-							clientThreads[k]:run(handleClient, client)
-							break
-						end
+						clientThreads[i] = MOAIThread.new()
+						clientThreads[i]:run(handleClient, client)
+						break
 					end
 				end
 			end
 
 			coroutine.yield()
+		end
+	end
+
+	function dbServer:send(_msg)
+		for _, client in pairs(clients) do
+			client:send(_msg)
 		end
 	end
 
