@@ -512,6 +512,7 @@ class Sprite:
 			luaFile.write('spriteData.bounds.'+k+' = {'+str(bx)+', '+str(by)+', '+str(v.frames[0].w+bx)+', '+str(v.frames[0].h+by)+'}\n\n\n')
 
 
+		luaFile.write('spriteData.texture = tex\n')
 		luaFile.write('spriteData.deck = deck\n\n')
 		luaFile.write('return spriteData\n')
 

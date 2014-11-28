@@ -121,6 +121,8 @@ function TileMap.new(_name, _viewport, _camera, _xParallax, _yParallax)
 		tilemap.layer = layer
 	end
 
+	tilemap.texture = tex
+
 	return tilemap
 end
 

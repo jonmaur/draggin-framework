@@ -23,6 +23,13 @@ THE SOFTWARE.
 local SpriteManager = {}
 local spriteData = {}
 
+-- TODO: Figure out a better way to do this so filtering can be set per sprite, maybe
+local defultFilter = MOAITexture.GL_NEAREST
+
+function SpriteManager.setDefaultFilter(_filter)
+	defultFilter = _filter
+end
+
 --- Get sprite data.
 -- Keeps track of assets so you only load them once.
 -- @param _strSpriteData the name of the sprite data to get.
@@ -36,10 +43,12 @@ function SpriteManager.getSpriteData(_strSpriteData)
 
 	if spriteData[_strSpriteData] == nil then
 		-- load the sheet
-		print("Creating new spritesheet:", _strSpriteData)
+		print("Creating new spritesheet:", _strSpriteData, defultFilter)
 
 		data = dofile("res/sprites/".._strSpriteData..".lua")
 		spriteData[_strSpriteData] = data
+
+		data.texture:setFilter(defultFilter)
 
 	else
 		data = spriteData[_strSpriteData]
