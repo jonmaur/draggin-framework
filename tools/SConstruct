@@ -178,7 +178,7 @@ audioPath = ASSETS_DIR+"/audio"
 
 if os.path.exists(audioPath):
 	for item in os.listdir(audioPath):
-		if fnmatchList(item, ("*.mp3", "*.wav")):
+		if fnmatchList(item, ("*.mp3", "*.ogg", "*.wav")):
 			fullPath = os.path.join(audioPath, item)
 
 			outputPath = os.path.join(RES_DIR+"/audio/", item)
