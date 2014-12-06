@@ -25,6 +25,11 @@ THE SOFTWARE.
 
 local FontManager = require "draggin/fontmanager"
 
+local Display = require "draggin/display"
+local virtualWidth = Display.virtualWidth
+local virtualHeight = Display.virtualHeight
+
+
 
 local TextBox = {}
 
@@ -96,10 +101,24 @@ function TextBox.new(_strFont, _fontSize, _bShadow)
 		txtNormal:setLoc(x, y)
 	end
 
+	--- Seek to this location.
+	-- Same as MOAITextBox:setLoc()
+	-- @param x the x position
+	-- @param y the y position
+	-- @param _secs the number of seconds to take
+	-- @param _ease the MOAIEaseType to use
+	function txt:seekLoc(x, y, _secs, _ease)
+
+		_ease = _ease or MOAIEaseType.SMOOTH
+
+		txtShadow:seekLoc(x + shadowOffsetX, y + shadowOffsetY, _secs, _ease)
+		return txtNormal:seekLoc(x, y, _secs, _ease)
+	end
+
 	--- Set the rectangle area to render text in.
 	-- Same as MOAITextBox:setRect()
-	-- @param y1 the y1 top left x position
-	-- @param x1 the x1 top left y position
+	-- @param x1 the x1 top left x position
+	-- @param y1 the y1 top left y position
 	-- @param x2 the x2 bottom right x position
 	-- @param y2 the y2 bottom right y position
 	function txt:setRect(x1, y1, x2, y2)
@@ -107,6 +126,27 @@ function TextBox.new(_strFont, _fontSize, _bShadow)
 		txtShadow:setRect(x1, y1, x2, y2)
 		txtNormal:setRect(x1, y1, x2, y2)
 		txt:setLoc(txtNormal:getLoc())
+	end
+
+	--- Helper for setting up the position, area, and anchor point.
+	-- Anchor point is normalized 0 to 1 such that 0 is anchored on the left of the rect
+	-- and 1 is the right. This affects the rect's positioning.
+	-- @param x the x position
+	-- @param y the y position
+	-- @param w the width of the rect
+	-- @param h the height of the rect
+	-- @param _anchorx a nomalized x anchor point
+	function txt:setDimensions(x, y, w, h, _anchorx, _anchory)
+
+		local x1 = -(w * _anchorx)
+		local y1 = -(h * _anchory)
+
+		local x2 = x1 + w
+		local y2 = y1 + h
+
+		txtShadow:setRect(x1, y1, x2, y2)
+		txtNormal:setRect(x1, y1, x2, y2)
+		txt:setLoc(x, y)
 	end
 
 	--- Set the alignment of this instance.
@@ -246,9 +286,14 @@ function TextBox.new(_strFont, _fontSize, _bShadow)
 	-- @param x the target x scale
 	-- @param y the target y scale
 	-- @param _secs the number of seconds to reach the target scale
-	function txt:seekScl(x, y, _secs)
-		txtShadow:seekScl(x, y, _secs)
-		txtNormal:seekScl(x, y, _secs)
+	-- @param _ease optional, the ease type to use, defaults to MOAIEaseType.SMOOTH
+	-- @return the MOAIAction object of the normal text
+	function txt:seekScl(x, y, _secs, _ease)
+
+		_ease = _ease or MOAIEaseType.SMOOTH
+
+		txtShadow:seekScl(x, y, _secs, _ease)
+		return txtNormal:seekScl(x, y, _secs, _ease)
 	end
 
 	--- Set the text reveal speed.
