@@ -160,6 +160,36 @@ if len(svgs) > 0:
 
 
 ###################################################################################################
+# RUBE files builder
+def rubeAction( target, source, env ):
+	print "Copying "+str(target[0])
+	try:
+		shutil.copyfile(str(source[0]), str(target[0]))
+	except (IOError, os.error), why:
+		#easygui.exceptionbox(str(source[0])+", "+str(target[0])+" FAILED")
+		raw_input(str(source[0])+", "+str(target[0])+" FAILED: "+str(why))
+
+RubeBuilder = Builder(action = rubeAction)
+env.Append(BUILDERS = {'rubeCompiler' : RubeBuilder})
+
+rubes = []
+
+rubePath = ASSETS_DIR+"/rube"
+
+if os.path.exists(rubePath):
+	for item in os.listdir(rubePath):
+		if fnmatch(item, "*.json"):
+			fullPath = os.path.join(rubePath, item)
+
+			outputPath = os.path.join(RES_DIR+"/rube/", item)
+
+			rubes.append(env.rubeCompiler(outputPath, fullPath))
+
+if len(rubes) > 0:
+	Default(rubes)
+
+
+###################################################################################################
 # audio files builder
 def audioAction( target, source, env ):
 	print "Copying "+str(target[0])
