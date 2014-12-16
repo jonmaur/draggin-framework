@@ -4,3 +4,4 @@
 *Thumbs.db
 *.dblite
 samples/*/main/res/*
+*.rube-backups
