@@ -74,6 +74,30 @@ local function printtable(t, _indent)
 end
 TableExt.print = printtable
 
+--- Print the contents of the table to a string
+-- @param t the table to print out to a string
+-- @param _indent, optional, the number of leading tabs to print
+-- @param _str, optional, the _str used in recursion
+local function tabletostring(t, _indent, _str)
+	_indent = _indent or 1
+	_str = _str or ""
+
+	local tabs = ""
+	for i = 1, _indent do
+		tabs = tabs.." "
+	end
+
+	for k, v in pairs(t) do
+		_str = _str..tabs.."["..tostring(k).."] = "..tostring(v).."\n"
+		if type(v) == "table" then
+			_str = _str..tabletostring(v, _indent + 1, _str)
+		end
+	end
+
+	return _str
+end
+TableExt.tostring = tabletostring
+
 --- Merge tables in place.
 -- @param t1 the table to accept the merge with t2
 -- @param t2 the table to merge into t1, remains unchanged

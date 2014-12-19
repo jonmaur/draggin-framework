@@ -1,0 +1,324 @@
+
+{
+  "activeScript" : "float pixelsPerUnit = 45;\nimage[] imgs = getSelectedImages();\nfor (uint i = 0; i < imgs.length; i++)\n\timgs[i].setHeight( imgs[i].getPixelHeight() / pixelsPerUnit );",
+  "collisionbitplanes" : 
+  {
+    "names" : 
+    [
+      "bitplane1",
+      "bitplane2",
+      "bitplane3",
+      "bitplane4",
+      "bitplane5",
+      "bitplane6",
+      "bitplane7",
+      "bitplane8",
+      "bitplane9",
+      "bitplane10",
+      "bitplane11",
+      "bitplane12",
+      "bitplane13",
+      "bitplane14",
+      "bitplane15",
+      "bitplane16",
+      "bitplane17",
+      "bitplane18",
+      "bitplane19",
+      "bitplane20",
+      "bitplane21",
+      "bitplane22",
+      "bitplane23",
+      "bitplane24",
+      "bitplane25",
+      "bitplane26",
+      "bitplane27",
+      "bitplane28",
+      "bitplane29",
+      "bitplane30",
+      "bitplane31",
+      "bitplane32"
+    ]
+  },
+  "metaworld" : 
+  {
+    "allowSleep" : true,
+    "autoClearForces" : true,
+    "continuousPhysics" : true,
+    "exportOptions" : 
+    {
+      "compactCommonFloats" : true,
+      "compactZeroVecs" : true,
+      "saveFullPathForImages" : false,
+      "saveFullPathForSamplerOutput" : false,
+      "saveImagePathsRelativeToRUBEFile" : false,
+      "saveSamplerOutputPathsRelativeToRUBEFile" : false,
+      "useHumanReadableFloats" : true,
+      "usePrettyPrint" : true
+    },
+    "gravity" : 
+    {
+      "x" : 0,
+      "y" : -10
+    },
+    "metabody" : 
+    [
+      
+      {
+        "angle" : 0,
+        "angularVelocity" : 0,
+        "awake" : true,
+        "fixture" : 
+        [
+          
+          {
+            "density" : 1,
+            "friction" : 0.2,
+            "id" : 1,
+            "name" : "ground_fixture",
+            "shapes" : 
+            [
+              
+              {
+                "type" : "line"
+              }
+            ],
+            "vertices" : 
+            {
+              "x" : [ -3.652366161346436, 11.73659038543701 ],
+              "y" : [ 0.0, 0.0 ]
+            }
+          }
+        ],
+        "id" : 1,
+        "linearVelocity" : 0,
+        "name" : "ground_body",
+        "position" : 
+        {
+          "x" : 0.03842425346374512,
+          "y" : -2.925325870513916
+        },
+        "type" : "static"
+      },
+      
+      {
+        "angle" : 0,
+        "angularVelocity" : 0,
+        "awake" : true,
+        "fixture" : 
+        [
+          
+          {
+            "density" : 1,
+            "friction" : 5,
+            "id" : 2,
+            "name" : "rearwheel_fixture",
+            "shapes" : 
+            [
+              
+              {
+                "radius" : 0.1806835383176804,
+                "type" : "circle"
+              }
+            ],
+            "vertices" : 
+            {
+              "x" : [ 0.0 ],
+              "y" : [ 0.0 ]
+            }
+          }
+        ],
+        "id" : 2,
+        "linearVelocity" : 0,
+        "massData-I" : 0.001674149534665048,
+        "massData-mass" : 0.1025621369481087,
+        "name" : "rearwheel_body",
+        "position" : 
+        {
+          "x" : -1.098548531532288,
+          "y" : -0.6054804325103760
+        },
+        "type" : "dynamic"
+      },
+      
+      {
+        "angle" : 0,
+        "angularVelocity" : 0,
+        "awake" : true,
+        "fixture" : 
+        [
+          
+          {
+            "density" : 1,
+            "friction" : 5,
+            "id" : 3,
+            "name" : "frontwheel_fixture",
+            "shapes" : 
+            [
+              
+              {
+                "radius" : 0.1221103146672249,
+                "type" : "circle"
+              }
+            ],
+            "vertices" : 
+            {
+              "x" : [ 0.0 ],
+              "y" : [ 0.0 ]
+            }
+          }
+        ],
+        "id" : 3,
+        "linearVelocity" : 0,
+        "massData-I" : 0.0003492442774586380,
+        "massData-mass" : 0.04684406891465187,
+        "name" : "frontwheel_body",
+        "position" : 
+        {
+          "x" : 1.237791776657104,
+          "y" : -0.6004207134246826
+        },
+        "type" : "dynamic"
+      },
+      
+      {
+        "angle" : 0,
+        "angularVelocity" : 0,
+        "awake" : true,
+        "fixture" : 
+        [
+          
+          {
+            "density" : 1,
+            "friction" : 0.2,
+            "id" : 5,
+            "name" : "chasis_fixture",
+            "shapes" : 
+            [
+              
+              {
+                "type" : "polygon"
+              }
+            ],
+            "vertices" : 
+            {
+              "x" : [ 1.527681589126587, -1.314167141914368, -1.308086156845093 ],
+              "y" : [ -0.5290428400039673, 0.01950767636299133, -0.5485508441925049 ]
+            }
+          }
+        ],
+        "id" : 5,
+        "linearVelocity" : 0,
+        "massData-I" : 0.5820237398147583,
+        "massData-center" : 
+        {
+          "x" : -0.3648572564125061,
+          "y" : -0.3526953458786011
+        },
+        "massData-mass" : 0.8054999709129333,
+        "name" : "chasis_body",
+        "position" : 0,
+        "type" : "dynamic"
+      }
+    ],
+    "metaimage" : 
+    [
+      
+      {
+        "aspectScale" : 1,
+        "body" : 5,
+        "center" : 0,
+        "file" : "../sprites/cars/bluebody1.png",
+        "filter" : 1,
+        "flip" : false,
+        "id" : 1,
+        "name" : "chasis_image",
+        "opacity" : 0.5,
+        "scale" : 1.777777791023254
+      },
+      
+      {
+        "aspectScale" : 1,
+        "body" : 2,
+        "center" : 0,
+        "file" : "../sprites/cars/bluerearwheel1.png",
+        "filter" : 1,
+        "flip" : false,
+        "id" : 2,
+        "name" : "rearwheel_image",
+        "opacity" : 0.5,
+        "scale" : 0.4
+      },
+      
+      {
+        "aspectScale" : 1,
+        "body" : 3,
+        "center" : 0,
+        "file" : "../sprites/cars/bluefrontwheel1.png",
+        "filter" : 1,
+        "flip" : false,
+        "id" : 3,
+        "name" : "frontwheel_image",
+        "opacity" : 0.5,
+        "scale" : 0.2666666805744171
+      }
+    ],
+    "metajoint" : 
+    [
+      
+      {
+        "anchorA" : 
+        {
+          "x" : -1.098549962043762,
+          "y" : -0.6054800152778625
+        },
+        "anchorB" : 0,
+        "bodyA" : 5,
+        "bodyB" : 2,
+        "collideConnected" : false,
+        "enableMotor" : true,
+        "id" : 2,
+        "localAxisA" : 
+        {
+          "x" : 0,
+          "y" : 1
+        },
+        "maxMotorTorque" : 10,
+        "motorSpeed" : -6.283185482025146,
+        "name" : "rearwheel_joint",
+        "springDampingRatio" : 0.7,
+        "springFrequency" : 4,
+        "type" : "wheel"
+      },
+      
+      {
+        "anchorA" : 
+        {
+          "x" : 1.237789988517761,
+          "y" : -0.6004210114479065
+        },
+        "anchorB" : 0,
+        "bodyA" : 5,
+        "bodyB" : 3,
+        "collideConnected" : false,
+        "enableMotor" : false,
+        "id" : 3,
+        "localAxisA" : 
+        {
+          "x" : 0,
+          "y" : 1
+        },
+        "maxMotorTorque" : 0,
+        "motorSpeed" : 0,
+        "name" : "frontwheel_joint",
+        "springDampingRatio" : 0.7,
+        "springFrequency" : 4,
+        "type" : "wheel"
+      }
+    ],
+    "positionIterations" : 3,
+    "stepsPerSecond" : 60.0,
+    "subStepping" : false,
+    "velocityIterations" : 8,
+    "warmStarting" : true
+  }
+}

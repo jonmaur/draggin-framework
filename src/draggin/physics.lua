@@ -22,14 +22,13 @@ THE SOFTWARE.
 
 -- Box2D Physics!
 
-
+local TextBox = require "draggin/textbox"
+local Display = require "draggin/display"
 local TableExt = require "draggin/tableext"
+
 
 local Physics = {}
 
-
-local worldOffsetX = 1920/8
-local worldOffsetY = 1080/8
 
 function Physics.new(_gravity, _unitsToMeters, _layer)
 	local box = {}
@@ -41,6 +40,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 	end
 
 	_unitsToMeters = _unitsToMeters or 1/19
+
 
 	local world = MOAIBox2DWorld.new()
 
@@ -58,9 +58,14 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 
 	box.world = world
 
+	local dbtxt
 	if _layer then
 		print("Debug Physics Draws on")
 		_layer:setBox2DWorld(world)
+
+		dbtxt = TextBox.new("gridblock7", 7, false)
+		dbtxt:setDimensions(0, 0, Display.virtualWidth/2, Display.virtualHeight, 0, 0)
+		dbtxt:insertIntoLayer(_layer)
 	end
 
 
@@ -207,7 +212,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 
 			if type(v.position) == "table" then
 				x = v.position.x
-				y = v.position.y
+				y = -v.position.y
 			end
 
 			-- radians
@@ -248,7 +253,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 			local vy = 0
 			if type(v.linearVelocity) == "table" then
 				vx = v.linearVelocity.x
-				vy = v.linearVelocity.y
+				vy = -v.linearVelocity.y
 			end
 			-- "massData-mass": 1,
 			local mass = 1
@@ -324,7 +329,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 			end
 
 			body:setMassData(mass, massI, massX, massY)
-			body:setTransform(x+worldOffsetX, -y+worldOffsetY, angle)
+			body:setTransform(x, y, angle)
 
 			-- insert into the bodies table which is referenced by index by the joints
 			table.insert(bodies, body)
@@ -334,12 +339,11 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 
 		end -- bodies
 
-		-- joints must be done after all the bodies
+		-- -- joints must be done after all the bodies
 		for _, j in ipairs(json.joint) do
 
 			-- wheel type
 			if j.type == "wheel" then
-				-- "name": "joint4",
 				-- "anchorA": (vector),
 				local anchorX = 0
 				local anchorY = 0
@@ -358,7 +362,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 				local axisY = 0
 				if type(j.localAxisA) == "table" then
 					axisX = j.localAxisA.x
-					axisY = -j.localAxisA.y
+					axisY = j.localAxisA.y
 				end
 
 				local bodyX, bodyY = bodyA:getPosition()
@@ -372,7 +376,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 				end
 				-- "motorSpeed": 0,
 				if type(j.motorSpeed) == "number" then
-					wheelJoint:setMotorSpeed(j.motorSpeed)
+					wheelJoint:setMotorSpeed(-j.motorSpeed)
 				end
 				-- "maxMotorTorque": 0,
 				if type(j.maxMotorTorque) == "number" then
@@ -391,6 +395,11 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 				world.joints[j.name] = wheelJoint
 			end
 		end -- joints
+
+		-- test
+		dbtxt:setString(TableExt.tostring(world.bodies))
+		print("---joints---")
+		TableExt.print(world.joints)
 	end
 
 	return box

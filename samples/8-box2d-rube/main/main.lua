@@ -1,3 +1,5 @@
+package.path = package.path .. ';' .. os.getenv("DRAGGIN_FRAMEWORK") .. '/src/?.lua'
+
 -- makes output work better on most hosts, or when running through Sublime Text.
 io.stdout:setvbuf("no")
 
