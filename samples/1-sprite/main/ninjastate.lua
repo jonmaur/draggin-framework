@@ -45,7 +45,7 @@ function ninjastate.new()
 		-- Only one render table can be actively rendered
 		MOAIRenderMgr.setRenderTable(layers)
 
-		-- scrolling bg
+		-- animate the ninja
 		local function animFunc()
 			while true do
 				ninja:playAnimation("runRight")
