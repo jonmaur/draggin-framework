@@ -192,7 +192,7 @@
 					0.8888888955116272
 				]
 			},
-			"file" : "../sprites/cars/bluebody1.png",
+			"file" : "../sprites/cars/bluebody.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -210,6 +210,25 @@
 			"name" : "chasis_image",
 			"opacity" : 0.5,
 			"scale" : 1.777777791023254
+		},
+		
+		{
+			"aspectScale" : 1,
+			"body" : 2,
+			"center" : 0,
+			"corners" : 
+			{
+				"x" : [ -0.2, 0.2, 0.2, -0.2 ],
+				"y" : [ -0.2, -0.2, 0.2, 0.2 ]
+			},
+			"file" : "../sprites/cars/bluerearwheel.png",
+			"filter" : 1,
+			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
+			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
+			"glVertexPointer" : [ -0.2, -0.2, 0.2, -0.2, 0.2, 0.2, -0.2, 0.2 ],
+			"name" : "rearwheel_image",
+			"opacity" : 0.5,
+			"scale" : 0.4
 		},
 		
 		{
@@ -233,7 +252,7 @@
 					0.1333333402872086
 				]
 			},
-			"file" : "../sprites/cars/bluefrontwheel1.png",
+			"file" : "../sprites/cars/bluefrontwheel.png",
 			"filter" : 1,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
@@ -251,25 +270,6 @@
 			"name" : "frontwheel_image",
 			"opacity" : 0.5,
 			"scale" : 0.2666666805744171
-		},
-		
-		{
-			"aspectScale" : 1,
-			"body" : 2,
-			"center" : 0,
-			"corners" : 
-			{
-				"x" : [ -0.2, 0.2, 0.2, -0.2 ],
-				"y" : [ -0.2, -0.2, 0.2, 0.2 ]
-			},
-			"file" : "../sprites/cars/bluerearwheel1.png",
-			"filter" : 1,
-			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
-			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
-			"glVertexPointer" : [ -0.2, -0.2, 0.2, -0.2, 0.2, 0.2, -0.2, 0.2 ],
-			"name" : "rearwheel_image",
-			"opacity" : 0.5,
-			"scale" : 0.4
 		}
 	],
 	"joint" : 

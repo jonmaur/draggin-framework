@@ -22,8 +22,9 @@ THE SOFTWARE.
 
 -- Box2D Physics!
 
-local TextBox = require "draggin/textbox"
 local Display = require "draggin/display"
+local TextBox = require "draggin/textbox"
+local Sprite = require "draggin/sprite"
 local TableExt = require "draggin/tableext"
 
 
@@ -39,7 +40,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 		_gravity = {x=0, y=_gravity}
 	end
 
-	_unitsToMeters = _unitsToMeters or 1/19
+	_unitsToMeters = _unitsToMeters or 1
 
 
 	local world = MOAIBox2DWorld.new()
@@ -339,7 +340,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 
 		end -- bodies
 
-		-- -- joints must be done after all the bodies
+		-- joints must be done after all the bodies
 		for _, j in ipairs(json.joint) do
 
 			-- wheel type
@@ -395,6 +396,38 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 				world.joints[j.name] = wheelJoint
 			end
 		end -- joints
+
+		-- images must be done after all the bodies
+		for _, img in ipairs(json.image) do
+
+			-- "aspectScale" : 1,
+			local aspectScale = 1
+			if type(img.aspectScale) == "number" then
+				aspectScale = img.aspectScale
+			end
+
+			-- "body" : 0, zero-based index of body in bodies array
+			local body = bodies[img.body + 1]
+
+			-- "center" : 0,
+			local centerX = 0
+			local centerY = 0
+			if type(img.center) == "table" then
+				centerX = img.center.x
+				centerY = -img.center.y
+			end
+
+			-- "file" : "../sprites/cars/bluebody.png",
+			local sprname, animname = string.match(img.file, "/(%w+)/(%w+).png$")
+			local spr = Sprite.new(sprname)
+			spr:playAnimation(animname)
+			_layer:insertProp(spr)
+			spr:setParent(body)
+			local scale = 1 / 45
+			spr:setScl(scale)
+
+		end -- images
+
 
 		-- test
 		dbtxt:setString(TableExt.tostring(world.bodies))
