@@ -280,6 +280,9 @@ class Sprite:
 		# loop through all the animations
 		for k, v in self.animations.items():
 
+			# default refpoints should be in the middle of frame
+			v.refPoint[0] = int(v.frames[0].image.size[0] / 2)
+			v.refPoint[1] = int(v.frames[0].image.size[1] / 2)
 			try:
 				# if the animation has more than 1 frame
 				if len(v.frames) > 1:
