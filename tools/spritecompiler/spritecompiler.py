@@ -31,7 +31,7 @@ from fnmatch import fnmatch
 import os
 import os.path
 import re
-import ImageChops
+from PIL import ImageChops
 import easygui
 
 
