@@ -87,6 +87,7 @@ end
 --- Initialize the Sledge host display.
 -- The Sledge host has support for fullscreen modes, set that up here.
 local function initSledge()
+	print("initSledge")
 	-- we're on a PC
 	-- if you don't open a window you'll get garbage!
 	MOAISim.openWindow(Display.appTitle, Display.windowWidth, Display.windowHeight)
@@ -140,8 +141,6 @@ local function initSledge()
 
 	Display.dmode = dmode
 
-	SledgeGraphicsHandler.setMode(dmode.w, dmode.h, dmode.bpp, dmode.refresh, 1)
-
 	-- make up some window modes
 	local windowmodes = {}
 	local i = 1
@@ -154,6 +153,17 @@ local function initSledge()
 	end
 
 	Display.windowmodes = windowmodes
+
+
+	if not Display.fullscreen then
+		SledgeGraphicsHandler.setMode(Display.windowWidth, Display.windowHeight, dmode.bpp, dmode.refresh, 0)
+		Display.screenWidth = Display.windowWidth
+		Display.screenHeight = Display.windowHeight
+	else
+		SledgeGraphicsHandler.setMode(dmode.w, dmode.h, dmode.bpp, dmode.refresh, 1)
+		Display.screenWidth = dmode.w
+		Display.screenHeight = dmode.h
+	end
 end
 
 --- Initialize the Display.
@@ -166,6 +176,7 @@ end
 -- @param _bFullscreen boolean true if you want fullscreen (only makes sense on a Sledge host)
 function Display:init(_appTitle, _virtualWidth, _virtualHeight, _screenWidth, _screenHeight, _bFullscreen)
 
+	print("Display:init()")
 	Display.appTitle = _appTitle
 	Display.virtualWidth = _virtualWidth or Display.virtualWidth
 	Display.virtualHeight = _virtualHeight or Display.virtualHeight
@@ -194,6 +205,7 @@ function Display:init(_appTitle, _virtualWidth, _virtualHeight, _screenWidth, _s
 		if SledgeGraphicsHandler then
 			initSledge()
 		else
+			print("no Sledge host found.")
 			-- not running the Sledge host, no fullscreen
 			MOAISim.openWindow(Display.appTitle, Display.windowWidth, Display.windowHeight)
 		end

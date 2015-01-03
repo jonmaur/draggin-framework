@@ -6,16 +6,6 @@
 
 echo off
 :: verify paths
-if not exist "%MOAI_BIN%\moai.exe" (
-    echo.
-    echo --------------------------------------------------------------------------------
-    echo ERROR: The MOAI_BIN environment variable either doesn't exist or it's pointing
-    echo to an invalid path. Please point it at a folder containing moai.exe.
-    echo --------------------------------------------------------------------------------
-    echo.
-    goto end
-)
-
 if not exist "%DRAGGIN_FRAMEWORK%\draggin-config.lua" (
     echo.
     echo -------------------------------------------------------------------------------
@@ -23,10 +13,34 @@ if not exist "%DRAGGIN_FRAMEWORK%\draggin-config.lua" (
     echo pointing to an invalid path. Please point it at the draggin-framework folder.
     echo -------------------------------------------------------------------------------
     echo.
+    goto end
 )
 
+if exist "%MOAI_BIN%\sledge.exe" (
+    :: run sledge
+    set current=%cd%
+    cd %~dp0\main
+    "%MOAI_BIN%\sledge" "main.lua" -console
+    cd %current%
 
-:: run moai
-cd %~dp0
-cd main
-"%MOAI_BIN%\moai" "%DRAGGIN_FRAMEWORK%\draggin-config.lua" "main.lua" -console
+    goto end
+)
+if exist "%MOAI_BIN%\moai.exe" (
+    :: run moai
+    set current=%cd%
+    cd %~dp0\main
+    "%MOAI_BIN%\moai" "%DRAGGIN_FRAMEWORK%\draggin-config.lua" "main.lua" -console
+    cd %current%
+    
+    goto end
+)
+
+echo.
+echo --------------------------------------------------------------------------------
+echo ERROR: The MOAI_BIN environment variable either doesn't exist or it's pointing
+echo to an invalid path. Please point it at a folder containing moai.exe or 
+echo sledge.exe
+echo --------------------------------------------------------------------------------
+echo.
+
+:end
