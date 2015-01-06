@@ -25,7 +25,7 @@ local FontManager = {}
 
 local fonts = {}
 
-local charcodes = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .,:;!?()&amp;/-"'
+local charcodes = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .,:;!?()&amp;/-"\'\\'
 
 --- Get a font.
 -- If the font is already loaded, no need to load it again.
