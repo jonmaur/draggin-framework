@@ -5,11 +5,13 @@
 :: export DRAGGIN_FRAMEWORK="<path to draggin-framework>"
 
 echo off
+setlocal
+
 :: verify paths
 if not exist "%DRAGGIN_FRAMEWORK%\draggin-config.lua" (
     echo.
     echo -------------------------------------------------------------------------------
-    echo WARNING: The DRAGGIN_FRAMEWORK environment variable either doesn't exist or it's 
+    echo ERROR: The DRAGGIN_FRAMEWORK environment variable either doesn't exist or it's 
     echo pointing to an invalid path. Please point it at the draggin-framework folder.
     echo -------------------------------------------------------------------------------
     echo.

@@ -1,4 +1,9 @@
-package.path = package.path .. ';' .. os.getenv("DRAGGIN_FRAMEWORK") .. '/src/?.lua'
+-- The Sledge host only seems to load one lua file from the commandline
+-- so if Sledge is the host the code from draggin-config.lua has to run here.
+-- TODO: Add loading multiple lua scripts to the Sledge host.
+if SledgeGraphicsHandler then
+	package.path = package.path .. ';' .. os.getenv("DRAGGIN_FRAMEWORK") .. '/src/?.lua'
+end
 
 -- makes output work better on most hosts, or when running through Sublime Text.
 io.stdout:setvbuf("no")
