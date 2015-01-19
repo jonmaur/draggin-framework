@@ -205,13 +205,18 @@ function Display:init(_appTitle, _virtualWidth, _virtualHeight, _screenWidth, _s
 		if SledgeGraphicsHandler then
 			initSledge()
 		else
-			print("no Sledge host found.")
+			print("no Sledge host found, no fullscreen mode.")
 			-- not running the Sledge host, no fullscreen
 			MOAISim.openWindow(Display.appTitle, Display.windowWidth, Display.windowHeight)
 		end
 	end
 
 	resetViewports()
+
+	if SledgeInputWrapper then
+		-- don't hide the mouse cursor
+		SledgeInputWrapper.hideCursorInsideWindow(false)
+	end
 
 	print("Display initialized")
 end
