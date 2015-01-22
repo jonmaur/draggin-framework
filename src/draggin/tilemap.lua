@@ -69,7 +69,7 @@ function TileMap.new(_name, _viewport, _camera, _xParallax, _yParallax)
 			end
 		end
 
-		grid:setRow(y, unpack(row))
+		grid:setRow((data.mapHeightInTiles-y) + 1, unpack(row))
 	end
 
 	local tileDeck = MOAITileDeck2D.new()
@@ -83,7 +83,17 @@ function TileMap.new(_name, _viewport, _camera, _xParallax, _yParallax)
 		1/bleedWidth, 1/bleedHeight,
 		(data.tileWidth)/bleedWidth, (data.tileHeight)/bleedHeight)
 	-- NOTE: this is the magic that makes the tiles render properly when you are trying to do the origin at top left
-	tileDeck:setUVRect(-0.5, 0.5, 0.5, -0.5)
+	--tileDeck:setUVRect(-0.5, 0.5, 0.5, -0.5)
+
+
+	tilemap.tileWidth = data.tileWidth
+	tilemap.tileHeight = data.tileHeight
+
+	tilemap.mapWidthInTiles = data.mapWidthInTiles
+	tilemap.mapHeightInTiles = data.mapHeightInTiles
+
+	tilemap.mapWidthInPixels = tilemap.tileWidth * tilemap.mapWidthInTiles
+	tilemap.mapHeightInPixels = tilemap.tileHeight * tilemap.mapHeightInTiles
 
 	-- if there's a viewport then go ahead and make some layers for this tilemap and put a prop in them
 	if _viewport then

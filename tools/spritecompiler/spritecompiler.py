@@ -493,7 +493,7 @@ class Sprite:
 				#rects.append( Rect.Rect( f.croppedImage.size, f.imageName ) )
 				offsetX = v.refPoint[0] - f.cropOffset[0]
 				offsetY = v.refPoint[1] - f.cropOffset[1]
-				luaFile.write('deck:setRect('+str(frameIndex)+', '+str(-offsetX)+', '+str(-offsetY)+', '+str(f.w-offsetX)+', '+str(f.h-offsetY)+')\n')
+				luaFile.write('deck:setRect('+str(frameIndex)+', '+str(-offsetX)+', '+str(offsetY)+', '+str(f.w-offsetX)+', '+str(-(f.h-offsetY))+')\n')
 				sheetW = float(self.sheetSize[0])
 				sheetH = float(self.sheetSize[1])
 				luaFile.write('deck:setUVRect('+str(frameIndex)+', ')

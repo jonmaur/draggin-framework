@@ -86,13 +86,13 @@ function menustate.new()
 
 		-- create the text boxes
 		local toptxt = TextBox.new("LiberationSansNarrow-Regular", 32)
-		toptxt:setRect(virtualWidth/8, 0, virtualWidth - (virtualWidth/8), 60)
+		toptxt:setRect(virtualWidth/8, virtualHeight-60, virtualWidth - (virtualWidth/8), virtualHeight)
 		toptxt:setAlignment(MOAITextBox.CENTER_JUSTIFY, MOAITextBox.LEFT_JUSTIFY)
 		toptxt:setString("WASD and SPACEBAR to navigate this menu.")
 		toptxt:insertIntoLayer(layer)
 
 		txt = TextBox.new("LiberationSansNarrow-Regular", 48)
-		txt:setRect(virtualWidth/4, virtualHeight - (virtualHeight/4), virtualWidth - (virtualWidth/4), virtualHeight)
+		txt:setRect(virtualWidth/4, 0, virtualWidth - (virtualWidth/4), virtualHeight/4)
 		txt:setAlignment(MOAITextBox.CENTER_JUSTIFY, MOAITextBox.CENTER_JUSTIFY)
 		txt:insertIntoLayer(layer)
 
@@ -116,9 +116,9 @@ function menustate.new()
 			fontname = "LiberationSansNarrow-Regular",
 			fontsize = 48,
 
-			top = virtualHeight/8,
+			top = virtualHeight - virtualHeight/8,
 			shadowX = -1,
-			shadowY = 1
+			shadowY = -1
 		}
 
 		local layer = MOAILayer2D.new()

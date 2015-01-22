@@ -37,8 +37,8 @@ function ScrollState.new()
 		local function scrollFunc()
 			local action
 			while true do
-				bg.prop:setLoc(0, 0)
-				action = bg.prop:seekLoc(-960, 0, 4, MOAIEaseType.LINEAR)
+				bg.prop:setLoc(0, -bg.mapHeightInPixels + virtualHeight)
+				action = bg.prop:seekLoc(-960, -bg.mapHeightInPixels + virtualHeight, 4, MOAIEaseType.LINEAR)
 				MOAIThread.blockOnAction(action)
 			end
 		end

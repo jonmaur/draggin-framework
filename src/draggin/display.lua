@@ -38,7 +38,7 @@ Display.virtualHeight = 480
 Display.viewport = MOAIViewport.new()
 Display.guiViewport = MOAIViewport.new()
 
-Display.modes = nil	-- on a PC this will be a table of all the supported Display modes
+Display.modes = nil	-- on a PC Sledge host this will be a table of all the supported Display modes
 
 
 --- Resets the viewports.
@@ -75,13 +75,13 @@ local function resetViewports()
 	print("resize Display", Display.screenOffsetX, Display.screenOffsetY)
 	-- the "game" viewport
 	Display.viewport:setSize(Display.screenOffsetX, Display.screenOffsetY, Display.screenOffsetX + Display.screenWidth, Display.screenOffsetY + Display.screenHeight)
-	Display.viewport:setScale(Display.virtualWidth, -Display.virtualHeight)
-	Display.viewport:setOffset(-1, 1)
+	Display.viewport:setScale(Display.virtualWidth, Display.virtualHeight)
+	Display.viewport:setOffset(-1, -1)
 
 	-- the gui or "screen" viewport
 	Display.guiViewport:setSize(Display.screenOffsetX, Display.screenOffsetY, Display.screenOffsetX + Display.screenWidth, Display.screenOffsetY + Display.screenHeight)
-	Display.guiViewport:setScale(Display.virtualWidth, -Display.virtualHeight)
-	Display.guiViewport:setOffset(-1, 1)
+	Display.guiViewport:setScale(Display.virtualWidth, Display.virtualHeight)
+	Display.guiViewport:setOffset(-1, -1)
 end
 
 --- Initialize the Sledge host display.

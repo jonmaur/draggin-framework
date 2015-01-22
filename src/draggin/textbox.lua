@@ -67,8 +67,12 @@ function TextBox.new(_strFont, _fontSize, _bShadow)
 	local txtNormal = MOAITextBox.new()
 	txtNormal:setStyle(styleNormal)
 
+	-- Flip Y so +1 is UP
+	txtShadow:setYFlip(true)
+	txtNormal:setYFlip(true)
+	
 	local shadowOffsetX = 2
-	local shadowOffsetY = 2
+	local shadowOffsetY = -2
 
 	local blinktimer
 
