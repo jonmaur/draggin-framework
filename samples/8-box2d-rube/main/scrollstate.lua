@@ -30,6 +30,7 @@ function ScrollState.new()
 		camera = MOAICamera2D.new()
 
 		bg = Tilemap.new("bg", viewport, camera)
+		bg.prop:setLoc(0, -bg.mapHeightInPixels + virtualHeight)
 		layers[#layers+1] = bg.layer
 
 		mainlayer = MOAILayer2D.new()

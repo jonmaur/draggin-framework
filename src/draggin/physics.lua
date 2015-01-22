@@ -34,7 +34,7 @@ local Physics = {}
 function Physics.new(_gravity, _unitsToMeters, _layer)
 	local box = {}
 
-	_gravity = _gravity or {x=0, y=10}
+	_gravity = _gravity or {x=0, y=-10}
 
 	if type(_gravity) == "number" then
 		_gravity = {x=0, y=_gravity}
@@ -213,7 +213,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 
 			if type(v.position) == "table" then
 				x = v.position.x
-				y = -v.position.y
+				y = v.position.y
 			end
 
 			-- radians
@@ -254,7 +254,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 			local vy = 0
 			if type(v.linearVelocity) == "table" then
 				vx = v.linearVelocity.x
-				vy = -v.linearVelocity.y
+				vy = v.linearVelocity.y
 			end
 			-- "massData-mass": 1,
 			local mass = 1
@@ -266,7 +266,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 			local massY = 0
 			if type(v["massData-center"]) == "table" then
 				massX = v["massData-center"].x
-				massY = -v["massData-center"].y
+				massY = v["massData-center"].y
 			end
 			-- "massData-I": 1,
 			local massI = 1
@@ -287,7 +287,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 						local verts = {}
 						for i = 1, #xs do
 							table.insert(verts, xs[i])
-							table.insert(verts, -ys[i])
+							table.insert(verts, ys[i])
 						end
 						fix = body:addChain(verts, false)
 
@@ -298,7 +298,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 						local verts = {}
 						for i = 1, #xs do
 							table.insert(verts, xs[i])
-							table.insert(verts, -ys[i])
+							table.insert(verts, ys[i])
 						end
 						fix = body:addPolygon(verts)
 
@@ -308,7 +308,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 						local centerY = 0
 						if type(fixture.circle.center) == "table" then
 							centerX = fixture.circle.center.x
-							centerY = -fixture.circle.center.y
+							centerY = fixture.circle.center.y
 						end
 						-- "radius" : 1
 						local radius = 0
@@ -350,7 +350,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 				local anchorY = 0
 				if type(j.anchorA) == "table" then
 					anchorX = j.anchorA.x
-					anchorY = -j.anchorA.y
+					anchorY = j.anchorA.y
 				end
 				-- "anchorB": (vector),
 				-- "bodyA": 4, //zero-based index of body in bodies array
@@ -377,7 +377,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 				end
 				-- "motorSpeed": 0,
 				if type(j.motorSpeed) == "number" then
-					wheelJoint:setMotorSpeed(-j.motorSpeed)
+					wheelJoint:setMotorSpeed(j.motorSpeed)
 				end
 				-- "maxMotorTorque": 0,
 				if type(j.maxMotorTorque) == "number" then
@@ -414,7 +414,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 			local centerY = 0
 			if type(img.center) == "table" then
 				centerX = img.center.x
-				centerY = -img.center.y
+				centerY = img.center.y
 			end
 
 			-- "file" : "../sprites/cars/bluebody.png",
