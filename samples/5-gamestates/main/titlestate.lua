@@ -61,14 +61,14 @@ function TitleState.new()
 		-- the textboxes
 		presentTextBox = TextBox.new()
 		presentTextBox:setFont("PressStart32")
-		presentTextBox:setRect(virtualWidth/8, virtualHeight/16, virtualWidth - virtualWidth/8, virtualHeight - virtualHeight/4)
+		presentTextBox:setRect(virtualWidth/8, virtualHeight/4, virtualWidth - virtualWidth/8, virtualHeight - (virtualHeight/16))
 		presentTextBox:setAlignment(MOAITextBox.CENTER_JUSTIFY)
 		presentTextBox:setSpeed(textSpeed)
 		presentTextBox:insertIntoLayer(mainlayer)
 
 		continueText = TextBox.new()
 		continueText:setFont("PressStart16")
-		continueText:setRect(virtualWidth/8, virtualHeight - virtualHeight/4, virtualWidth - virtualWidth/8, virtualHeight - virtualHeight/16)
+		continueText:setRect(virtualWidth/8, virtualHeight/16, virtualWidth - virtualWidth/8, virtualHeight/4)
 		continueText:setAlignment(MOAITextBox.CENTER_JUSTIFY, MOAITextBox.CENTER_JUSTIFY)
 		continueText:insertIntoLayer(mainlayer)
 
@@ -108,8 +108,8 @@ function TitleState.new()
 		local function scrollFunc()
 			local action
 			while true do
-				bg.prop:setLoc(0, 0)
-				action = bg.prop:seekLoc(-960, 0, 4, MOAIEaseType.LINEAR)
+				bg.prop:setLoc(0, -bg.mapHeightInPixels + virtualHeight)
+				action = bg.prop:seekLoc(-960, -bg.mapHeightInPixels + virtualHeight, 4, MOAIEaseType.LINEAR)
 				MOAIThread.blockOnAction(action)
 
 			end
@@ -176,7 +176,7 @@ function TitleState.new()
 
 				spacing = 40,
 				shadowX = 2,
-				shadowY = 2,
+				shadowY = -2,
 
 				entrywidth = virtualWidth/2,
 			}

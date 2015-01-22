@@ -69,8 +69,8 @@ function PauseState.new()
 			fontsize = 16,
 
 			spacing = 20,
-			shadowX = 2,
-			shadowY = 2,
+			shadowX = 1,
+			shadowY = -1,
 
 			entrywidth = virtualWidth/2,
 		}
