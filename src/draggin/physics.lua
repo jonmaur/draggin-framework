@@ -27,6 +27,7 @@ local TextBox = require "draggin/textbox"
 local Sprite = require "draggin/sprite"
 local TableExt = require "draggin/tableext"
 
+local RADIANS_TO_DEGREES = 180 / math.pi
 
 local Physics = {}
 
@@ -377,7 +378,8 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 				end
 				-- "motorSpeed": 0,
 				if type(j.motorSpeed) == "number" then
-					wheelJoint:setMotorSpeed(j.motorSpeed)
+					-- these are radians, MOAI needs degrees
+					wheelJoint:setMotorSpeed(j.motorSpeed * RADIANS_TO_DEGREES)
 				end
 				-- "maxMotorTorque": 0,
 				if type(j.maxMotorTorque) == "number" then
