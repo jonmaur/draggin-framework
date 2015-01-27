@@ -22,15 +22,15 @@ Display:init(Draggin.appTitle, 1920/4, 1080/4, 1920/2, 1080/2, false)
 
 
 local GameStateManager = require "draggin/gamestatemanager"
-local ScrollState = require "scrollstate"
+local RubeState = require "rubestate"
 
 --- Main MOAIThread function of the application.
 -- The whole application starts here to make sure you can always call coroutine.yield()
 local function mainFunc()
 
-	local scrollstate = ScrollState.new()
+	local rubestate = RubeState.new()
 
-	GameStateManager.pushState(scrollstate)
+	GameStateManager.pushState(rubestate)
 
 	Draggin:waitForAnyInput()
 

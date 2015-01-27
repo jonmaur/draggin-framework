@@ -10,13 +10,13 @@ local virtualHeight = Display.virtualHeight
 
 local floor = math.floor
 
-local ScrollState = {}
+local RubeState = {}
 
-function ScrollState.new()
+function RubeState.new()
 
 	local state = {}
 
-	state.name = "ScrollState"
+	state.name = "RubeState"
 
 	local layers = {}
 	local camera
@@ -30,7 +30,8 @@ function ScrollState.new()
 		camera = MOAICamera2D.new()
 
 		bg = Tilemap.new("bg", viewport, camera)
-		bg.prop:setLoc(0, -bg.mapHeightInPixels + virtualHeight)
+		bg.prop:setLoc(-virtualWidth/8, -bg.mapHeightInPixels + (virtualHeight*1.89))
+		bg.prop:setScl(0.06, 0.06)
 		layers[#layers+1] = bg.layer
 
 		mainlayer = MOAILayer2D.new()
@@ -40,7 +41,6 @@ function ScrollState.new()
 
 		phys = Physics.new(nil, 1, mainlayer)
 		phys:loadRubeJson("bluecar2")
-		--phys.world.bodies.chasis_body:setTransform(10, 10, 0)
 	end
 
 	function state:gotFocus()
@@ -53,12 +53,10 @@ function ScrollState.new()
 		local offsetX = (-virtualWidth / 2)
 		local offsetY = (-virtualHeight / 2)
 
-		local y = 0
-
-		--phys.world.joints.rearwheel_joint:setMotor(2000, 10000, true)
 		local x = 0
 		local y = 0
-		local z = 1/45
+		--local z = 1/45
+		local z = 1/45*4
 
 		--z = (2 / virtualWidth) + 1
 
@@ -80,4 +78,4 @@ function ScrollState.new()
 	return state
 end
 
-return ScrollState
+return RubeState
