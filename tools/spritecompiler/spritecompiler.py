@@ -477,6 +477,7 @@ class Sprite:
 		luaFile.write('spriteData.bounds = {}\n')
 		luaFile.write('spriteData.curves = {}\n')
 		luaFile.write('spriteData.deckIndex = {}\n')
+		luaFile.write('spriteData.originalWidths = {}\n')
 		luaFile.write('local curve\n\n')
 		frameIndex = 1
 
@@ -488,9 +489,10 @@ class Sprite:
 
 			curveIndex = 1
 			timeline = 0
+			orgWidth = 0
 
 			for f in v.frames:
-				#rects.append( Rect.Rect( f.croppedImage.size, f.imageName ) )
+				orgWidth = f.image.size[0]
 				offsetX = v.refPoint[0] - f.cropOffset[0]
 				offsetY = v.refPoint[1] - f.cropOffset[1]
 				luaFile.write('deck:setRect('+str(frameIndex)+', '+str(-offsetX)+', '+str(offsetY)+', '+str(f.w-offsetX)+', '+str(-(f.h-offsetY))+')\n')
@@ -512,7 +514,10 @@ class Sprite:
 			# write out the bounding box of this animation
 			bx = -(v.refPoint[0] - v.frames[0].cropOffset[0])
 			by = -(v.refPoint[1] - v.frames[0].cropOffset[1])
-			luaFile.write('spriteData.bounds.'+k+' = {'+str(bx)+', '+str(by)+', '+str(v.frames[0].w+bx)+', '+str(v.frames[0].h+by)+'}\n\n\n')
+			luaFile.write('spriteData.bounds.'+k+' = {'+str(bx)+', '+str(by)+', '+str(v.frames[0].w+bx)+', '+str(v.frames[0].h+by)+'}\n')
+
+			# write out the original width of the original un-cropped image, used mostly to help with RUBE import scales
+			luaFile.write('spriteData.originalWidths.'+k+' = '+str(orgWidth)+'\n\n\n')
 
 
 		luaFile.write('spriteData.texture = tex\n')

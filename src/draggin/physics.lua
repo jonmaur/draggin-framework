@@ -425,8 +425,14 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 			spr:playAnimation(animname)
 			_layer:insertProp(spr)
 			spr:setParent(body)
-			local scale = 1 / 45
-			spr:setScl(scale)
+
+			if type(img.glVertexPointer) == "table" then
+
+				local orgw = spr.spriteData.originalWidths[animname]
+				local rubew = img.glVertexPointer[3] - img.glVertexPointer[1]
+				local scale = 1 / (orgw / rubew)
+				spr:setScl(scale)
+			end
 
 		end -- images
 
