@@ -84,8 +84,14 @@
             ],
             "vertices" : 
             {
-              "x" : [ -3.652366161346436, 11.73659038543701 ],
-              "y" : [ 0.0, 0.0 ]
+              "x" : 
+              [
+                -3.652366161346436,
+                11.73659038543701,
+                13.80383491516113,
+                16.21330070495606
+              ],
+              "y" : [ 0.0, 0.0, 1.588339447975159, 4.877449035644531 ]
             }
           }
         ],
@@ -396,11 +402,11 @@
         "body" : 5,
         "center" : 0,
         "file" : "../sprites/cars/bluebody.png",
-        "filter" : 1,
+        "filter" : 0,
         "flip" : false,
         "id" : 1,
         "name" : "chasis_image",
-        "opacity" : 0.5,
+        "opacity" : 1,
         "scale" : 1.777777791023254
       },
       
@@ -409,11 +415,11 @@
         "body" : 2,
         "center" : 0,
         "file" : "../sprites/cars/bluerearwheel.png",
-        "filter" : 1,
+        "filter" : 0,
         "flip" : false,
         "id" : 2,
         "name" : "rearwheel_image",
-        "opacity" : 0.5,
+        "opacity" : 1,
         "scale" : 0.4
       },
       
@@ -422,11 +428,11 @@
         "body" : 3,
         "center" : 0,
         "file" : "../sprites/cars/bluefrontwheel.png",
-        "filter" : 1,
+        "filter" : 0,
         "flip" : false,
         "id" : 3,
         "name" : "frontwheel_image",
-        "opacity" : 0.5,
+        "opacity" : 1,
         "scale" : 0.2666666805744171
       },
       
@@ -435,11 +441,11 @@
         "body" : 4,
         "center" : 0,
         "file" : "../sprites/boxes/box.png",
-        "filter" : 1,
+        "filter" : 0,
         "flip" : false,
         "id" : 4,
         "name" : "box_0",
-        "opacity" : 0.5,
+        "opacity" : 1,
         "scale" : 0.6201863884925842
       },
       
@@ -448,11 +454,11 @@
         "body" : 6,
         "center" : 0,
         "file" : "../sprites/boxes/box.png",
-        "filter" : 1,
+        "filter" : 0,
         "flip" : false,
         "id" : 5,
         "name" : "box_0",
-        "opacity" : 0.5,
+        "opacity" : 1,
         "scale" : 0.6831572651863098
       },
       
@@ -461,11 +467,11 @@
         "body" : 7,
         "center" : 0,
         "file" : "../sprites/boxes/box.png",
-        "filter" : 1,
+        "filter" : 0,
         "flip" : false,
         "id" : 6,
         "name" : "box_0",
-        "opacity" : 0.5,
+        "opacity" : 1,
         "scale" : 0.5488987565040588
       }
     ],

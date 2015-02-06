@@ -56,7 +56,7 @@ function RubeState.new()
 		local x = 0
 		local y = 0
 		--local z = 1/45
-		local z = 1/45*4
+		local z = 1/45*3
 
 		--z = (2 / virtualWidth) + 1
 

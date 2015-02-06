@@ -115,6 +115,40 @@
 				{
 					"density" : 1,
 					"friction" : 0.2,
+					"name" : "chasis_fixture",
+					"polygon" : 
+					{
+						"vertices" : 
+						{
+							"x" : [ 1.527681589126587, -1.314167141914368, -1.308086156845093 ],
+							"y" : [ -0.5290428400039673, 0.01950767636299133, -0.5485508441925049 ]
+						}
+					}
+				}
+			],
+			"linearVelocity" : 0,
+			"massData-I" : 0.5820239186286926,
+			"massData-center" : 
+			{
+				"x" : -0.3648572564125061,
+				"y" : -0.3526953458786011
+			},
+			"massData-mass" : 0.8055003285408020,
+			"name" : "chasis_body",
+			"position" : 0,
+			"type" : 2
+		},
+		
+		{
+			"angle" : 0,
+			"angularVelocity" : 0,
+			"awake" : true,
+			"fixture" : 
+			[
+				
+				{
+					"density" : 1,
+					"friction" : 0.2,
 					"name" : "box_fixture",
 					"polygon" : 
 					{
@@ -152,40 +186,6 @@
 				"x" : 7.860449790954590,
 				"y" : -1.552027225494385
 			},
-			"type" : 2
-		},
-		
-		{
-			"angle" : 0,
-			"angularVelocity" : 0,
-			"awake" : true,
-			"fixture" : 
-			[
-				
-				{
-					"density" : 1,
-					"friction" : 0.2,
-					"name" : "chasis_fixture",
-					"polygon" : 
-					{
-						"vertices" : 
-						{
-							"x" : [ 1.527681589126587, -1.314167141914368, -1.308086156845093 ],
-							"y" : [ -0.5290428400039673, 0.01950767636299133, -0.5485508441925049 ]
-						}
-					}
-				}
-			],
-			"linearVelocity" : 0,
-			"massData-I" : 0.5820239186286926,
-			"massData-center" : 
-			{
-				"x" : -0.3648572564125061,
-				"y" : -0.3526953458786011
-			},
-			"massData-mass" : 0.8055003285408020,
-			"name" : "chasis_body",
-			"position" : 0,
 			"type" : 2
 		},
 		
@@ -261,8 +261,14 @@
 					{
 						"vertices" : 
 						{
-							"x" : [ -3.652366161346436, 11.73659038543701 ],
-							"y" : [ 0.0, 0.0 ]
+							"x" : 
+							[
+								-3.652366161346436,
+								11.73659038543701,
+								13.80383491516113,
+								16.21330070495606
+							],
+							"y" : [ 0.0, 0.0, 1.588339447975159, 4.877449035644531 ]
 						}
 					},
 					"density" : 1,
@@ -329,6 +335,47 @@
 		
 		{
 			"aspectScale" : 1,
+			"body" : 4,
+			"center" : 0,
+			"corners" : 
+			{
+				"x" : 
+				[
+					-0.1333333402872086,
+					0.1333333402872086,
+					0.1333333402872086,
+					-0.1333333402872086
+				],
+				"y" : 
+				[
+					-0.1333333402872086,
+					-0.1333333402872086,
+					0.1333333402872086,
+					0.1333333402872086
+				]
+			},
+			"file" : "../sprites/cars/bluefrontwheel.png",
+			"filter" : 0,
+			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
+			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
+			"glVertexPointer" : 
+			[
+				-0.1333333402872086,
+				-0.1333333402872086,
+				0.1333333402872086,
+				-0.1333333402872086,
+				0.1333333402872086,
+				0.1333333402872086,
+				-0.1333333402872086,
+				0.1333333402872086
+			],
+			"name" : "frontwheel_image",
+			"opacity" : 1,
+			"scale" : 0.2666666805744171
+		},
+		
+		{
+			"aspectScale" : 1,
 			"body" : 0,
 			"center" : 0,
 			"corners" : 
@@ -349,7 +396,7 @@
 				]
 			},
 			"file" : "../sprites/boxes/box.png",
-			"filter" : 1,
+			"filter" : 0,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
 			"glVertexPointer" : 
@@ -364,8 +411,43 @@
 				0.2744493782520294
 			],
 			"name" : "box_0",
-			"opacity" : 0.5,
+			"opacity" : 1,
 			"scale" : 0.5488987565040588
+		},
+		
+		{
+			"aspectScale" : 1,
+			"body" : 2,
+			"center" : 0,
+			"corners" : 
+			{
+				"x" : [ -2, 2, 2, -2 ],
+				"y" : 
+				[
+					-0.8888888955116272,
+					-0.8888888955116272,
+					0.8888888955116272,
+					0.8888888955116272
+				]
+			},
+			"file" : "../sprites/cars/bluebody.png",
+			"filter" : 0,
+			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
+			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
+			"glVertexPointer" : 
+			[
+				-2,
+				-0.8888888955116272,
+				2,
+				-0.8888888955116272,
+				2,
+				0.8888888955116272,
+				-2,
+				0.8888888955116272
+			],
+			"name" : "chasis_image",
+			"opacity" : 1,
+			"scale" : 1.777777791023254
 		},
 		
 		{
@@ -390,7 +472,7 @@
 				]
 			},
 			"file" : "../sprites/boxes/box.png",
-			"filter" : 1,
+			"filter" : 0,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
 			"glVertexPointer" : 
@@ -405,13 +487,13 @@
 				0.3415786325931549
 			],
 			"name" : "box_0",
-			"opacity" : 0.5,
+			"opacity" : 1,
 			"scale" : 0.6831572651863098
 		},
 		
 		{
 			"aspectScale" : 1,
-			"body" : 2,
+			"body" : 3,
 			"center" : 0,
 			"corners" : 
 			{
@@ -431,7 +513,7 @@
 				]
 			},
 			"file" : "../sprites/boxes/box.png",
-			"filter" : 1,
+			"filter" : 0,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
 			"glVertexPointer" : 
@@ -446,49 +528,8 @@
 				0.3100931942462921
 			],
 			"name" : "box_0",
-			"opacity" : 0.5,
+			"opacity" : 1,
 			"scale" : 0.6201863884925842
-		},
-		
-		{
-			"aspectScale" : 1,
-			"body" : 4,
-			"center" : 0,
-			"corners" : 
-			{
-				"x" : 
-				[
-					-0.1333333402872086,
-					0.1333333402872086,
-					0.1333333402872086,
-					-0.1333333402872086
-				],
-				"y" : 
-				[
-					-0.1333333402872086,
-					-0.1333333402872086,
-					0.1333333402872086,
-					0.1333333402872086
-				]
-			},
-			"file" : "../sprites/cars/bluefrontwheel.png",
-			"filter" : 1,
-			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
-			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
-			"glVertexPointer" : 
-			[
-				-0.1333333402872086,
-				-0.1333333402872086,
-				0.1333333402872086,
-				-0.1333333402872086,
-				0.1333333402872086,
-				0.1333333402872086,
-				-0.1333333402872086,
-				0.1333333402872086
-			],
-			"name" : "frontwheel_image",
-			"opacity" : 0.5,
-			"scale" : 0.2666666805744171
 		},
 		
 		{
@@ -501,48 +542,13 @@
 				"y" : [ -0.2, -0.2, 0.2, 0.2 ]
 			},
 			"file" : "../sprites/cars/bluerearwheel.png",
-			"filter" : 1,
+			"filter" : 0,
 			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
 			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
 			"glVertexPointer" : [ -0.2, -0.2, 0.2, -0.2, 0.2, 0.2, -0.2, 0.2 ],
 			"name" : "rearwheel_image",
-			"opacity" : 0.5,
+			"opacity" : 1,
 			"scale" : 0.4
-		},
-		
-		{
-			"aspectScale" : 1,
-			"body" : 3,
-			"center" : 0,
-			"corners" : 
-			{
-				"x" : [ -2, 2, 2, -2 ],
-				"y" : 
-				[
-					-0.8888888955116272,
-					-0.8888888955116272,
-					0.8888888955116272,
-					0.8888888955116272
-				]
-			},
-			"file" : "../sprites/cars/bluebody.png",
-			"filter" : 1,
-			"glDrawElements" : [ 0, 1, 2, 2, 3, 0 ],
-			"glTexCoordPointer" : [ 0.0, 0.0, 1, 0.0, 1, 1, 0.0, 1 ],
-			"glVertexPointer" : 
-			[
-				-2,
-				-0.8888888955116272,
-				2,
-				-0.8888888955116272,
-				2,
-				0.8888888955116272,
-				-2,
-				0.8888888955116272
-			],
-			"name" : "chasis_image",
-			"opacity" : 0.5,
-			"scale" : 1.777777791023254
 		}
 	],
 	"joint" : 
@@ -551,34 +557,11 @@
 		{
 			"anchorA" : 
 			{
-				"x" : -1.098549962043762,
-				"y" : -0.6054800152778626
-			},
-			"anchorB" : 0,
-			"bodyA" : 3,
-			"bodyB" : 5,
-			"enableMotor" : true,
-			"localAxisA" : 
-			{
-				"x" : 0,
-				"y" : 1
-			},
-			"maxMotorTorque" : 50.0,
-			"motorSpeed" : -18.84955596923828,
-			"name" : "rearwheel_joint",
-			"springDampingRatio" : 0.7,
-			"springFrequency" : 4,
-			"type" : "wheel"
-		},
-		
-		{
-			"anchorA" : 
-			{
 				"x" : 1.237789988517761,
 				"y" : -0.6004210114479065
 			},
 			"anchorB" : 0,
-			"bodyA" : 3,
+			"bodyA" : 2,
 			"bodyB" : 4,
 			"enableMotor" : false,
 			"localAxisA" : 
@@ -589,6 +572,29 @@
 			"maxMotorTorque" : 0,
 			"motorSpeed" : 0,
 			"name" : "frontwheel_joint",
+			"springDampingRatio" : 0.7,
+			"springFrequency" : 4,
+			"type" : "wheel"
+		},
+		
+		{
+			"anchorA" : 
+			{
+				"x" : -1.098549962043762,
+				"y" : -0.6054800152778626
+			},
+			"anchorB" : 0,
+			"bodyA" : 2,
+			"bodyB" : 5,
+			"enableMotor" : true,
+			"localAxisA" : 
+			{
+				"x" : 0,
+				"y" : 1
+			},
+			"maxMotorTorque" : 50.0,
+			"motorSpeed" : -18.84955596923828,
+			"name" : "rearwheel_joint",
 			"springDampingRatio" : 0.7,
 			"springFrequency" : 4,
 			"type" : "wheel"
