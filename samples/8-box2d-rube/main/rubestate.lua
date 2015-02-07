@@ -40,7 +40,7 @@ function RubeState.new()
 		layers[#layers+1] = mainlayer
 
 		phys = Physics.new(nil, 1, mainlayer)
-		phys:loadRubeJson("bluecar2")
+		phys:loadRubeJson("bluecar")
 	end
 
 	function state:gotFocus()
