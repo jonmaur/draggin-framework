@@ -194,253 +194,254 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 		--TableExt.print(json)
 		local bodies = {}
 
-		for _, v in ipairs(json.body) do
+		if type(json.body) == "table" then
+			for _, v in ipairs(json.body) do
 
-			local x = 0
-			local y = 0
-
-
-			-- "type": 2, //0 = static, 1 = kinematic, 2 = dynamic
-			local bodytype = MOAIBox2DBody.STATIC
-			if v.type == 1 then
-				bodytype = MOAIBox2DBody.KINEMATIC
-			elseif v.type == 2 then
-				bodytype = MOAIBox2DBody.DYNAMIC
-			end
-
-			-- create the body
-			local body = world:addBody(bodytype)
+				local x = 0
+				local y = 0
 
 
-			if type(v.position) == "table" then
-				x = v.position.x
-				y = v.position.y
-			end
+				-- "type": 2, //0 = static, 1 = kinematic, 2 = dynamic
+				local bodytype = MOAIBox2DBody.STATIC
+				if v.type == 1 then
+					bodytype = MOAIBox2DBody.KINEMATIC
+				elseif v.type == 2 then
+					bodytype = MOAIBox2DBody.DYNAMIC
+				end
 
-			-- radians
-			local angle = 0
-			if type(v.angle) == "number" then
-				angle = v.angle
-			end
-			-- "angularDamping": 0,
-			local angularDamping = 0
-			if type(v.angularDamping) == "number" then
-				angularDamping = v.angularDamping
-			end
-			-- "angularVelocity": 0, //radians per second
-			local angularVelocity = 0
-			if type(v.angularVelocity) == "number" then
-				angularVelocity = v.angularVelocity
-			end
-			-- "awake": true,
-			if type(v.awake) == "boolean" then
-				body:setAwake(v.awake)
-			end
-			-- "bullet": true,
-			if type(v.bullet) == "boolean" then
-				body:setBullet(v.bullet)
-			end
-			-- "fixedRotation": true,
-			local fixedRotation = true
-			if type(v.fixedRotation) == "boolean" then
-				fixedRotation = v.fixedRotation
-			end
-			-- "linearDamping": 0,
-			local linearDamping = 0
-			if type(v.linearDamping) == "number" then
-				linearDamping = v.linearDamping
-			end
-			-- "linearVelocity": (vector),
-			local vx = 0
-			local vy = 0
-			if type(v.linearVelocity) == "table" then
-				vx = v.linearVelocity.x
-				vy = v.linearVelocity.y
-			end
-			-- "massData-mass": 1,
-			local mass = 1
-			if type(v["massData-mass"]) == "number" then
-				mass = v["massData-mass"]
-			end
-			-- "massData-center": (vector),
-			local massX = 0
-			local massY = 0
-			if type(v["massData-center"]) == "table" then
-				massX = v["massData-center"].x
-				massY = v["massData-center"].y
-			end
-			-- "massData-I": 1,
-			local massI = 1
-			if type(v["massData-I"]) == "number" then
-				massI = v["massData-I"]
-			end
+				-- create the body
+				local body = world:addBody(bodytype)
 
-			if type(v.fixture) == "table" then
-				for _, fixture in ipairs(v.fixture) do
 
-					local fix = nil
+				if type(v.position) == "table" then
+					x = v.position.x
+					y = v.position.y
+				end
 
-					if type(fixture.chain) == "table" then
-						-- TODO: closed chain
-						-- gather the verts
-						local xs = fixture.chain.vertices.x
-						local ys = fixture.chain.vertices.y
-						local verts = {}
-						for i = 1, #xs do
-							table.insert(verts, xs[i])
-							table.insert(verts, ys[i])
+				-- radians
+				local angle = 0
+				if type(v.angle) == "number" then
+					angle = v.angle
+				end
+				-- "angularDamping": 0,
+				local angularDamping = 0
+				if type(v.angularDamping) == "number" then
+					angularDamping = v.angularDamping
+				end
+				-- "angularVelocity": 0, //radians per second
+				local angularVelocity = 0
+				if type(v.angularVelocity) == "number" then
+					angularVelocity = v.angularVelocity
+				end
+				-- "awake": true,
+				if type(v.awake) == "boolean" then
+					body:setAwake(v.awake)
+				end
+				-- "bullet": true,
+				if type(v.bullet) == "boolean" then
+					body:setBullet(v.bullet)
+				end
+				-- "fixedRotation": true,
+				local fixedRotation = true
+				if type(v.fixedRotation) == "boolean" then
+					fixedRotation = v.fixedRotation
+				end
+				-- "linearDamping": 0,
+				local linearDamping = 0
+				if type(v.linearDamping) == "number" then
+					linearDamping = v.linearDamping
+				end
+				-- "linearVelocity": (vector),
+				local vx = 0
+				local vy = 0
+				if type(v.linearVelocity) == "table" then
+					vx = v.linearVelocity.x
+					vy = v.linearVelocity.y
+				end
+				-- "massData-mass": 1,
+				local mass = 1
+				if type(v["massData-mass"]) == "number" then
+					mass = v["massData-mass"]
+				end
+				-- "massData-center": (vector),
+				local massX = 0
+				local massY = 0
+				if type(v["massData-center"]) == "table" then
+					massX = v["massData-center"].x
+					massY = v["massData-center"].y
+				end
+				-- "massData-I": 1,
+				local massI = 1
+				if type(v["massData-I"]) == "number" then
+					massI = v["massData-I"]
+				end
+
+				if type(v.fixture) == "table" then
+					for _, fixture in ipairs(v.fixture) do
+
+						local fix = nil
+
+						if type(fixture.chain) == "table" then
+							-- TODO: closed chain
+							-- gather the verts
+							local xs = fixture.chain.vertices.x
+							local ys = fixture.chain.vertices.y
+							local verts = {}
+							for i = 1, #xs do
+								table.insert(verts, xs[i])
+								table.insert(verts, ys[i])
+							end
+							fix = body:addChain(verts, false)
+
+						elseif type(fixture.polygon) == "table" then
+							-- gather the verts
+							local xs = fixture.polygon.vertices.x
+							local ys = fixture.polygon.vertices.y
+							local verts = {}
+							for i = 1, #xs do
+								table.insert(verts, xs[i])
+								table.insert(verts, ys[i])
+							end
+							fix = body:addPolygon(verts)
+
+						elseif type(fixture.circle) == "table" then
+							-- "center" : 0
+							local centerX = 0
+							local centerY = 0
+							if type(fixture.circle.center) == "table" then
+								centerX = fixture.circle.center.x
+								centerY = fixture.circle.center.y
+							end
+							-- "radius" : 1
+							local radius = 0
+							if type(fixture.circle.radius) == "number" then
+								radius = fixture.circle.radius
+							end
+							fix = body:addCircle(centerX, centerY, radius)
 						end
-						fix = body:addChain(verts, false)
 
-					elseif type(fixture.polygon) == "table" then
-						-- gather the verts
-						local xs = fixture.polygon.vertices.x
-						local ys = fixture.polygon.vertices.y
-						local verts = {}
-						for i = 1, #xs do
-							table.insert(verts, xs[i])
-							table.insert(verts, ys[i])
+						if fix then
+							if type(fixture.density) == "number" then
+								fix:setDensity(fixture.density)
+							end
+							if type(fixture.friction) == "number" then
+								fix:setFriction(fixture.friction)
+							end
 						end
-						fix = body:addPolygon(verts)
-
-					elseif type(fixture.circle) == "table" then
-						-- "center" : 0
-						local centerX = 0
-						local centerY = 0
-						if type(fixture.circle.center) == "table" then
-							centerX = fixture.circle.center.x
-							centerY = fixture.circle.center.y
-						end
-						-- "radius" : 1
-						local radius = 0
-						if type(fixture.circle.radius) == "number" then
-							radius = fixture.circle.radius
-						end
-						fix = body:addCircle(centerX, centerY, radius)
 					end
-
-					if fix then
-						if type(fixture.density) == "number" then
-							fix:setDensity(fixture.density)
-						end
-						if type(fixture.friction) == "number" then
-							fix:setFriction(fixture.friction)
-						end
-					end
-				end
-			end
-
-			body:setMassData(mass, massI, massX, massY)
-			body:setTransform(x, y, angle)
-
-			-- insert into the bodies table which is referenced by index by the joints
-			table.insert(bodies, body)
-
-			-- keep a reference in the world by name
-			world.bodies[v.name] = body
-
-		end -- bodies
-
-		-- joints must be done after all the bodies
-		for _, j in ipairs(json.joint) do
-
-			-- wheel type
-			if j.type == "wheel" then
-				-- "anchorA": (vector),
-				local anchorX = 0
-				local anchorY = 0
-				if type(j.anchorA) == "table" then
-					anchorX = j.anchorA.x
-					anchorY = j.anchorA.y
-				end
-				-- "anchorB": (vector),
-				-- "bodyA": 4, //zero-based index of body in bodies array
-				local bodyA = bodies[j.bodyA + 1]
-				-- "bodyB": 1, //zero-based index of body in bodies array
-				local bodyB = bodies[j.bodyB + 1]
-				-- "collideConnected": true,
-				-- "localAxisA": (vector),
-				local axisX = 0
-				local axisY = 0
-				if type(j.localAxisA) == "table" then
-					axisX = j.localAxisA.x
-					axisY = j.localAxisA.y
 				end
 
-				local bodyX, bodyY = bodyA:getPosition()
-				local wheelJoint = world:addWheelJoint(bodyA, bodyB, bodyX+anchorX, bodyY+anchorY, axisX, axisY)
+				body:setMassData(mass, massI, massX, massY)
+				body:setTransform(x, y, angle)
 
-				-- "customProperties": //An array of zero or more custom properties.
-
-				-- "enableMotor": true,
-				if type(j.enableMotor) == "boolean" then
-					wheelJoint:setMotorEnabled(j.enableMotor)
-				end
-				-- "motorSpeed": 0,
-				if type(j.motorSpeed) == "number" then
-					-- these are radians, MOAI needs degrees
-					wheelJoint:setMotorSpeed(j.motorSpeed * RADIANS_TO_DEGREES)
-				end
-				-- "maxMotorTorque": 0,
-				if type(j.maxMotorTorque) == "number" then
-					wheelJoint:setMaxMotorTorque(j.maxMotorTorque)
-				end
-				-- "springDampingRatio": 0.7,
-				if type(j.springDampingRatio) == "number" then
-					wheelJoint:setSpringDampingRatio(j.springDampingRatio)
-				end
-				-- "springFrequency": 4,
-				if type(j.springFrequency) == "number" then
-					wheelJoint:setSpringFrequencyHz(j.springFrequency)
-				end
+				-- insert into the bodies table which is referenced by index by the joints
+				table.insert(bodies, body)
 
 				-- keep a reference in the world by name
-				world.joints[j.name] = wheelJoint
-			end
-		end -- joints
+				world.bodies[v.name] = body
+
+			end -- bodies
+		end
+
+		-- joints must be done after all the bodies
+		-- TODO: check!
+		if type(json.joint) == "table" then
+			for _, j in ipairs(json.joint) do
+
+				-- wheel type
+				if j.type == "wheel" then
+					-- "anchorA": (vector),
+					local anchorX = 0
+					local anchorY = 0
+					if type(j.anchorA) == "table" then
+						anchorX = j.anchorA.x
+						anchorY = j.anchorA.y
+					end
+					-- "anchorB": (vector),
+					-- "bodyA": 4, //zero-based index of body in bodies array
+					local bodyA = bodies[j.bodyA + 1]
+					-- "bodyB": 1, //zero-based index of body in bodies array
+					local bodyB = bodies[j.bodyB + 1]
+					-- "collideConnected": true,
+					-- "localAxisA": (vector),
+					local axisX = 0
+					local axisY = 0
+					if type(j.localAxisA) == "table" then
+						axisX = j.localAxisA.x
+						axisY = j.localAxisA.y
+					end
+
+					local bodyX, bodyY = bodyA:getPosition()
+					local wheelJoint = world:addWheelJoint(bodyA, bodyB, bodyX+anchorX, bodyY+anchorY, axisX, axisY)
+
+					-- "customProperties": //An array of zero or more custom properties.
+
+					-- "enableMotor": true,
+					if type(j.enableMotor) == "boolean" then
+						wheelJoint:setMotorEnabled(j.enableMotor)
+					end
+					-- "motorSpeed": 0,
+					if type(j.motorSpeed) == "number" then
+						-- these are radians, MOAI needs degrees
+						wheelJoint:setMotorSpeed(j.motorSpeed * RADIANS_TO_DEGREES)
+					end
+					-- "maxMotorTorque": 0,
+					if type(j.maxMotorTorque) == "number" then
+						wheelJoint:setMaxMotorTorque(j.maxMotorTorque)
+					end
+					-- "springDampingRatio": 0.7,
+					if type(j.springDampingRatio) == "number" then
+						wheelJoint:setSpringDampingRatio(j.springDampingRatio)
+					end
+					-- "springFrequency": 4,
+					if type(j.springFrequency) == "number" then
+						wheelJoint:setSpringFrequencyHz(j.springFrequency)
+					end
+
+					-- keep a reference in the world by name
+					world.joints[j.name] = wheelJoint
+				end
+			end -- joints
+		end
 
 		-- images must be done after all the bodies
-		for _, img in ipairs(json.image) do
+		if type(json.image) == "table" then
+			for _, img in ipairs(json.image) do
 
-			-- "aspectScale" : 1,
-			local aspectScale = 1
-			if type(img.aspectScale) == "number" then
-				aspectScale = img.aspectScale
-			end
+				-- "aspectScale" : 1,
+				local aspectScale = 1
+				if type(img.aspectScale) == "number" then
+					aspectScale = img.aspectScale
+				end
 
-			-- "body" : 0, zero-based index of body in bodies array
-			local body = bodies[img.body + 1]
+				-- "body" : 0, zero-based index of body in bodies array
+				local body = bodies[img.body + 1]
 
-			-- "center" : 0,
-			local centerX = 0
-			local centerY = 0
-			if type(img.center) == "table" then
-				centerX = img.center.x
-				centerY = img.center.y
-			end
+				-- "center" : 0,
+				local centerX = 0
+				local centerY = 0
+				if type(img.center) == "table" then
+					centerX = img.center.x
+					centerY = img.center.y
+				end
 
-			-- "file" : "../sprites/cars/bluebody.png",
-			local sprname, animname = string.match(img.file, "/(%w+)/(%w+).png$")
-			local spr = Sprite.new(sprname)
-			spr:playAnimation(animname)
-			_layer:insertProp(spr)
-			spr:setParent(body)
+				-- "file" : "../sprites/cars/bluebody.png",
+				local sprname, animname = string.match(img.file, "/(%w+)/(%w+).png$")
+				local spr = Sprite.new(sprname)
+				spr:playAnimation(animname)
+				_layer:insertProp(spr)
+				spr:setParent(body)
 
-			if type(img.glVertexPointer) == "table" then
+				if type(img.glVertexPointer) == "table" then
 
-				local orgw = spr.spriteData.originalWidths[animname]
-				local rubew = img.glVertexPointer[3] - img.glVertexPointer[1]
-				local scale = 1 / (orgw / rubew)
-				spr:setScl(scale)
-			end
+					local orgw = spr.spriteData.originalWidths[animname]
+					local rubew = img.glVertexPointer[3] - img.glVertexPointer[1]
+					local scale = 1 / (orgw / rubew)
+					spr:setScl(scale)
+				end
 
-		end -- images
-
-
-		-- test
-		dbtxt:setString(TableExt.tostring(world.bodies))
-		print("---joints---")
-		TableExt.print(world.joints)
+			end -- images
+		end
 	end
 
 	return box
