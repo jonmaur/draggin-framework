@@ -1,6 +1,5 @@
 
 {
-  "activeScript" : "float pixelsPerUnit = 45;\nimage[] imgs = getSelectedImages();\nfor (uint i = 0; i < imgs.length; i++)\n\timgs[i].setHeight( imgs[i].getPixelHeight() / pixelsPerUnit );",
   "collisionbitplanes" : 
   {
     "names" : 
@@ -46,14 +45,14 @@
     "continuousPhysics" : true,
     "exportOptions" : 
     {
-      "compactCommonFloats" : true,
-      "compactZeroVecs" : true,
+      "compactCommonFloats" : false,
+      "compactZeroVecs" : false,
       "saveFullPathForImages" : false,
       "saveFullPathForSamplerOutput" : false,
       "saveImagePathsRelativeToRUBEFile" : false,
       "saveSamplerOutputPathsRelativeToRUBEFile" : false,
       "useHumanReadableFloats" : true,
-      "usePrettyPrint" : true
+      "usePrettyPrint" : false
     },
     "gravity" : 
     {
@@ -122,7 +121,7 @@
             [
               
               {
-                "radius" : 0.1806835383176804,
+                "radius" : 0.3716844618320465,
                 "type" : "circle"
               }
             ],
@@ -135,8 +134,8 @@
         ],
         "id" : 2,
         "linearVelocity" : 0,
-        "massData-I" : 0.001674149534665048,
-        "massData-mass" : 0.1025621369481087,
+        "massData-I" : 0.02997902594506741,
+        "massData-mass" : 0.4340089559555054,
         "name" : "rearwheel_body",
         "position" : 
         {
@@ -209,17 +208,17 @@
             {
               "x" : 
               [
+                0.3100938796997070,
+                0.3100938796997070,
                 -0.3100929260253906,
-                0.3100938796997070,
-                0.3100938796997070,
                 -0.3100929260253906
               ],
               "y" : 
               [
                 -0.3100931644439697,
-                -0.3100931644439697,
                 0.3100931644439697,
-                0.3100931644439697
+                0.3100931644439697,
+                -0.3100931644439697
               ]
             }
           }
@@ -305,17 +304,17 @@
             {
               "x" : 
               [
+                0.3415784835815430,
+                0.3415784835815430,
                 -0.3415789604187012,
-                0.3415784835815430,
-                0.3415784835815430,
                 -0.3415789604187012
               ],
               "y" : 
               [
                 -0.3415787220001221,
-                -0.3415787220001221,
                 0.3415786027908325,
-                0.3415786027908325
+                0.3415786027908325,
+                -0.3415787220001221
               ]
             }
           }
@@ -361,17 +360,17 @@
             {
               "x" : 
               [
+                0.2744493484497070,
+                0.2744493484497070,
                 -0.2744493484497070,
-                0.2744493484497070,
-                0.2744493484497070,
                 -0.2744493484497070
               ],
               "y" : 
               [
                 -0.2744493782520294,
-                -0.2744493782520294,
                 0.2744493782520294,
-                0.2744493782520294
+                0.2744493782520294,
+                -0.2744493782520294
               ]
             }
           }
@@ -399,67 +398,15 @@
       
       {
         "aspectScale" : 1,
-        "body" : 5,
-        "center" : 0,
-        "file" : "../sprites/cars/bluebody.png",
-        "filter" : 0,
-        "flip" : false,
-        "id" : 1,
-        "name" : "chasis_image",
-        "opacity" : 1,
-        "scale" : 1.777777791023254
-      },
-      
-      {
-        "aspectScale" : 1,
-        "body" : 2,
-        "center" : 0,
-        "file" : "../sprites/cars/bluerearwheel.png",
-        "filter" : 0,
-        "flip" : false,
-        "id" : 2,
-        "name" : "rearwheel_image",
-        "opacity" : 1,
-        "scale" : 0.4
-      },
-      
-      {
-        "aspectScale" : 1,
         "body" : 3,
         "center" : 0,
         "file" : "../sprites/cars/bluefrontwheel.png",
         "filter" : 0,
         "flip" : false,
-        "id" : 3,
+        "id" : 1,
         "name" : "frontwheel_image",
         "opacity" : 1,
         "scale" : 0.2666666805744171
-      },
-      
-      {
-        "aspectScale" : 1,
-        "body" : 4,
-        "center" : 0,
-        "file" : "../sprites/boxes/box.png",
-        "filter" : 0,
-        "flip" : false,
-        "id" : 4,
-        "name" : "box_0",
-        "opacity" : 1,
-        "scale" : 0.6201863884925842
-      },
-      
-      {
-        "aspectScale" : 1,
-        "body" : 6,
-        "center" : 0,
-        "file" : "../sprites/boxes/box.png",
-        "filter" : 0,
-        "flip" : false,
-        "id" : 5,
-        "name" : "box_0",
-        "opacity" : 1,
-        "scale" : 0.6831572651863098
       },
       
       {
@@ -469,10 +416,62 @@
         "file" : "../sprites/boxes/box.png",
         "filter" : 0,
         "flip" : false,
-        "id" : 6,
+        "id" : 2,
         "name" : "box_0",
         "opacity" : 1,
         "scale" : 0.5488987565040588
+      },
+      
+      {
+        "aspectScale" : 1,
+        "body" : 5,
+        "center" : 0,
+        "file" : "../sprites/cars/bluebody.png",
+        "filter" : 0,
+        "flip" : false,
+        "id" : 3,
+        "name" : "chasis_image",
+        "opacity" : 1,
+        "scale" : 1.777777791023254
+      },
+      
+      {
+        "aspectScale" : 1,
+        "body" : 6,
+        "center" : 0,
+        "file" : "../sprites/boxes/box.png",
+        "filter" : 0,
+        "flip" : false,
+        "id" : 4,
+        "name" : "box_0",
+        "opacity" : 1,
+        "scale" : 0.6831572651863098
+      },
+      
+      {
+        "aspectScale" : 1,
+        "body" : 4,
+        "center" : 0,
+        "file" : "../sprites/boxes/box.png",
+        "filter" : 0,
+        "flip" : false,
+        "id" : 5,
+        "name" : "box_0",
+        "opacity" : 1,
+        "scale" : 0.6201863884925842
+      },
+      
+      {
+        "aspectScale" : 1,
+        "body" : 2,
+        "center" : 0,
+        "file" : "../sprites/cars/bluerearwheel.png",
+        "filter" : 0,
+        "flip" : false,
+        "id" : 6,
+        "name" : "rearwheel_image",
+        "opacity" : 1,
+        "scale" : 0.8228408098220825
       }
     ],
     "metajoint" : 
@@ -489,14 +488,14 @@
         "bodyB" : 2,
         "collideConnected" : false,
         "enableMotor" : true,
-        "id" : 2,
+        "id" : 1,
         "localAxisA" : 
         {
           "x" : 0,
           "y" : 1
         },
-        "maxMotorTorque" : 50.0,
-        "motorSpeed" : -18.84955596923828,
+        "maxMotorTorque" : 100.0,
+        "motorSpeed" : -12.56637096405029,
         "name" : "rearwheel_joint",
         "springDampingRatio" : 0.7,
         "springFrequency" : 4,
@@ -514,7 +513,7 @@
         "bodyB" : 3,
         "collideConnected" : false,
         "enableMotor" : false,
-        "id" : 3,
+        "id" : 2,
         "localAxisA" : 
         {
           "x" : 0,

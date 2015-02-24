@@ -47,8 +47,9 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 	local world = MOAIBox2DWorld.new()
 
 	world:setUnitsToMeters(_unitsToMeters)
-	-- this setting made it fast
-	--world:setGravity(0, 9.8 / (1/19))
+	world.unitsToMeters = _unitsToMeters
+	world.metersToUnits = 1/_unitsToMeters
+
 	world:setGravity(_gravity.x, _gravity.y)
 	world:start()
 
@@ -190,16 +191,35 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 		local jsonStr = jsonFile:read()
 
 		local json = MOAIJsonParser.decode(jsonStr)
-
 		--TableExt.print(json)
+
+		-- World settings
+		-- "allowSleep" : true, BETTER ALWAYS BE TRUE!
+		-- "autoClearForces" : true,
+		if type(json.autoClearForces) == "boolean" then
+			world:setAutoClearForces(json.autoClearForces)
+		end
+		-- "continuousPhysics" : true,
+		-- "gravity" : 
+		local gx = 0
+		local gy = 0
+		if type(json.gravity) == "table" then
+			gx = json.gravity.x
+			gy = json.gravity.y
+		end
+		world:setGravity(gx, gy)
+		--"velocityIterations" : 8,
+		--"positionIterations" : 3,
+		world:setIterations(json.velocityIterations, json.positionIterations)
+		--"stepsPerSecond" : 60.0, I guess this is framerate?
+		--"subStepping" : false, -- always false, it's a box2d debug feature
+		--"warmStarting" : true
+
+		
 		local bodies = {}
 
 		if type(json.body) == "table" then
 			for _, v in ipairs(json.body) do
-
-				local x = 0
-				local y = 0
-
 
 				-- "type": 2, //0 = static, 1 = kinematic, 2 = dynamic
 				local bodytype = MOAIBox2DBody.STATIC
@@ -212,70 +232,13 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 				-- create the body
 				local body = world:addBody(bodytype)
 
-
+				local x = 0
+				local y = 0
 				if type(v.position) == "table" then
 					x = v.position.x
 					y = v.position.y
 				end
-
-				-- radians
-				local angle = 0
-				if type(v.angle) == "number" then
-					angle = v.angle
-				end
-				-- "angularDamping": 0,
-				local angularDamping = 0
-				if type(v.angularDamping) == "number" then
-					angularDamping = v.angularDamping
-				end
-				-- "angularVelocity": 0, //radians per second
-				local angularVelocity = 0
-				if type(v.angularVelocity) == "number" then
-					angularVelocity = v.angularVelocity
-				end
-				-- "awake": true,
-				if type(v.awake) == "boolean" then
-					body:setAwake(v.awake)
-				end
-				-- "bullet": true,
-				if type(v.bullet) == "boolean" then
-					body:setBullet(v.bullet)
-				end
-				-- "fixedRotation": true,
-				local fixedRotation = true
-				if type(v.fixedRotation) == "boolean" then
-					fixedRotation = v.fixedRotation
-				end
-				-- "linearDamping": 0,
-				local linearDamping = 0
-				if type(v.linearDamping) == "number" then
-					linearDamping = v.linearDamping
-				end
-				-- "linearVelocity": (vector),
-				local vx = 0
-				local vy = 0
-				if type(v.linearVelocity) == "table" then
-					vx = v.linearVelocity.x
-					vy = v.linearVelocity.y
-				end
-				-- "massData-mass": 1,
-				local mass = 1
-				if type(v["massData-mass"]) == "number" then
-					mass = v["massData-mass"]
-				end
-				-- "massData-center": (vector),
-				local massX = 0
-				local massY = 0
-				if type(v["massData-center"]) == "table" then
-					massX = v["massData-center"].x
-					massY = v["massData-center"].y
-				end
-				-- "massData-I": 1,
-				local massI = 1
-				if type(v["massData-I"]) == "number" then
-					massI = v["massData-I"]
-				end
-
+				
 				if type(v.fixture) == "table" then
 					for _, fixture in ipairs(v.fixture) do
 
@@ -321,18 +284,94 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 						end
 
 						if fix then
+							local density = 1 / (world.metersToUnits * world.metersToUnits)
 							if type(fixture.density) == "number" then
-								fix:setDensity(fixture.density)
+								density = fixture.density / (world.metersToUnits * world.metersToUnits)
 							end
+							fix:setDensity(density)
+
 							if type(fixture.friction) == "number" then
 								fix:setFriction(fixture.friction)
+							end
+							if type(fixture.restitution) == "number" then
+								fix:setRestitution(fixture.restitution)
+							end
+							if type(fixture.sensor) == "boolean" then
+								fix:setSensor(fixture.sensor)
 							end
 						end
 					end
 				end
 
-				body:setMassData(mass, massI, massX, massY)
+				-- radians
+				local angle = 0
+				if type(v.angle) == "number" then
+					angle = v.angle * RADIANS_TO_DEGREES
+				end
+				-- "angularDamping": 0,
+				local angularDamping = 0
+				if type(v.angularDamping) == "number" then
+					angularDamping = v.angularDamping
+				end
+				body:setAngularDamping(angularDamping)
+				-- "angularVelocity": 0, //radians per second
+				local angularVelocity = 0
+				if type(v.angularVelocity) == "number" then
+					angularVelocity = v.angularVelocity * RADIANS_TO_DEGREES
+				end
+				body:setAngularVelocity(angularVelocity)
+				-- "awake": true,
+				if type(v.awake) == "boolean" then
+					body:setAwake(v.awake)
+				end
+				-- "bullet": true,
+				if type(v.bullet) == "boolean" then
+					body:setBullet(v.bullet)
+				end
+				-- "fixedRotation": false,
+				local fixedRotation = false
+				if type(v.fixedRotation) == "boolean" then
+					fixedRotation = v.fixedRotation
+				end
+				body:setFixedRotation(fixedRotation)
+				-- "linearDamping": 0,
+				local linearDamping = 0
+				if type(v.linearDamping) == "number" then
+					linearDamping = v.linearDamping
+				end
+				body:setLinearDamping(linearDamping)
+				-- "linearVelocity": (vector),
+				local lvx = 0
+				local lvy = 0
+				if type(v.linearVelocity) == "table" then
+					-- TODO: do I need to convert these using meters to units?
+					lvx = v.linearVelocity.x
+					lvy = v.linearVelocity.y
+				end
+				body:setLinearVelocity(lvx, lvy)
+				-- "massData-mass": 1,
+				local mass = nil
+				if type(v["massData-mass"]) == "number" then
+					mass = v["massData-mass"]
+				end
+				-- "massData-center": (vector),
+				local massX = nil
+				local massY = nil
+				if type(v["massData-center"]) == "table" then
+					massX = v["massData-center"].x * world.metersToUnits
+					massY = v["massData-center"].y * world.metersToUnits
+				end
+				-- "massData-I": 1,
+				local massI = nil
+				if type(v["massData-I"]) == "number" then
+					massI = v["massData-I"] * world.metersToUnits * world.metersToUnits
+				end
+
 				body:setTransform(x, y, angle)
+				body:resetMassData()
+				if mass ~= nil then
+					body:setMassData(mass, massI, massX, massY)
+				end
 
 				-- insert into the bodies table which is referenced by index by the joints
 				table.insert(bodies, body)
@@ -344,38 +383,51 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 		end
 
 		-- joints must be done after all the bodies
-		-- TODO: check!
 		if type(json.joint) == "table" then
 			for _, j in ipairs(json.joint) do
 
+				-- Common to all joints
+				-- "anchorA": (vector),
+				local anchorAX = 0
+				local anchorAY = 0
+				if type(j.anchorA) == "table" then
+					anchorAX = j.anchorA.x
+					anchorAY = j.anchorA.y
+				end
+				-- "anchorB": (vector),
+				local anchorBX = 0
+				local anchorBY = 0
+				if type(j.anchorB) == "table" then
+					anchorBX = j.anchorB.x
+					anchorBY = j.anchorB.y
+				end
+				-- "bodyA": 4, //zero-based index of body in bodies array
+				local bodyA = bodies[j.bodyA + 1]
+				-- "bodyB": 1, //zero-based index of body in bodies array
+				local bodyB = bodies[j.bodyB + 1]
+				-- "localAxisA": (vector),
+				local axisX = 0
+				local axisY = 0
+				if type(j.localAxisA) == "table" then
+					axisX = j.localAxisA.x
+					axisY = j.localAxisA.y
+				end
+
+				-- "collideConnected" : false,
+				local collideConnected = false
+				if type(j.collideConnected) == "boolean" then
+					collideConnected = j.collideConnected
+				end
+
+				local bodyAX, bodyAY = bodyA:getPosition()
+				local bodyBX, bodyBY = bodyB:getPosition()
+				
 				-- wheel type
 				if j.type == "wheel" then
-					-- "anchorA": (vector),
-					local anchorX = 0
-					local anchorY = 0
-					if type(j.anchorA) == "table" then
-						anchorX = j.anchorA.x
-						anchorY = j.anchorA.y
-					end
-					-- "anchorB": (vector),
-					-- "bodyA": 4, //zero-based index of body in bodies array
-					local bodyA = bodies[j.bodyA + 1]
-					-- "bodyB": 1, //zero-based index of body in bodies array
-					local bodyB = bodies[j.bodyB + 1]
-					-- "collideConnected": true,
-					-- "localAxisA": (vector),
-					local axisX = 0
-					local axisY = 0
-					if type(j.localAxisA) == "table" then
-						axisX = j.localAxisA.x
-						axisY = j.localAxisA.y
-					end
-
-					local bodyX, bodyY = bodyA:getPosition()
-					local wheelJoint = world:addWheelJoint(bodyA, bodyB, bodyX+anchorX, bodyY+anchorY, axisX, axisY)
+					local wheelJoint = world:addWheelJoint(bodyA, bodyB, bodyAX+anchorAX, bodyAY+anchorAY, axisX, axisY)
 
 					-- "customProperties": //An array of zero or more custom properties.
-
+					
 					-- "enableMotor": true,
 					if type(j.enableMotor) == "boolean" then
 						wheelJoint:setMotorEnabled(j.enableMotor)
@@ -400,6 +452,123 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 
 					-- keep a reference in the world by name
 					world.joints[j.name] = wheelJoint
+				
+				elseif j.type == "revolute" then
+					-- NOTE: This requires MOAI changes
+					-- NOTE: world:addRevoluteJoint didn't work so well for me.
+					local revoluteJoint = world:addRevoluteJointLocal(bodyA, bodyB, anchorAX, anchorAY, 
+						anchorBX, anchorBY, collideConnected)
+
+					-- "lowerLimit": 0,
+					local lowerLimit = 0
+					if type(j.lowerLimit) == "number" then
+						lowerLimit = j.lowerLimit * RADIANS_TO_DEGREES
+					end
+					-- "upperLimit": 0,
+					local upperLimit = 0
+					if type(j.upperLimit) == "number" then
+						upperLimit = j.upperLimit * RADIANS_TO_DEGREES
+					end
+					revoluteJoint:setLimit(lowerLimit, upperLimit)
+					-- "enableLimit": false,
+					local enableLimit = false
+					if type(j.enableLimit) == "boolean" then
+						enableLimit = j.enableLimit
+						revoluteJoint:setLimitEnabled(enableLimit)
+					end
+
+					-- "jointSpeed": 0,
+					if type(j.jointSpeed) == "number" then
+						-- TODO: anything to do with this??
+					end
+
+					-- "refAngle": 0,
+					if type(j.refAngle) == "number" then
+						-- TODO
+					end
+
+					-- "enableMotor": true,
+					if type(j.enableMotor) == "boolean" then
+						revoluteJoint:setMotorEnabled(j.enableMotor)
+					end
+					-- "motorSpeed": 0,
+					if type(j.motorSpeed) == "number" then
+						-- these are radians, MOAI needs degrees
+						revoluteJoint:setMotorSpeed(j.motorSpeed * RADIANS_TO_DEGREES)
+					end
+					-- "maxMotorTorque": 0,
+					if type(j.maxMotorTorque) == "number" then
+						revoluteJoint:setMaxMotorTorque(j.maxMotorTorque)
+					end
+
+					-- keep a reference in the world by name
+					world.joints[j.name] = revoluteJoint
+
+				elseif j.type == "distance" then
+
+					-- "dampingRatio" : 0,
+					local dampingRatio = 0
+					if type(j.dampingRatio) == "number" then
+						dampingRatio = j.dampingRatio
+					end
+					-- "frequency" : 0,
+					local frequency = 0
+					if type(j.frequency) == "number" then
+						frequency = j.frequency
+					end
+
+					local distanceJoint = world:addDistanceJoint(bodyA, bodyB, bodyAX+anchorAX, bodyAY+anchorAY, 
+						frequency, dampingRatio, collideConnected)
+					
+					-- "length" : 0,
+					if type(j.length) == "number" then
+						distanceJoint:setLength(j.length * world.metersToUnits)
+					end
+
+					-- keep a reference in the world by name
+					world.joints[j.name] = distanceJoint
+				elseif j.type == "prismatic" then
+					local prismaticJoint = world:addPrismaticJoint(bodyA, bodyB, bodyAX+anchorAX, bodyAY+anchorAY, 
+						axisX, axisY, collideConnected)
+
+					-- "lowerLimit": 0,
+					local lowerLimit = 0
+					if type(j.lowerLimit) == "number" then
+						lowerLimit = j.lowerLimit * RADIANS_TO_DEGREES
+					end
+					-- "upperLimit": 0,
+					local upperLimit = 0
+					if type(j.upperLimit) == "number" then
+						upperLimit = j.upperLimit * RADIANS_TO_DEGREES
+					end
+					prismaticJoint:setLimit(lowerLimit, upperLimit)
+					-- "enableLimit": false,
+					local enableLimit = false
+					if type(j.enableLimit) == "boolean" then
+						enableLimit = j.enableLimit
+						prismaticJoint:setLimitEnabled(enableLimit)
+					end
+					
+					-- "enableMotor": true,
+					if type(j.enableMotor) == "boolean" then
+						prismaticJoint:setMotorEnabled(j.enableMotor)
+					end
+					-- "motorSpeed": 0,
+					if type(j.motorSpeed) == "number" then
+						prismaticJoint:setMotorSpeed(j.motorSpeed * world.metersToUnits)
+					end
+					-- "maxMotorForce": 0,
+					if type(j.maxMotorForce) == "number" then
+						prismaticJoint:setMaxMotorForce(j.maxMotorForce * world.metersToUnits)
+					end
+
+					-- "refAngle": 0,
+					if type(j.refAngle) == "number" then
+						-- TODO
+					end
+
+					-- keep a reference in the world by name
+					world.joints[j.name] = prismaticJoint
 				end
 			end -- joints
 		end
