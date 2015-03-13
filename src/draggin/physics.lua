@@ -61,16 +61,10 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 
 	box.world = world
 
-	local dbtxt
 	if _layer then
 		print("Debug Physics Draws on")
 		_layer:setBox2DWorld(world)
-
-		dbtxt = TextBox.new("gridblock7", 7, false)
-		dbtxt:setDimensions(0, 0, Display.virtualWidth/2, Display.virtualHeight, 0, 0)
-		dbtxt:insertIntoLayer(_layer)
 	end
-
 
 	function box:addRect(_type, x, y, w, h, r)
 
@@ -184,7 +178,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 		return physBody
 	end
 
-	function box:loadRubeJson(_filename)
+	function box:loadRubeJson(_filename, _layer)
 
 		local jsonFile = MOAIFileStream.new()
 		jsonFile:open("res/rube/".._filename..".json")
@@ -240,6 +234,8 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 				end
 				
 				if type(v.fixture) == "table" then
+					body.fixtures = {}
+
 					for _, fixture in ipairs(v.fixture) do
 
 						local fix = nil
@@ -266,6 +262,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 								table.insert(verts, ys[i])
 							end
 							fix = body:addPolygon(verts)
+							print("polygon", fixture.name)
 
 						elseif type(fixture.circle) == "table" then
 							-- "center" : 0
@@ -281,6 +278,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 								radius = fixture.circle.radius
 							end
 							fix = body:addCircle(centerX, centerY, radius)
+							print("circle", fixture.name)
 						end
 
 						if fix then
@@ -299,6 +297,8 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 							if type(fixture.sensor) == "boolean" then
 								fix:setSensor(fixture.sensor)
 							end
+
+							body.fixtures[fixture.name] = fix
 						end
 					end
 				end
@@ -584,6 +584,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 				end
 
 				-- "body" : 0, zero-based index of body in bodies array
+				-- img.body might be -1 which results in body being nil
 				local body = bodies[img.body + 1]
 
 				-- "center" : 0,
@@ -600,6 +601,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 				spr:playAnimation(animname)
 				_layer:insertProp(spr)
 				spr:setParent(body)
+				spr:setLoc(centerX, centerY)
 
 				if type(img.glVertexPointer) == "table" then
 
@@ -607,6 +609,13 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 					local rubew = img.glVertexPointer[3] - img.glVertexPointer[1]
 					local scale = 1 / (orgw / rubew)
 					spr:setScl(scale)
+				end
+
+				if type(img.flip) == "boolean" then
+					if img.flip then
+						local sx, sy = spr:getScl()
+						spr:setScl(-sx, sy)
+					end
 				end
 
 			end -- images
