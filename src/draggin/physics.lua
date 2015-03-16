@@ -298,6 +298,20 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 								fix:setSensor(fixture.sensor)
 							end
 
+							local categoryBits = 1
+							if type(fixture["filter-categoryBits"]) == "number" then
+								categoryBits = fixture["filter-categoryBits"]
+							end
+							local maskBits = 65535
+							if type(fixture["filter-maskBits"]) == "number" then
+								maskBits = fixture["filter-maskBits"]
+							end
+							local groupIndex = 0
+							if type(fixture["filter-groupIndex"]) == "number" then
+								groupIndex = fixture["filter-groupIndex"]
+							end
+							fix:setFilter(categoryBits, maskBits, groupIndex)
+
 							body.fixtures[fixture.name] = fix
 						end
 					end
