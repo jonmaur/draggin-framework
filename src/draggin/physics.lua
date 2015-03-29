@@ -33,7 +33,7 @@ local Physics = {}
 
 
 function Physics.new(_gravity, _unitsToMeters, _layer)
-	local box = {}
+	local Phys = {}
 
 	_gravity = _gravity or {x=0, y=-10}
 
@@ -59,14 +59,14 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 	-- table to keep track of all joints by name
 	world.joints = {}
 
-	box.world = world
+	Phys.world = world
 
 	if _layer then
 		print("Debug Physics Draws on")
 		_layer:setBox2DWorld(world)
 	end
 
-	function box:addRect(_type, x, y, w, h, r)
+	function Phys:addRect(_type, x, y, w, h, r)
 
 		local physBody = {}
 		_type = _type or MOAIBox2DBody.STATIC
@@ -84,7 +84,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 		return physBody
 	end
 
-	function box:addSpriteBody(_sprite, _type, _bounds)
+	function Phys:addSpriteBody(_sprite, _type, _bounds)
 
 		assert(_sprite)
 
@@ -111,7 +111,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 		body:resetMassData()
 	end
 
-	function box:addSpriteBodyCircle(_sprite, _type, _radius, _fixedrotation)
+	function Phys:addSpriteBodyCircle(_sprite, _type, _radius, _fixedrotation)
 
 		assert(_sprite)
 
@@ -146,7 +146,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 		body:resetMassData()
 	end
 
-	function box:addCircle(_type, x, y, r)
+	function Phys:addCircle(_type, x, y, r)
 		local physBody = {}
 		_type = _type or MOAIBox2DBody.STATIC
 
@@ -161,7 +161,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 		return physBody
 	end
 
-	function box:addChain(_verts, _close)
+	function Phys:addChain(_verts, _close)
 		assert(type(_verts) == "table")
 
 		local physBody = {}
@@ -178,7 +178,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 		return physBody
 	end
 
-	function box:loadRubeJson(_filename, _layer)
+	function Phys:loadRubeJson(_filename, _layer)
 
 		local jsonFile = MOAIFileStream.new()
 		jsonFile:open("res/rube/".._filename..".json")
@@ -636,7 +636,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 		end
 	end
 
-	return box
+	return Phys
 end
 
 return Physics
