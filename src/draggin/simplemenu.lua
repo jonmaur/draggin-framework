@@ -70,7 +70,7 @@ local SimpleMenu = {}
 -- @param _config a table describing the configuration of this menu
 -- @return the new SimpleMenu instance
 function SimpleMenu.new(_entries, _layer, _config)
-	print("Creating a new SimpleMenu")
+	--print("Creating a new SimpleMenu")
 	-- _entries looks like this-- _config.sndnavigate a Sound object to play when navigating the menu
 
 	--local ent = {
@@ -107,7 +107,7 @@ function SimpleMenu.new(_entries, _layer, _config)
 
 	--- Move the menu selection up.
 	function menu:moveUp()
-		print("menu:moveUp()")
+		--print("menu:moveUp()")
 
 		local newSelected = selected
 		local testSelected = selected - 1
@@ -132,7 +132,7 @@ function SimpleMenu.new(_entries, _layer, _config)
 
 	--- Move the menu selection down.
 	function menu:moveDown()
-		print("menu:moveDown()")
+		--print("menu:moveDown()")
 
 		local newSelected = selected
 		local testSelected = selected + 1
@@ -207,7 +207,7 @@ function SimpleMenu.new(_entries, _layer, _config)
 	-- @param _item string or number representing the menu's entry to select
 	-- @return true if successful, does nothing if not successful
 	function menu:setSelected(_item)
-		print("menu:setSelected", _item)
+		--print("menu:setSelected", _item)
 
 		if type(_item) == "string" then
 			-- find the index
@@ -270,7 +270,7 @@ function SimpleMenu.new(_entries, _layer, _config)
 		for k, v in pairs(options) do
 			--print("there")
 			if v == _strOption then
-				print("menu:setOption found it!", k, v)
+				--print("menu:setOption found it!", k, v)
 				newOption = k
 				item.subtxt.option = newOption
 				item.subtxt:setString(v)
@@ -289,7 +289,7 @@ function SimpleMenu.new(_entries, _layer, _config)
 	-- if the current entry has a callback, the fist argument is the item text
 	-- the option text (if any) is the 2nd argument
 	function menu:chooseSelected()
-		print("chooseSelected")
+		--print("chooseSelected")
 		local item = items[selected]
 
 		if type(item.onChoose) == "function" then
@@ -306,10 +306,10 @@ function SimpleMenu.new(_entries, _layer, _config)
 
 	-- initialization
 
-	print("_entries", #_entries)
+	--print("_entries", #_entries)
 	for k, t in ipairs(_entries) do
 
-		print("simplemenu item", k, t)
+		--print("simplemenu item", k, t)
 
 		local txtBox = TextBox.new(fontname, fontsize)
 		items[k] = txtBox
@@ -382,11 +382,11 @@ function SimpleMenu.new(_entries, _layer, _config)
 			local pick = partition:propForPoint(x, y)
 
 			if pick and _state == "down" then
-				print("picked", pick.str)
+				--print("picked", pick.str)
 				menu:setSelected(pick.str)
 			end
 			if pick and _state == "up" then
-				print("picked", pick.str)
+				--print("picked", pick.str)
 				if menu:setSelected(pick.str) then
 					menu:chooseSelected()
 				end
