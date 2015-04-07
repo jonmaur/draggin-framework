@@ -269,8 +269,8 @@ function Draggin:removeJoystickCallback(_padnumber, _func)
 end
 
 --local buttonstates = {[0] = {}, [1] = {}, [2] = {}, [3] = {}}
-local buttonstate = {}
 for i = 1, #joysticks do
+	local buttonstate = {}
 	local function onJoystickButtonEvent(_key, _down)
 
 		--local buttonstate = buttonstates[i]
