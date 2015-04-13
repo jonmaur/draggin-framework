@@ -59,6 +59,9 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 	-- table to keep track of all joints by name
 	world.joints = {}
 
+	-- table to keep track of all images by name
+	world.images = {}
+
 	Phys.world = world
 
 	if _layer then
@@ -610,9 +613,22 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 				end
 
 				-- "file" : "../sprites/cars/bluebody.png",
-				local sprname, animname = string.match(img.file, "/(%w+)/(%w+).png$")
+				local sprname, animname, framenum = string.match(img.file, "/(%w+)/([%a_-]+)(%d-).png$")
+				print("image", sprname, animname, framenum)
 				local spr = Sprite.new(sprname)
-				spr:playAnimation(animname)
+				local speed = 1
+				if type(img.customProperties) == "table" then
+					for _, prop in ipairs(img.customProperties) do
+						if type(prop) == "table" then
+							if prop.name == "speed" then
+								if type(prop.float) == "number" then
+									speed = prop.float
+								end
+							end
+						end
+					end
+				end
+				spr:playAnimation(animname, speed)
 				_layer:insertProp(spr)
 				spr:setParent(body)
 				spr:setLoc(centerX, centerY)
@@ -631,6 +647,9 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 						spr:setScl(-sx, sy)
 					end
 				end
+
+				-- keep a reference in the world by name
+				world.images[img.name] = spr
 
 			end -- images
 		end
