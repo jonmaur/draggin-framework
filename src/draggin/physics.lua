@@ -648,6 +648,22 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 					end
 				end
 
+				local r = 1
+				local g = 1
+				local b = 1
+				local a = 1
+				if type(img.colorTint) == "table" then
+					r = img.colorTint[1] / 255
+					g = img.colorTint[2] / 255
+					b = img.colorTint[3] / 255
+					a = img.colorTint[4] / 255
+				end
+				if type(img.opacity) == "number" then
+					a = a * img.opacity
+				end
+
+				spr:setColor(r, g, b, a)
+
 				-- keep a reference in the world by name
 				world.images[img.name] = spr
 
