@@ -43,6 +43,26 @@ function Draggin.lerp(_from, _to, _by)
 	return ((_to - _from) * _by) + _from
 end
 
+--- A simple isnan.
+-- Check for nan
+-- @param _num the number to check
+-- @return true if _num is nan
+function Draggin.isnan(_num)
+	return _num ~= _num
+end
+
+--- Clean number
+-- If the param _num is nan or inf, return 0
+-- Otherwise return _num
+-- @param _num the number to clean
+-- @return a clean version of _num
+function Draggin.cleanNumber(_num)
+	if _num ~= _num or _num == math.huge then
+		return 0
+	end
+	return _num
+end
+
 local debugDrawOn = false
 --- Set debug draws.
 -- Sets debug draws for MOAITextBox objects.
