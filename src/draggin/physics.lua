@@ -664,6 +664,11 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 
 				spr:setColor(r, g, b, a)
 
+				if body then
+					body.sprites = body.sprites or {}
+					body.sprites[#body.sprites+1] = spr
+				end
+
 				-- keep a reference in the world by name
 				world.images[img.name] = spr
 
