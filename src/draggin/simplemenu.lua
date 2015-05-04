@@ -91,13 +91,17 @@ function SimpleMenu.new(_entries, _layer, _config)
 
 	local fontname = config.fontname or "PressStart6"
 	local fontsize = config.fontsize or 24
+	local fontscale = config.fontscale or 1
 
 	local spacing = config.spacing or fontsize + 2
-	local top = config.top or virtualHeight/2
 	local shadowX = config.shadowX or 0.4
 	local shadowY = config.shadowY or 0.4
 
-	local entrywidth = config.entrywidth or virtualWidth/8
+	local viewportWidth = config.viewportWidth or virtualWidth
+	local viewportHeight = config.viewportHeight or virtualHeight
+
+	local entrywidth = config.entrywidth or viewportWidth/8
+	local top = config.top or viewportHeight/2
 
 	local items = {}
 	local selected
@@ -314,7 +318,8 @@ function SimpleMenu.new(_entries, _layer, _config)
 		local txtBox = TextBox.new(fontname, fontsize)
 		items[k] = txtBox
 		txtBox:setRect(-entrywidth, -fontsize/1.5, entrywidth, fontsize/1.5)
-		txtBox:setLoc(virtualWidth/2, top - (spacing*(k)))
+		txtBox:setLoc(viewportWidth/2, top - (spacing*(k)))
+		txtBox:setScl(fontscale, fontscale)
 		txtBox:setAlignment(MOAITextBox.CENTER_JUSTIFY)
 		txtBox:setShadowOffset(shadowX, shadowY)
 		txtBox:setString(t.txt)
@@ -328,7 +333,8 @@ function SimpleMenu.new(_entries, _layer, _config)
 			local subtxt = TextBox.new(fontname, fontsize)
 			txtBox.subtxt = subtxt
 			subtxt:setRect(entrywidth, -fontsize/1.5, entrywidth*2, fontsize/1.5)
-			subtxt:setLoc(virtualWidth/2, top - (spacing*(k)))
+			subtxt:setLoc(viewportWidth/2, top - (spacing*(k)))
+			subtxt:setScl(fontscale, fontscale)
 			subtxt:setAlignment(MOAITextBox.CENTER_JUSTIFY)
 			subtxt:setShadowOffset(shadowX, shadowY)
 			subtxt:insertIntoLayer(_layer, partition)
