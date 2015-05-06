@@ -315,7 +315,22 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 							end
 							fix:setFilter(categoryBits, maskBits, groupIndex)
 
-							body.fixtures[fixture.name] = fix
+							fix.name = fixture.name
+
+							-- Rube likes to handle complex fixtures as one, 
+							-- but they are actually multiple fixtures with the same name
+							if body.fixtures[fixture.name] == nil then
+								-- we're fine, there's only the one fixture by this name so far
+								body.fixtures[fixture.name] = fix
+							elseif type(body.fixtures[fixture.name]) == "userdata" then
+								-- turn it into a table
+								local t = {body.fixtures[fixture.name], fix}
+								body.fixtures[fixture.name] = t
+								
+							elseif type(body.fixtures[fixture.name]) == "table" then
+								-- it's already a table of fixtures by this name
+								body.fixtures[fixture.name][#body.fixtures[fixture.name]+1] = fix
+							end
 						end
 					end
 				end
