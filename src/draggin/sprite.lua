@@ -78,6 +78,7 @@ function Sprite.new(_strSprite)
 		_mode = _mode or MOAITimer.LOOP
 
 		if _mode == MOAITimer.LOOP and currAnimationName == _strAnim then
+			self.anim:setSpeed(_speed)
 			return
 		end
 
