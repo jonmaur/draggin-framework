@@ -67,7 +67,7 @@ function GameStateManager.pushState(_state, ...)
 end
 
 
-function GameStateManager.popState()
+function GameStateManager.popState(...)
 	local poppedState = topState
 
 	print("popState", topState.name)
@@ -83,7 +83,7 @@ function GameStateManager.popState()
 		topState = states[#states]
 
 		if topState and topState.gotFocus then
-			topState:gotFocus(poppedState.name)
+			topState:gotFocus(poppedState, ...)
 		end
 	end
 
@@ -138,6 +138,16 @@ function GameStateManager.getTopName()
 	else
 		return ""
 	end
+end
+
+function GameStateManager.isStateOnStack(_state)
+	for i = 1, #states do
+		if states[i] == _state then
+			return true, i
+		end
+	end
+	
+	return false
 end
 
 return GameStateManager
