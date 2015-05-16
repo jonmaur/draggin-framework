@@ -285,6 +285,14 @@ function TextBox.new(_strFont, _fontSize, _bShadow)
 		txtNormal:setScl(x, y)
 	end
 
+	--- Get the scale.
+	-- Same as MOAITextBox:getScl()
+	-- @return the x scale
+	-- @return the y scale
+	function txt:getScl()
+		return txtNormal:getScl()
+	end
+
 	--- Seek to this scale.
 	-- Same as MOAITextBox:seekScl()
 	-- @param x the target x scale
