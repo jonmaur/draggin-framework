@@ -156,11 +156,11 @@ local function initSledge()
 
 
 	if not Display.fullscreen then
-		SledgeGraphicsHandler.setMode(Display.windowWidth, Display.windowHeight, dmode.bpp, dmode.refresh, 0)
+		SledgeGraphicsHandler.setMode(Display.windowWidth, Display.windowHeight, dmode.refresh, dmode.bpp, 0)
 		Display.screenWidth = Display.windowWidth
 		Display.screenHeight = Display.windowHeight
 	else
-		SledgeGraphicsHandler.setMode(dmode.w, dmode.h, dmode.bpp, dmode.refresh, 1)
+		SledgeGraphicsHandler.setMode(dmode.w, dmode.h, dmode.refresh, dmode.bpp, 1)
 		Display.screenWidth = dmode.w
 		Display.screenHeight = dmode.h
 	end
@@ -233,11 +233,11 @@ function Display:toggleFullscreen()
 
 	local dmode = Display.dmode
 	if Display.fullscreen then
-		SledgeGraphicsHandler.setMode(Display.windowWidth, Display.windowHeight, dmode.bpp, dmode.refresh, 0)
+		SledgeGraphicsHandler.setMode(Display.windowWidth, Display.windowHeight, dmode.refresh, dmode.bpp, 0)
 		Display.screenWidth = Display.windowWidth
 		Display.screenHeight = Display.windowHeight
 	else
-		SledgeGraphicsHandler.setMode(dmode.w, dmode.h, dmode.bpp, dmode.refresh, 1)
+		SledgeGraphicsHandler.setMode(dmode.w, dmode.h, dmode.refresh, dmode.bpp, 1)
 		Display.screenWidth = dmode.w
 		Display.screenHeight = dmode.h
 	end
@@ -269,11 +269,11 @@ function Display:setDisplayMode(_dmode, _bFullscreen)
 	end
 
 	if _bFullscreen then
-		SledgeGraphicsHandler.setMode(_dmode.w, _dmode.h, _dmode.bpp, _dmode.refresh, 1)
+		SledgeGraphicsHandler.setMode(_dmode.w, _dmode.h, _dmode.refresh, _dmode.bpp, 1)
 		Display.screenWidth = _dmode.w
 		Display.screenHeight = _dmode.h
 	else
-		SledgeGraphicsHandler.setMode(_dmode.w, _dmode.h, _dmode.bpp, _dmode.refresh, 0)
+		SledgeGraphicsHandler.setMode(_dmode.w, _dmode.h, _dmode.refresh, _dmode.bpp, 0)
 		Display.screenWidth = Display.windowWidth
 		Display.screenHeight = Display.windowHeight
 		Display.windowWidth = _dmode.w
