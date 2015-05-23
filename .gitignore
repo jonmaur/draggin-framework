@@ -6,3 +6,4 @@
 samples/*/main/res/*
 *.rube-backups
 *.json-backups*
+*.sconsign.tmp

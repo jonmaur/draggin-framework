@@ -78,13 +78,17 @@ if len(copyfiles) > 0:
 luafiles = []
 def luaAction( target, source, env ):
 	print "luaAction"
-	print "compiling "+str(target[0])
-	args = [os.path.join(DRAGGIN_FRAMEWORK, 'tools/luajitcompiler/luajit'), '-b', str(source[0]), str(target[0])]
+	print "compiling "+str(os.path.join(os.getcwd(), str(target[0])))
+	args = ['luajit', '-b', str(os.path.join(os.getcwd(), str(source[0]))), str(os.path.join(os.getcwd(), str(target[0])))]
+	currentdir = os.getcwd()
+	os.chdir(os.path.join(DRAGGIN_FRAMEWORK, 'tools/luajitcompiler'))
 	try:
 		p = subprocess.Popen(args)
 	except (IOError, os.error), why:
 		#easygui.exceptionbox(str(source[0])+", "+str(target[0])+" FAILED")
 		raw_input(str(source[0])+", "+str(target[0])+" FAILED: "+str(why))
+
+	os.chdir(currentdir)
 
 luaBuilder = Builder(action = luaAction)
 env.Append(BUILDERS = {'luaComplier' : luaBuilder})
@@ -98,14 +102,13 @@ for root, dirs, files in os.walk(dragginsrc):
 		
 		pattern_check = fnmatch(filename, "*.lua")
 		if pattern_check:
-			# print filename
 			copyfile = str(filename)
 				
-		# print "directory "+str(root)
 		
 		if copyfile != "":
 			outputfiles = []
-			outputfiles.append(str("package/windows/" + copyfile[len(dragginsrc):]))
+			outputfiles.append(str(os.path.join(os.getcwd(), os.path.normpath("package/windows/" + copyfile[len(dragginsrc):]))))
+			copyfile = str(os.path.join(os.getcwd(), os.path.normpath(copyfile)))
 			luafiles.append(env.luaComplier(outputfiles, copyfile))
 
 # game files
@@ -116,14 +119,13 @@ for root, dirs, files in os.walk("main"):
 		
 		pattern_check = fnmatch(filename, "*.lua") and not fnmatch(filename, "*savedata.lua")
 		if pattern_check:
-			# print filename
 			copyfile = str(filename)
 				
-		# print "directory "+str(root)
 		
 		if copyfile != "":
 			outputfiles = []
-			outputfiles.append(str("package/windows/" + copyfile[len("main/"):]))
+			outputfiles.append(str(os.path.join(os.getcwd(), os.path.normpath("package/windows/" + copyfile[len("main/"):]))))
+			copyfile = str(os.path.join(os.getcwd(), os.path.normpath(copyfile)))
 			luafiles.append(env.luaComplier(outputfiles, copyfile))
 
 if len(luafiles) > 0:
