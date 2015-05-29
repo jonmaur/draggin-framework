@@ -61,6 +61,7 @@ local SimpleMenu = {}
 -- _config.fontsize the size of the font to use for this menu
 -- _config.spacing the ammount of spacing between menu entries
 -- _config.top the y position of the top of the menu
+-- _config.left the x position of the left side of the menu
 -- _config.shadowX the shadow x offset
 -- _config.shadowY the shadow y offset
 -- _config.entrywidth the menu entries width
@@ -102,6 +103,9 @@ function SimpleMenu.new(_entries, _layer, _config)
 
 	local entrywidth = config.entrywidth or viewportWidth/8
 	local top = config.top or viewportHeight/2
+	local left = config.left or 0
+	local align = config.align or MOAITextBox.CENTER_JUSTIFY
+	local alignoptions = config.alignoptions or MOAITextBox.CENTER_JUSTIFY
 
 	local items = {}
 	local selected
@@ -309,6 +313,14 @@ function SimpleMenu.new(_entries, _layer, _config)
 
 
 	-- initialization
+	-- check for options text for positioning
+	local hasoptions = false
+	for k, t in ipairs(_entries) do
+		if type(t.options) == "table" then
+			hasoptions = true
+			break
+		end
+	end
 
 	--print("_entries", #_entries)
 	for k, t in ipairs(_entries) do
@@ -317,10 +329,15 @@ function SimpleMenu.new(_entries, _layer, _config)
 
 		local txtBox = TextBox.new(fontname, fontsize)
 		items[k] = txtBox
-		txtBox:setRect(-entrywidth, -fontsize/1.5, entrywidth, fontsize/1.5)
+		if t.label and hasoptions then
+			txtBox:setRect(-(entrywidth/2)+left, -fontsize/1.5, (entrywidth/2)+left, fontsize/1.5)
+			txtBox:setAlignment(MOAITextBox.CENTER_JUSTIFY)
+		else
+			txtBox:setRect(-entrywidth+left, -fontsize/1.5, left, fontsize/1.5)
+			txtBox:setAlignment(align)
+		end
 		txtBox:setLoc(viewportWidth/2, top - (spacing*(k)))
 		txtBox:setScl(fontscale, fontscale)
-		txtBox:setAlignment(MOAITextBox.CENTER_JUSTIFY)
 		txtBox:setShadowOffset(shadowX, shadowY)
 		txtBox:setString(t.txt)
 		txtBox.txt = t.txt
@@ -332,10 +349,10 @@ function SimpleMenu.new(_entries, _layer, _config)
 		if type(t.options) == "table" then
 			local subtxt = TextBox.new(fontname, fontsize)
 			txtBox.subtxt = subtxt
-			subtxt:setRect(entrywidth, -fontsize/1.5, entrywidth*2, fontsize/1.5)
+			subtxt:setRect(left, -fontsize/1.5, entrywidth+left, fontsize/1.5)
 			subtxt:setLoc(viewportWidth/2, top - (spacing*(k)))
 			subtxt:setScl(fontscale, fontscale)
-			subtxt:setAlignment(MOAITextBox.CENTER_JUSTIFY)
+			subtxt:setAlignment(alignoptions)
 			subtxt:setShadowOffset(shadowX, shadowY)
 			subtxt:insertIntoLayer(_layer, partition)
 
