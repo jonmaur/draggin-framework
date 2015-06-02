@@ -44,6 +44,7 @@ local states = {}
 local topState = nil
 
 function GameStateManager.pushState(_state, ...)
+	print("pushState", _state.name)
 	if topState then
 		if topState.lostFocus then
 			-- let the top state know which state is getting focus
