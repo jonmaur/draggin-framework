@@ -167,7 +167,7 @@ function SimpleMenu.new(_entries, _layer, _config)
 	-- Only makes sense for entries with multiple entries
 	function menu:moveRight()
 		local item = items[selected]
-		if item.subtxt == nil then
+		if item.subtxt == nil or not item.enabled then
 			return
 		end
 
@@ -191,7 +191,7 @@ function SimpleMenu.new(_entries, _layer, _config)
 	-- Only makes sense for entries with multiple entries
 	function menu:moveLeft()
 		local item = items[selected]
-		if item.subtxt == nil then
+		if item.subtxt == nil or not item.enabled then
 			return
 		end
 
@@ -290,7 +290,37 @@ function SimpleMenu.new(_entries, _layer, _config)
 				break
 			end
 		end
+	end
 
+	--- Set the option of a menu entry
+	-- @param _item string or number representing the menu's entry to set the option of
+	-- @param _disabled boolean, disable this menu entry?
+	function menu:setDisabled(_item, _disabled)
+		print("menu:setDisabled", _item, _disabled)
+		if type(_item) == "string" then
+			-- find the index
+			for k, v in pairs(items) do
+				--print("here")
+				if v.txt == _item then
+					_item = k
+
+					break
+				end
+			end
+		end
+
+		local item = items[_item]
+		local options = item.subtxt.options
+
+		if _disabled then
+			item:setColor(disabledColor)
+			item.subtxt:setColor(disabledColor)
+			item.enabled = false
+		else
+			item:setColor(normalColor)
+			item.subtxt:setColor(normalColor)
+			item.enabled = true
+		end
 	end
 
 	--- Choose the currently selected menu entry.
