@@ -48,6 +48,7 @@ function SpriteManager.getSpriteData(_strSpriteData)
 		data = dofile("res/sprites/".._strSpriteData..".lua")
 		spriteData[_strSpriteData] = data
 
+		data.name = _strSpriteData
 		data.texture:setFilter(defultFilter)
 
 	else
