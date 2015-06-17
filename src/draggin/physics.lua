@@ -410,6 +410,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 
 				-- keep a reference in the world by name
 				world.bodies[v.name] = body
+				body.name = v.name
 
 			end -- bodies
 		end
