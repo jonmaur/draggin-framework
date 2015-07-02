@@ -39,6 +39,51 @@ local virtualHeight = Display.virtualHeight
 
 local SimpleMenu = {}
 
+--- Add default menu keyboad actions.
+-- Quick default action setup using standard PC keyboard menu keys.
+-- @param _actions an action map table
+-- @return true on success, nil on fail
+function SimpleMenu.addKeyboardActions(_actions)
+
+	if _actions and _actions.addAction then
+		_actions:addAction("cancle", 27, nil)
+		_actions:addAction("cancle", 8, nil)
+		_actions:addAction("ok", 13, nil)
+		_actions:addAction("ok", ' ', nil)
+		_actions:addAction("left", 'a', nil)
+		_actions:addAction("right", 'd', nil)
+		_actions:addAction("up", 'w', nil)
+		_actions:addAction("down", 's', nil)
+
+		-- arrow keys
+		_actions:addAction("left", 1073741904, nil)
+		_actions:addAction("right", 1073741903, nil)
+		_actions:addAction("up", 1073741906, nil)
+		_actions:addAction("down", 1073741905, nil)
+
+		return true
+	end
+end
+
+--- Remove the default menu keyboad actions.
+-- Quick way to remove the actions added with addKeyboardActions().
+-- But be super careful! This removes ALL buttons and keys assigned to the default actions for menus,
+-- not just the keys from addKeyboardActions().
+-- @param _actions an action map table
+-- @return true on success, nil on fail
+function SimpleMenu.removeKeyboardActions(_actions)
+	if _actions and _actions.addAction then
+		_actions:removeAction("cancle")
+		_actions:removeAction("ok")
+		_actions:removeAction("left")
+		_actions:removeAction("right")
+		_actions:removeAction("up")
+		_actions:removeAction("down")
+
+		return true
+	end
+end
+
 --- Create a SimpleMenu.
 -- A SimpleMenu is a quick way to get text based menus.
 -- You send a table describing the entries as such:
@@ -119,7 +164,19 @@ function SimpleMenu.new(_entries, _layer, _config)
 
 		local newSelected = selected
 		local testSelected = selected - 1
-		while testSelected > 0 do
+		local looped = false
+
+		while true do
+			if testSelected <= 0 then
+				if looped then
+					-- already looped? just get out of here
+					menu:setSelected(selected)
+					return
+				end
+				testSelected = #items
+				looped = true
+			end
+
 			local item = items[testSelected]
 			if item.label ~= nil and item.label == true then
 				-- skip
@@ -144,7 +201,19 @@ function SimpleMenu.new(_entries, _layer, _config)
 
 		local newSelected = selected
 		local testSelected = selected + 1
-		while testSelected <= #items do
+		local looped = false
+
+		while true do
+			if testSelected > #items then
+				if looped then
+					-- already looped? just get out of here
+					menu:setSelected(selected)
+					return
+				end
+				testSelected = 1
+				looped = true
+			end
+
 			local item = items[testSelected]
 			if item.label ~= nil and item.label == true then
 				-- skip
@@ -473,6 +542,28 @@ function SimpleMenu.new(_entries, _layer, _config)
 
 			items[i]:destroy()
 			items[i] = nil
+		end
+	end
+
+	--- Check for default navigation actions
+	-- Just a helper function since this is usually what's checked to navigate around menus.
+	-- The action map better have "up", "down", "left", and "right" or this function makes no
+	-- sense.
+	-- @param _actions an action map
+	-- @return true if the action map passed in was valid
+	function menu:defaultNavigation(_actions)
+		if _actions and _actions.stateOf then
+			if _actions:stateOf("up") == "down" then
+				menu:moveUp()
+			elseif _actions:stateOf("down") == "down" then
+				menu:moveDown()
+			elseif _actions:stateOf("left") == "down" then
+				menu:moveLeft()
+			elseif _actions:stateOf("right") == "down" then
+				menu:moveRight()
+			end
+
+			return true
 		end
 	end
 

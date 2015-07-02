@@ -298,7 +298,7 @@ for i = 1, #joysticks do
 		--print("onJoystickEvent", i, _key, _down)
 		if buttonstate[_key] == nil then
 			buttonstate[_key] = "up"
-			print(i, _key, "nil")
+			--print(i, _key, "nil")
 		end
 
 		if _down then
