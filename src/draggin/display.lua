@@ -120,7 +120,7 @@ local function initSledge()
 	for k, v in pairs(allmodes) do
 		--print("mode", k, v)
 		if type(v) == "table" then
-			if v.bpp == 24 and v.refresh == 60 then
+			if (v.bpp == 24 and v.refresh == 60) or (v.bpp == dmode.bpp and v.refresh == dmode.refresh) then
 				for kk, vv in pairs(v) do
 					print(kk, vv)
 				end
