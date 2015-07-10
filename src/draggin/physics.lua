@@ -316,6 +316,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 							fix:setFilter(categoryBits, maskBits, groupIndex)
 
 							fix.name = fixture.name
+							fix.body = body
 
 							-- Rube likes to handle complex fixtures as one, 
 							-- but they are actually multiple fixtures with the same name
