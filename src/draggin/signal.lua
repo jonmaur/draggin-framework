@@ -49,8 +49,23 @@ function Signal.new()
 	--- Emit the Signal.
 	-- Calls all the callbacks and passes along all params
 	function sig:emit(...)
-		for k, v in pairs(self.callbacks) do
-			v(...)
+		local done
+		for _, v in pairs(self.callbacks) do
+			if v(...) then
+				-- if the callback returns true then that means it's done and should remove itself
+				if done == nil then
+					done = {v}
+				else
+					done[#done+1] = v
+				end
+			end
+		end
+
+		-- clean up all the done callbacks
+		if done then
+			for _, v in pairs(done) do
+				self:remove(v)
+			end
 		end
 	end
 

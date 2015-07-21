@@ -38,11 +38,7 @@ function Ninja.new()
 
 		ninja.sig_animationcomplete:register(function()
 				fsm:changeState("idle")
-				-- TODO: it would be super usefull for signals to be able to remove the
-				-- current callback right here
-
-				-- HACK: I hope no one else was registered...
-				ninja.sig_animationcomplete:removeAll()
+				return true
 			end)
 	end
 
