@@ -118,4 +118,11 @@ local function merge(t1, t2)
 end
 TableExt.merge = merge
 
+--- Grab a random entry from the table. Table must be an array.
+-- @param t the table to choose from
+local function randomentry(t)
+	return t[math.random(1, #t)]
+end
+TableExt.randomentry = randomentry
+
 return TableExt
