@@ -69,6 +69,21 @@ function AudioManager:stopGroup(_group)
 	end
 end
 
+--- Pause playback of a group.
+-- @param _group the group to pause playback of
+function AudioManager:pauseGroup(_group)
+	local g = groups[_group]
+
+	if g == nil then
+		print("WARNING: Audio group", _group, "not found!")
+		return
+	end
+
+	for k, v in ipairs(g) do
+		v:stop()
+	end
+end
+
 --- Enable a group of Sounds.
 -- Means that play() calls on the sounds will execute
 -- @param _group the Sound group to enable

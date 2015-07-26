@@ -76,6 +76,16 @@ function Sound.new(_strSound, _group)
 		sig_played:emit(_strSound)
 	end
 
+	--- Pause the Sound.
+	function sound:pause()
+
+		if not enabled then
+			return
+		end
+		--print("Pause sound", _strSound)
+		usound:pause()
+	end
+
 	--- Stop the Sound.
 	-- emits a sig_stopped signal sending the Sound's name
 	function sound:stop()
@@ -139,6 +149,12 @@ function Sound.new(_strSound, _group)
 		else
 			enabled = false
 		end
+	end
+
+	--- Remove the sound from the AudioManager.
+	function sound:remove()
+		sound:stop()
+		AudioManager:removeSound(sound, _group)
 	end
 
 	AudioManager:addSound(sound, _group)
