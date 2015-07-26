@@ -550,20 +550,22 @@ function SimpleMenu.new(_entries, _layer, _config)
 	-- The action map better have "up", "down", "left", and "right" or this function makes no
 	-- sense.
 	-- @param _actions an action map
-	-- @return true if the action map passed in was valid
+	-- @return true if there was any navigating
 	function menu:defaultNavigation(_actions)
 		if _actions and _actions.stateOf then
 			if _actions:stateOf("up") == "down" then
 				menu:moveUp()
+				return true
 			elseif _actions:stateOf("down") == "down" then
 				menu:moveDown()
+				return true
 			elseif _actions:stateOf("left") == "down" then
 				menu:moveLeft()
+				return true
 			elseif _actions:stateOf("right") == "down" then
 				menu:moveRight()
+				return true
 			end
-
-			return true
 		end
 	end
 
