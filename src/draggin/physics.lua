@@ -265,7 +265,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 								table.insert(verts, ys[i])
 							end
 							fix = body:addPolygon(verts)
-							print("polygon", fixture.name)
+							-- print("polygon", fixture.name)
 
 						elseif type(fixture.circle) == "table" then
 							-- "center" : 0
@@ -281,7 +281,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 								radius = fixture.circle.radius
 							end
 							fix = body:addCircle(centerX, centerY, radius)
-							print("circle", fixture.name)
+							-- print("circle", fixture.name)
 						end
 
 						if fix then
@@ -631,7 +631,7 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 
 				-- "file" : "../sprites/cars/bluebody.png",
 				local sprname, animname, framenum = string.match(img.file, "/(%w+)/([%a_-]+)(%d-).png$")
-				print("image", sprname, animname, framenum)
+				-- print("image", sprname, animname, framenum)
 				local spr = Sprite.new(sprname)
 				local speed = 1
 				if type(img.customProperties) == "table" then
