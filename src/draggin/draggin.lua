@@ -561,5 +561,18 @@ function Draggin:waitForAnyInput()
 	Draggin:removeJoystickCallback(4, joystickInputFunc)
 end
 
+--- Callback after any input buttons or touch events
+-- Supports pointers, keyboards, and joysticks
+-- @param _callback	callback function.
+-- @return the MOAIThread that was created, so you can cancle it.
+function Draggin:callbackOnAnyInput(_callback)
+	local thread = MOAIThread.new()
+	thread:run(function ()
+		Draggin:waitForAnyInput()
+		_callback()
+	end)
+
+	return thread
+end
 
 return Draggin
