@@ -87,7 +87,7 @@ function Sprite.new(_strSprite)
 		self.anim = MOAIAnim:new()
 		self.anim:reserveLinks(1)
 
-		assert(self.spriteData.curves[_strAnim] ~= nil)
+		assert(self.spriteData.curves[_strAnim] ~= nil, "Cannot find animation "..tostring(_strAnim))
 		self.anim:setLink(1, self.spriteData.curves[_strAnim], self, MOAIProp2D.ATTR_INDEX)
 		self.anim:setMode(_mode)
 		self.anim:setSpeed(_speed)
