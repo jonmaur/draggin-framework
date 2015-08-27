@@ -44,7 +44,7 @@ local states = {}
 local topState = nil
 
 function GameStateManager.pushState(_state, ...)
-	print("pushState", _state.name)
+	print("<<< pushState", _state.name)
 	if topState then
 		if topState.lostFocus then
 			-- let the top state know which state is getting focus
@@ -65,13 +65,15 @@ function GameStateManager.pushState(_state, ...)
 	if _state.gotFocus then
 		_state:gotFocus(oldTop, ...)
 	end
+
+	GameStateManager.printStack()
 end
 
 
 function GameStateManager.popState(...)
 	local poppedState = topState
 
-	print("popState", topState.name)
+	print(">>> popState", topState.name)
 
 	if poppedState then
 		--table.remove(states)
@@ -94,6 +96,7 @@ function GameStateManager.popState(...)
 		print("popState stack empty")
 	end
 
+	GameStateManager.printStack()
 
 	-- caller is expected to destroy the state, if it wants to
 	return poppedState
@@ -116,7 +119,7 @@ function GameStateManager.switchState(_to, ...)
 		topState = states[#states]
 	end
 
-	print("switchState to", _to.name, ...)
+	print("^^^ switchState to", _to.name, ...)
 
 	topState = _to
 	table.insert(states, _to)
@@ -129,6 +132,8 @@ function GameStateManager.switchState(_to, ...)
 	if _to.gotFocus then
 		_to:gotFocus(oldTop, ...)
 	end
+
+	GameStateManager.printStack()
 
 	return oldTop
 end
@@ -149,6 +154,13 @@ function GameStateManager.isStateOnStack(_state)
 	end
 	
 	return false
+end
+
+function GameStateManager.printStack()
+	print("<GameState Stack>")
+	for i = 1, #states do
+		print(i, states[i].name)
+	end
 end
 
 return GameStateManager
