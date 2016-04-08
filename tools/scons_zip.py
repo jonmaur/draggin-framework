@@ -2,6 +2,7 @@ import os
 import os.path
 import glob
 import shutil
+import datetime
 from fnmatch import fnmatch
 
 PROJECT_NAME = "draggin"
@@ -50,7 +51,7 @@ for root, dirs, files in os.walk("package/windows"):
 
 # the exe
 outputfiles = []
-outputfiles.append(str("package/" + PROJECT_NAME + "_windows.zip"))
+outputfiles.append(str("package/" + PROJECT_NAME + "-windows-" + str(datetime.date.today()) + ".zip"))
 zipfiles.append(env.zipComplier(outputfiles, inputfiles))
 
 

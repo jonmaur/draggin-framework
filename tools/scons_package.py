@@ -48,7 +48,7 @@ for root, dirs, files in os.walk("main"):
 		copyfile = ""
 		filename = os.path.join(root, f)
 		
-		pattern_check = fnmatchList(filename, ["*.png", "*.ttf", "*.fnt", "*.wav", "*.mp3", "*.json"])
+		pattern_check = fnmatchList(filename, ["*.png", "*.ttf", "*.fnt", "*.wav", "*.mp3", "*.json", "*.ogg"])
 		if pattern_check:
 			# print filename
 			copyfile = str(filename)
