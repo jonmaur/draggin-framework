@@ -63,9 +63,7 @@ for root, dirs, files in os.walk("main"):
 # the exe
 outputfiles = []
 outputfiles.append(str("package/windows/" + PROJECT_NAME + ".exe"))
-executable = MOAI_BIN + "/sledge.exe"
-if not os.path.exists(executable):
-	executable = MOAI_BIN + "/moai.exe"
+executable = MOAI_BIN + "/moai.exe"
 
 copyfiles.append(env.copyComplier(outputfiles, executable))
 

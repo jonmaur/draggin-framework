@@ -1,9 +1,5 @@
--- The Sledge host only seems to load one lua file from the commandline
--- so if Sledge is the host the code from draggin-config.lua has to run here.
--- TODO: Add loading multiple lua scripts to the Sledge host.
-if SledgeGraphicsHandler then
-	package.path = package.path .. ';' .. os.getenv("DRAGGIN_FRAMEWORK") .. '/src/?.lua'
-end
+-- make sure the draggin framework is found
+package.path = package.path .. ';' .. os.getenv("DRAGGIN_FRAMEWORK") .. '/src/?.lua'
 
 -- makes output work better on most hosts, or when running through Sublime Text.
 io.stdout:setvbuf("no")
@@ -28,6 +24,7 @@ local NinjaState = require "ninjastate"
 -- The whole application starts here to make sure you can always call coroutine.yield()
 local function mainFunc()
 
+	print("mainFunc")
 	local ninjastate = NinjaState.new()
 
 	GameStateManager.pushState(ninjastate)
@@ -42,3 +39,5 @@ end
 -- the main coroutine function, effectively destroying that coroutine
 local mainThread = MOAIThread.new()
 mainThread:run(mainFunc)
+
+print("end main.lua")

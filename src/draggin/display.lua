@@ -48,6 +48,11 @@ local function resetViewports()
 	local deviceWidth = MOAIEnvironment.horizontalResolution or Display.screenWidth
 	local deviceHeight = MOAIEnvironment.verticalResolution or Display.screenHeight
 
+	if not Display.fullscreen then
+		deviceWidth = Display.screenWidth
+		deviceHeight = Display.screenHeight
+	end
+
 	print("Device res", deviceWidth, deviceHeight)
 
 	Display.screenOffsetX = 0
@@ -197,19 +202,8 @@ function Display:init(_appTitle, _virtualWidth, _virtualHeight, _screenWidth, _s
 
 	print("Virtual res", Display.virtualWidth, Display.virtualHeight)
 	print("Requested screen res", Display.screenWidth, Display.screenHeight, Display.fullscreen)
-
-	if MOAIInputMgr.device.keyboard ~= nil and MOAIEnvironment.horizontalResolution == nil then
-		-- it's probably a pc...
-		-- MOAIEnvironment.horizontalResolution seems to only be set on tablets/phones
-		-- Double check that we are running in the Sledge host
-		if SledgeGraphicsHandler then
-			initSledge()
-		else
-			print("no Sledge host found, no fullscreen mode.")
-			-- not running the Sledge host, no fullscreen
-			MOAISim.openWindow(Display.appTitle, Display.windowWidth, Display.windowHeight)
-		end
-	end
+	
+	MOAISim.openWindow(Display.appTitle, Display.windowWidth, Display.windowHeight)
 
 	resetViewports()
 

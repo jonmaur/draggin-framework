@@ -129,8 +129,6 @@ function Draggin:printEnvironment()
 	print ("                       Joy3 : ", MOAIInputMgr.joy3)
 	print ("----------- Sound ------------")
 	print ("                       Untz : ", MOAIUntzSystem ~= nil)
-	print ("------------ Host ------------")
-	print ("                     Sledge : ", SledgeGraphicsHandler ~= nil)
 	print ("------------ End -------------")
 end
 

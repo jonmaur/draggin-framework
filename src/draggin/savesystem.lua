@@ -40,8 +40,8 @@ function SaveSystem.new(_filename)
 	--- Save the current table.
 	-- Always uses the filename.
 	function sys:save()
-		serializer:serialize(data)
-		serializer:exportToFile(_filename)
+		serializer:serializeToFile(_filename, data)
+		-- serializer:exportToFile(_filename)
 	end
 
 	--- Load the save table.
