@@ -38,7 +38,7 @@ function ninjastate.new()
 		txt:setColor(1, 1, 1, 1)
 		txt:setRect(virtualWidth/16, virtualHeight - virtualHeight/4, virtualWidth - virtualWidth/16, virtualHeight - virtualHeight/16)
 		txt:setAlignment(MOAITextBox.CENTER_JUSTIFY, MOAITextBox.CENTER_JUSTIFY)
-		txt:setString('[space] jump, [enter] attack, [esc] quit')
+		txt:setString('[space] jump, [z] attack, [q] quit')
 
 		ninja = Ninja.new()
 
@@ -46,10 +46,9 @@ function ninjastate.new()
 		-- action map
 		actions = ActionMap.new()
 
-		actions:addAction("quit", string.char(27))
+		actions:addAction("quit", 'q')
 		actions:addAction("jump", ' ', nil)
-		actions:addAction("attack", 'b', nil)
-		actions:addAction("attack", string.char(13), nil)
+		actions:addAction("attack", 'z', nil)
 
 		print(state.name.." init() done.")
 	end
