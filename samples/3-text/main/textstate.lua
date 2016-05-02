@@ -10,6 +10,7 @@ local textstate = {}
 
 function textstate.new()
 
+	-- Uncomment this to see the textbox debug draws
 	--Draggin:debugDraw(true)
 
 	local state = {}
@@ -30,7 +31,6 @@ function textstate.new()
 
 		-- create the text boxes
 		local txt = TextBox.new("LiberationSansNarrow-Regular", 42)
-		-- txt:setRect(virtualWidth/4, virtualHeight/2, virtualWidth - virtualWidth/4, virtualHeight - virtualHeight/8)
 		txt:setDimensions(virtualWidth*0.5, virtualHeight*0.75, virtualWidth/2, virtualHeight/3, 0.5, 0.5)
 		txt:setAlignment(MOAITextBox.CENTER_JUSTIFY, MOAITextBox.CENTER_JUSTIFY)
 		txt:setSpeed(15)
