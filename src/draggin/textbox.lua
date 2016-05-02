@@ -120,6 +120,8 @@ function TextBox.new(_strFont, _fontSize, _bShadow)
 	end
 
 	--- Set the rectangle area to render text in.
+	-- WARNING: This does not set the location and if you use this as a way to position 
+	-- text it may not show up! Try setDimensions instead.
 	-- Same as MOAITextBox:setRect()
 	-- @param x1 the x1 top left x position
 	-- @param y1 the y1 top left y position
