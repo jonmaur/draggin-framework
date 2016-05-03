@@ -144,6 +144,9 @@ function TextBox.new(_strFont, _fontSize, _bShadow)
 	-- @param _anchorx a nomalized x anchor point
 	function txt:setDimensions(x, y, w, h, _anchorx, _anchory)
 
+		_anchorx = _anchorx or 0.5
+		_anchory = _anchory or 0.5
+
 		local x1 = -(w * _anchorx)
 		local y1 = -(h * _anchory)
 
