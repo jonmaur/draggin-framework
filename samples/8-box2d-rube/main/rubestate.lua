@@ -39,8 +39,8 @@ function RubeState.new()
 		mainlayer:setCamera(camera)
 		layers[#layers+1] = mainlayer
 
-		phys = Physics.new(nil, 1, mainlayer)
-		phys:loadRubeJson("bluecar")
+		phys = Physics.new(nil, 1)
+		phys:loadRubeJson("bluecar", mainlayer)
 	end
 
 	function state:gotFocus()
@@ -55,11 +55,7 @@ function RubeState.new()
 
 		local x = 0
 		local y = 0
-		--local z = 1/45
 		local z = 1/45*3
-
-		--z = (2 / virtualWidth) + 1
-
 
 		offsetX = (-virtualWidth / 2) * z
 		offsetY = (-virtualHeight / 2) * z
