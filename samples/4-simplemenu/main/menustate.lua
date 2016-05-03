@@ -79,6 +79,8 @@ function menustate.new()
 
 	function state:init()
 
+		-- Draggin:debugDraw(true)
+
 		-- create the main layer
 		local layer = MOAILayer2D.new()
 		layer:setViewport(viewport)
@@ -116,7 +118,7 @@ function menustate.new()
 			fontname = "LiberationSansNarrow-Regular",
 			fontsize = 48,
 
-			top = virtualHeight - virtualHeight/8,
+			top = virtualHeight * 0.7,
 			shadowX = -1,
 			shadowY = -1
 		}

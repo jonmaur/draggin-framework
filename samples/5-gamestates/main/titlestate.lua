@@ -43,6 +43,9 @@ function TitleState.new()
 	end
 
 	function state:init()
+
+		-- Draggin:debugDraw(true)
+
 		-- setup the rendering for this state
 		state.layers = {}
 
@@ -61,14 +64,14 @@ function TitleState.new()
 		-- the textboxes
 		presentTextBox = TextBox.new()
 		presentTextBox:setFont("PressStart32")
-		presentTextBox:setRect(virtualWidth/8, virtualHeight/4, virtualWidth - virtualWidth/8, virtualHeight - (virtualHeight/16))
-		presentTextBox:setAlignment(MOAITextBox.CENTER_JUSTIFY)
+		presentTextBox:setDimensions(virtualWidth * 0.5, virtualHeight * 0.75, virtualWidth*0.9, virtualHeight*0.3, 0.5, 0.5)
+		presentTextBox:setAlignment(MOAITextBox.CENTER_JUSTIFY, MOAITextBox.TOP_JUSTIFY)
 		presentTextBox:setSpeed(textSpeed)
 		presentTextBox:insertIntoLayer(mainlayer)
 
 		continueText = TextBox.new()
 		continueText:setFont("PressStart16")
-		continueText:setRect(virtualWidth/8, virtualHeight/16, virtualWidth - virtualWidth/8, virtualHeight/4)
+		continueText:setDimensions(virtualWidth * 0.5, virtualHeight * 0.15, virtualWidth/2, virtualHeight/8)
 		continueText:setAlignment(MOAITextBox.CENTER_JUSTIFY, MOAITextBox.CENTER_JUSTIFY)
 		continueText:insertIntoLayer(mainlayer)
 
@@ -178,7 +181,10 @@ function TitleState.new()
 				shadowX = 2,
 				shadowY = -2,
 
-				entrywidth = virtualWidth/2,
+				-- placing isn't making sense...
+				top = virtualHeight * 0.5,
+				left = (virtualWidth * 0.25) * 1.5,
+				entrywidth = virtualWidth * 0.75,
 			}
 			menu = SimpleMenu.new(items, menulayer, menuConfig)
 			state.layers[#state.layers+1] = menulayer
