@@ -32,7 +32,7 @@ local RADIANS_TO_DEGREES = 180 / math.pi
 local Physics = {}
 
 
-function Physics.new(_gravity, _unitsToMeters, _layer)
+function Physics.new(_gravity, _unitsToMeters, _debuglayer)
 	local Phys = {}
 
 	_gravity = _gravity or {x=0, y=-10}
@@ -64,9 +64,9 @@ function Physics.new(_gravity, _unitsToMeters, _layer)
 
 	Phys.world = world
 
-	if _layer then
+	if _debuglayer then
 		print("Debug Physics Draws on")
-		_layer:setBox2DWorld(world)
+		_debuglayer:setBox2DWorld(world)
 	end
 
 	function Phys:addRect(_type, x, y, w, h, r)
