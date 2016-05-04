@@ -1,12 +1,12 @@
 draggin-framework
 =================
-
-A framework for use with the [MOAI SDK](http://www.getmoai.com/).
+A framework for use with the [MOAI SDK](http://moaiforge.com/).
 
 #Overview
-The Draggin Framework is a collection of scripts to help with common game tasks. It is released under the MIT license. Officially Draggin is only tested with MOAI 1.5 stable branch
-and the Windows, Linux, and Android Hosts. I see no reason why it wouldn't work with any
-host, or even most versions of MOAI.
+The Draggin Framework is a collection of scripts to help with common game tasks. It is 
+released under the MIT license. Draggin is only tested with MOAI 1.7 sdk release on
+MoaiForge for Windows. It should work on other platforms but it hasn't been tested yet.
+Draggin should work with most versions and hosts of MOAI.
 
 ##Display
 This module helps you setup a display with a "virtual res" stretched across the screen
@@ -47,6 +47,10 @@ Adds dynamic shadows to text and other helpers like blink()
 Helper for loading and rendering of TileMaps. Supports "no cracks" rendering using the
 bleed technique. Also supports paralax scrolling.
 
+##Physics
+Helper for maintaining a Box2D physics world. Can add Draggin Sprites to the physics world.
+Includes a [RUBE Editor](https://www.iforce2d.net/rube/) json loader, supporting almost all RUBE features.
+
 #Tools
 Draggin comes with tools to compile assets for use with Draggin. Tools are available for
 compiling Sprites, TileMaps, and a simple almost useless Box2D compiler. The tools
@@ -54,34 +58,40 @@ are all written in Python 2.7 and are cross-platform.
 
 ##Sprite Compiler
 Compiles a folder with animation sequences of png's into a Sprite complete with an
-optimized Sprite Texture sheet.
+optimized Sprite Texture sheet. Frames are placed a few pixels apart and alpha edges are
+bled out to prevent any of the transparent colour bleeding back into the frame when
+rendering with filtering on.
 
 ##TileMap Compiler
-Takes a big png of an entire map and chops it up into non-duplicated tiles and the
-map. Also bleeds the edges of the tiles so there won't be any cracks showing up later
-when rendering.
+Takes a big png of an entire map and chops it up into non-duplicated tiles and creates a
+map. Also bleeds the edges of the tiles in the texture sheet so there won't be any cracks 
+showing up later when rendering, even when scaled.
 
 ##Box2D Compiler
 A rather super simple compiler which takes an svg file with a path and outputs that as
-a path for use in MOAI's Box2D implementation.
+a path for use in MOAI's Box2D implementation. (Deprecated)
 
 ##Asset Processing Scripts
 Draggin comes packaged with some ready to use scons scripts which gather Sprites, Tilemaps,
-Audio Files, Font Files, and Box2D svg's. The scons scripts then output the compiled versions of the
-assets which can be loaded by Draggin.
+Audio Files, Font Files, Box2D svg's, and RUBE json files. The scons scripts then output the compiled
+versions of the assets which are ready to be loaded by Draggin. The scripts only reprocess assets
+if they have changed since the last time.
 
 #Getting Started
 
 ##Base Requirements
-* [MOAI SDK](https://github.com/moai/moai-dev)
+* [MOAI SDK](http://moaiforge.com/) It doesn't have to be this version, you can probably use any MOAI.
 
 ##Tool Requirements
 * [Python 2.7](https://www.python.org/)
-* [Python Image Library](http://www.pythonware.com/products/pil/)
-* [Scons 2.3.4](http://www.scons.org/) (optional, needed for samples and asset processing scripts)
+* [Python Image Library](http://www.pythonware.com/products/pil/) or [Pillow](https://pypi.python.org/pypi/Pillow)
 
-##Samples and Asset Processing Requirements
-* Requires all previous requirements
+##Asset Processing Requirements
+* All tool requirements
+* [Scons 2.x.x](http://www.scons.org/)
+
+##Samples Requirements
+* All other requirements above
 * Set the following OS environment variables:
 
 	* MOAI_BIN=(path_to_moai_executable)
@@ -91,3 +101,6 @@ assets which can be loaded by Draggin.
 * Navigate to a DRAGGIN_FRAMEWORK/samples/(sample)/ directory
 * run the "processassets(.bat or .sh)" script
 * run the "run(.bat or .sh)" script
+
+##Recommended Editors
+* [RUBE](https://www.iforce2d.net/rube/) Not free, but truely a really useful box2d editor! It's great for editing levels with a lot of physics.
