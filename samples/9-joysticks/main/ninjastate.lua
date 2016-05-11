@@ -23,6 +23,8 @@ function ninjastate.new()
 
 	local circle
 	local stick
+	local circleright
+	local stickright
 	local buttons = {}
 	local numbuttons = 12
 	local labels = {}
@@ -36,9 +38,14 @@ function ninjastate.new()
 
 		ninja = Sprite.new("ninja")
 		ninja:setScl(4, 4)
+
 		circle = Sprite.new("gamepad")
 		stick = Sprite.new("gamepad")
 		stick:setColor(1, 0, 0)
+
+		circleright = Sprite.new("gamepad")
+		stickright = Sprite.new("gamepad")
+		stickright:setColor(1, 0, 0)
 
 		for i = 1, numbuttons do
 			buttons[i] = Sprite.new("gamepad")
@@ -70,15 +77,25 @@ function ninjastate.new()
 		stick:setLoc(128, 128)
 		mainlayer:insertProp(stick)
 
+		-- the right circle sprite
+		circleright:playAnimation("circle")
+		circleright:setLoc(virtualWidth - 128, 128)
+		mainlayer:insertProp(circleright)
+
+		-- the right stick sprite
+		stickright:playAnimation("stick")
+		stickright:setLoc(virtualWidth - 128, 128)
+		mainlayer:insertProp(stickright)
+
 		-- the button sprites
 		for k, v in ipairs(buttons) do
 			v:playAnimation("button")
-			v:setLoc(128 * (((k-1) % 6)+1), (virtualHeight + 32) - (128 * (math.floor((k-1) / 6) + 1)))
+			v:setLoc(128 * (((k-1) % 6)+1) + 32, (virtualHeight + 32) - (128 * (math.floor((k-1) / 6) + 1)))
 			mainlayer:insertProp(v)
 		end
 		
 		for k, v in ipairs(labels) do
-			v:setDimensions(128 * (((k-1) % 6)+1), (virtualHeight + 32) - (128 * (math.floor((k-1) / 6) + 1)), 128, 128, 0.5, 0.5)
+			v:setDimensions(128 * (((k-1) % 6)+1) + 32, (virtualHeight + 32) - (128 * (math.floor((k-1) / 6) + 1)), 128, 128, 0.5, 0.5)
 			v:setString(tostring(k-1))
 			v:insertIntoLayer(mainlayer)
 		end
