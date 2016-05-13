@@ -258,9 +258,8 @@ if keyboard then
 	keyboard:setCallback(onKeyboardEvent)
 end
 
--- Joystick support, this is pretty much what SDL2 considers a joystick
--- Mostly something like an xbox 360 controller
-local joysticks = { MOAIInputMgr.joy0, MOAIInputMgr.joy1, MOAIInputMgr.joy2, MOAIInputMgr.joy3 }
+-- Joystick support, currently only supported in custom moai hosts
+local joysticks = { MOAIInputMgr.pad0, MOAIInputMgr.pad1, MOAIInputMgr.pad2, MOAIInputMgr.pad3 }
 Draggin.joysticks = joysticks
 local sig_joysticks = { Signal.new(), Signal.new(), Signal.new(), Signal.new() }
 
@@ -271,7 +270,7 @@ local sig_joysticks = { Signal.new(), Signal.new(), Signal.new(), Signal.new() }
 -- @param _padnumber the joystick number 1-4
 -- @param _func the callback
 function Draggin:registerJoystickCallback(_padnumber, _func)
-	--print("Draggin:registerJoystickCallback(", _padnumber, _func, ")")
+	print("Draggin:registerJoystickCallback(", _padnumber, _func, ")")
 	sig_joysticks[_padnumber]:register(_func)
 
 	-- let whoever called this know if we even have a joystick
@@ -293,7 +292,7 @@ for i = 1, #joysticks do
 
 		--local buttonstate = buttonstates[i]
 
-		--print("onJoystickEvent", i, _key, _down)
+		print("onJoystickEvent", i, _key, _down)
 		if buttonstate[_key] == nil then
 			buttonstate[_key] = "up"
 			--print(i, _key, "nil")

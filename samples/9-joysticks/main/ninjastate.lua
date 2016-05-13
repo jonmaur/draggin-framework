@@ -20,13 +20,14 @@ function ninjastate.new()
 
 	local ninja
 	local animThread
+	local joyThread
 
 	local circle
 	local stick
 	local circleright
 	local stickright
 	local buttons = {}
-	local numbuttons = 12
+	local numbuttons = 15
 	local labels = {}
 
 	function state:init()
@@ -90,13 +91,21 @@ function ninjastate.new()
 		-- the button sprites
 		for k, v in ipairs(buttons) do
 			v:playAnimation("button")
-			v:setLoc(128 * (((k-1) % 6)+1) + 32, (virtualHeight + 32) - (128 * (math.floor((k-1) / 6) + 1)))
+			local xoffset = 32
+			if k >= 13 then
+				xoffset = 256-32
+			end
+			v:setLoc(128 * (((k-1) % 6)+1) + xoffset, (virtualHeight + 32) - (128 * (math.floor((k-1) / 6) + 1)))
 			mainlayer:insertProp(v)
 		end
 		
 		for k, v in ipairs(labels) do
-			v:setDimensions(128 * (((k-1) % 6)+1) + 32, (virtualHeight + 32) - (128 * (math.floor((k-1) / 6) + 1)), 128, 128, 0.5, 0.5)
-			v:setString(tostring(k-1))
+			local xoffset = 32
+			if k >= 13 then
+				xoffset = 256-32
+			end
+			v:setDimensions(128 * (((k-1) % 6)+1) + xoffset, (virtualHeight + 32) - (128 * (math.floor((k-1) / 6) + 1)), 128, 128, 0.5, 0.5)
+			v:setString(tostring(k))
 			v:insertIntoLayer(mainlayer)
 		end
 
@@ -116,6 +125,38 @@ function ninjastate.new()
 
 		animThread = MOAIThread.new()
 		animThread:run(animFunc)
+
+
+		local function joyFunc()
+			while true do
+				local lx, ly = Draggin.joysticks[1].stickLeft:getVector()
+				local rx, ry = Draggin.joysticks[1].stickRight:getVector()
+				-- print("joy0", lx, ly, rx, ry)
+
+				stick:setLoc(128 + (lx * 96), 128 + (-ly * 96))
+				stickright:setLoc((virtualWidth - 128) + (rx * 96), 128 + (-ry * 96))
+
+				coroutine.yield()
+			end
+		end
+
+		joyThread = MOAIThread.new()
+		joyThread:run(joyFunc)
+
+		local function joystickInputFunc(_padnumber, _index, _state)
+			print("joystickInputFunc", _padnumber, _index, _state)
+			if _padnumber == 1 then
+				if _state == "up" then
+					buttons[_index]:setColor(1, 1, 1)
+				elseif _state == "down" then
+					buttons[_index]:setColor(1, 0, 0)
+				end
+			end
+		end
+
+		-- and do all the joysticks
+		Draggin:registerJoystickCallback(1, joystickInputFunc)
+
 	end
 
 	function state:lostFocus()
@@ -134,6 +175,9 @@ function ninjastate.new()
 
 		animThread:stop()
 		animThread = nil
+
+		joyThread:stop()
+		joyThread = nil
 	end
 
 

@@ -9,7 +9,7 @@ local Display = require "draggin/display"
 
 ----------------------------------------------------------------
 -- App Title
-Draggin.appTitle = "Run Ninja, run!"
+Draggin.appTitle = "Game Controllers"
 
 ----------------------------------------------------------------
 -- Display
@@ -28,8 +28,9 @@ local function mainFunc()
 	local ninjastate = NinjaState.new()
 
 	GameStateManager.pushState(ninjastate)
-
-	Draggin:waitForAnyInput()
+	while GameStateManager.isStateOnStack(ninjastate) do
+		coroutine.yield()
+	end
 
 	os.exit()
 end
