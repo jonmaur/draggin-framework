@@ -270,7 +270,7 @@ local sig_joysticks = { Signal.new(), Signal.new(), Signal.new(), Signal.new() }
 -- @param _padnumber the joystick number 1-4
 -- @param _func the callback
 function Draggin:registerJoystickCallback(_padnumber, _func)
-	print("Draggin:registerJoystickCallback(", _padnumber, _func, ")")
+	-- print("Draggin:registerJoystickCallback(", _padnumber, _func, ")")
 	sig_joysticks[_padnumber]:register(_func)
 
 	-- let whoever called this know if we even have a joystick
@@ -292,7 +292,7 @@ for i = 1, #joysticks do
 
 		--local buttonstate = buttonstates[i]
 
-		print("onJoystickEvent", i, _key, _down)
+		-- print("onJoystickEvent", i, _key, _down)
 		if buttonstate[_key] == nil then
 			buttonstate[_key] = "up"
 			--print(i, _key, "nil")
@@ -501,7 +501,7 @@ elseif MOAIInputMgr.device.touch then
 		end
 	)
 else
-	print("WHAT??? There's no mouse or touch input? Must be a new host?")
+	print("WARNING: There's no mouse or touch input. Really not sure how this could happen...")
 end
 
 --- Make a coroutine wait for any input from any source.

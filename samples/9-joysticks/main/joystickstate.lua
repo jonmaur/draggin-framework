@@ -7,27 +7,32 @@ local viewport = Display.viewport
 local virtualWidth = Display.virtualWidth
 local virtualHeight = Display.virtualHeight
 
-local ninjastate = {}
+local joystickstate = {}
 
-function ninjastate.new()
+function joystickstate.new()
 
 	local state = {}
 
-	state.name = "NinjaState"
+	state.name = "JoystickState"
 
+	-- layers
 	local layers = {}
 	local mainlayer
 
-	local ninja
+	-- threads
 	local animThread
 	local joyThread
 
+	-- sprites
+	local ninja
 	local circle
 	local stick
 	local circleright
 	local stickright
 	local buttons = {}
 	local numbuttons = 15
+
+	-- textboxes
 	local labels = {}
 
 	function state:init()
@@ -88,7 +93,7 @@ function ninjastate.new()
 		stickright:setLoc(virtualWidth - 128, 128)
 		mainlayer:insertProp(stickright)
 
-		-- the button sprites
+		-- setup the button sprites
 		for k, v in ipairs(buttons) do
 			v:playAnimation("button")
 			local xoffset = 32
@@ -99,6 +104,7 @@ function ninjastate.new()
 			mainlayer:insertProp(v)
 		end
 		
+		-- setup the button text labels
 		for k, v in ipairs(labels) do
 			local xoffset = 32
 			if k >= 13 then
@@ -144,7 +150,7 @@ function ninjastate.new()
 		joyThread:run(joyFunc)
 
 		local function joystickInputFunc(_padnumber, _index, _state)
-			print("joystickInputFunc", _padnumber, _index, _state)
+			-- print("joystickInputFunc", _padnumber, _index, _state)
 			if _padnumber == 1 then
 				if _state == "up" then
 					buttons[_index]:setColor(1, 1, 1)
@@ -184,4 +190,4 @@ function ninjastate.new()
 	return state
 end
 
-return ninjastate
+return joystickstate

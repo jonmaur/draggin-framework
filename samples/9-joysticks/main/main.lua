@@ -9,7 +9,7 @@ local Display = require "draggin/display"
 
 ----------------------------------------------------------------
 -- App Title
-Draggin.appTitle = "Game Controllers"
+Draggin.appTitle = "Joystick"
 
 ----------------------------------------------------------------
 -- Display
@@ -18,17 +18,17 @@ Display:init(Draggin.appTitle, 1920/2, 1080/2, 1920/2, 1080/2, false)
 
 
 local GameStateManager = require "draggin/gamestatemanager"
-local NinjaState = require "ninjastate"
+local JoystickState = require "joystickstate"
 
 --- Main MOAIThread function of the application.
 -- The whole application starts here to make sure you can always call coroutine.yield()
 local function mainFunc()
 
 	print("mainFunc")
-	local ninjastate = NinjaState.new()
+	local joystickstate = JoystickState.new()
 
-	GameStateManager.pushState(ninjastate)
-	while GameStateManager.isStateOnStack(ninjastate) do
+	GameStateManager.pushState(joystickstate)
+	while GameStateManager.isStateOnStack(joystickstate) do
 		coroutine.yield()
 	end
 
@@ -40,5 +40,3 @@ end
 -- the main coroutine function, effectively destroying that coroutine
 local mainThread = MOAIThread.new()
 mainThread:run(mainFunc)
-
-print("end main.lua")
