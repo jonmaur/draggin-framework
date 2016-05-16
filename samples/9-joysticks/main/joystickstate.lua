@@ -20,7 +20,6 @@ function joystickstate.new()
 	local mainlayer
 
 	-- threads
-	local animThread
 	local joyThread
 
 	-- sprites
@@ -119,20 +118,6 @@ function joystickstate.new()
 		-- Only one render table can be actively rendered
 		MOAIRenderMgr.setRenderTable(layers)
 
-		-- animate the ninja
-		local function animFunc()
-			while true do
-				ninja:playAnimation("runRight")
-				Draggin:wait(3)
-				ninja:playAnimation("jumpRight", 1, MOAITimer.PING_PONG)
-				Draggin:wait(3)
-			end
-		end
-
-		animThread = MOAIThread.new()
-		animThread:run(animFunc)
-
-
 		local function joyFunc()
 			while true do
 				local lx, ly = Draggin.joysticks[1].stickLeft:getVector()
@@ -178,9 +163,6 @@ function joystickstate.new()
 		for k, v in ipairs(labels) do
 			v:removeFromLayer()
 		end
-
-		animThread:stop()
-		animThread = nil
 
 		joyThread:stop()
 		joyThread = nil
