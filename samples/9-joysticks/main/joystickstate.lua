@@ -28,6 +28,10 @@ function joystickstate.new()
 	local stick
 	local circleright
 	local stickright
+	local boxrtrigger
+	local rtrigger
+	local boxltrigger
+	local ltrigger
 	local buttons = {}
 	local numbuttons = 15
 
@@ -51,6 +55,14 @@ function joystickstate.new()
 		circleright = Sprite.new("gamepad")
 		stickright = Sprite.new("gamepad")
 		stickright:setColor(1, 0, 0)
+
+		boxrtrigger = Sprite.new("gamepad")
+		rtrigger = Sprite.new("gamepad")
+		rtrigger:setColor(1, 0, 0)
+
+		boxltrigger = Sprite.new("gamepad")
+		ltrigger = Sprite.new("gamepad")
+		ltrigger:setColor(1, 0, 0)
 
 		for i = 1, numbuttons do
 			buttons[i] = Sprite.new("gamepad")
@@ -92,6 +104,26 @@ function joystickstate.new()
 		stickright:setLoc(virtualWidth - 128, 128)
 		mainlayer:insertProp(stickright)
 
+		-- the right box sprite
+		boxrtrigger:playAnimation("box")
+		boxrtrigger:setLoc(virtualWidth/2 + 200, 128)
+		mainlayer:insertProp(boxrtrigger)
+
+		-- the right trigger sprite
+		rtrigger:playAnimation("stick")
+		rtrigger:setLoc(virtualWidth/2 + 200, 128)
+		mainlayer:insertProp(rtrigger)
+
+		-- the left box sprite
+		boxltrigger:playAnimation("box")
+		boxltrigger:setLoc(virtualWidth/2 - 200, 128)
+		mainlayer:insertProp(boxltrigger)
+
+		-- the left trigger sprite
+		ltrigger:playAnimation("stick")
+		ltrigger:setLoc(virtualWidth/2 - 200, 128)
+		mainlayer:insertProp(ltrigger)
+
 		-- setup the button sprites
 		for k, v in ipairs(buttons) do
 			v:playAnimation("button")
@@ -122,11 +154,14 @@ function joystickstate.new()
 			while true do
 				local lx, ly = Draggin.joysticks[1].stickLeft:getVector()
 				local rx, ry = Draggin.joysticks[1].stickRight:getVector()
+				local lt, rt = Draggin.joysticks[1].triggers:getVector()
 				-- print("joy0", lx, ly, rx, ry)
 
 				stick:setLoc(128 + (lx * 96), 128 + (-ly * 96))
 				stickright:setLoc((virtualWidth - 128) + (rx * 96), 128 + (-ry * 96))
 
+				rtrigger:setLoc(virtualWidth/2 + 200, 128 + (rt * 96))
+				ltrigger:setLoc(virtualWidth/2 - 200, 128 + (lt * 96))
 				coroutine.yield()
 			end
 		end
