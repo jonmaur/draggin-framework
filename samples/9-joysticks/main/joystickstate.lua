@@ -161,8 +161,8 @@ function joystickstate.new()
 					stick:setLoc(128 + (lx * 96), 128 + (-ly * 96))
 					stickright:setLoc((virtualWidth - 128) + (rx * 96), 128 + (-ry * 96))
 
-					rtrigger:setLoc(virtualWidth/2 + 200, 128 + (rt * 96))
-					ltrigger:setLoc(virtualWidth/2 - 200, 128 + (lt * 96))
+					rtrigger:setLoc(virtualWidth/2 + 200, 32 + (rt * 192))
+					ltrigger:setLoc(virtualWidth/2 - 200, 32 + (lt * 192))
 				end
 				coroutine.yield()
 			end
