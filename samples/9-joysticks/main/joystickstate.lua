@@ -152,16 +152,18 @@ function joystickstate.new()
 
 		local function joyFunc()
 			while true do
-				local lx, ly = Draggin.joysticks[1].stickLeft:getVector()
-				local rx, ry = Draggin.joysticks[1].stickRight:getVector()
-				local lt, rt = Draggin.joysticks[1].triggers:getVector()
-				-- print("joy0", lx, ly, rx, ry)
+				if Draggin.joysticks[1] then
+					local lx, ly = Draggin.joysticks[1].stickLeft:getVector()
+					local rx, ry = Draggin.joysticks[1].stickRight:getVector()
+					local lt, rt = Draggin.joysticks[1].triggers:getVector()
+					-- print("joy0", lx, ly, rx, ry)
 
-				stick:setLoc(128 + (lx * 96), 128 + (-ly * 96))
-				stickright:setLoc((virtualWidth - 128) + (rx * 96), 128 + (-ry * 96))
+					stick:setLoc(128 + (lx * 96), 128 + (-ly * 96))
+					stickright:setLoc((virtualWidth - 128) + (rx * 96), 128 + (-ry * 96))
 
-				rtrigger:setLoc(virtualWidth/2 + 200, 128 + (rt * 96))
-				ltrigger:setLoc(virtualWidth/2 - 200, 128 + (lt * 96))
+					rtrigger:setLoc(virtualWidth/2 + 200, 128 + (rt * 96))
+					ltrigger:setLoc(virtualWidth/2 - 200, 128 + (lt * 96))
+				end
 				coroutine.yield()
 			end
 		end
