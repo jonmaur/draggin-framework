@@ -22,6 +22,7 @@
 
 
 from PIL import Image
+from PIL import ImageChops
 import rect.rect as Rect
 import rect.packer as Packer
 import sys
@@ -31,8 +32,6 @@ from fnmatch import fnmatch
 import os
 import os.path
 import re
-from PIL import ImageChops
-import easygui
 
 
 FRAME_DURATION = (1.0/15.0)*1000.0
@@ -536,14 +535,9 @@ if __name__ == "__main__":
 	if (len(sys.argv) == 1):
 		print("No arguments found.")
 		print("Commandline usage: spriteCompiler [space separated list of files and/or folders]")
-		print("Using a dialog box to get a folder.")
-		folder = easygui.diropenbox("Choose a folder to create a sprite from", "Draggin Sprite Compiler", default=None)
-		if (folder == None):
-			print("You choose poorly, exiting.")
-			sys.exit()
-		imageFilenames = gatherFiles([folder], ("*.png", "*.bmp"))
-	else:
-		imageFilenames = gatherFiles(sys.argv[1:], ("*.png", "*.bmp"))
+		sys.exit()
+	
+	imageFilenames = gatherFiles(sys.argv[1:], ("*.png", "*.bmp"))
 
 	spr = Sprite()
 	spr.importImages(imageFilenames)
