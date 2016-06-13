@@ -63,14 +63,17 @@ function spritepreviewstate.new()
 		-- animate the ninja
 		local function imguiFunc()
 			local v = MOAIImVec2.new()
+			local red = MOAIImVec4.new()
+			red:set(1, 0, 0, 1)
 			
 			while true do
 				-- imgui test
 				-- MOAIImGui.ShowTestWindow(true)
 				MOAIImGui.Begin("Window Test", true, MOAIImGui.ImGuiWindowFlags_AlwaysHorizontalScrollbar + MOAIImGui.ImGuiWindowFlags_AlwaysVerticalScrollbar)
-					v:set(200, 32)
-					MOAIImGui.BeginChild(1)
-						MOAIImGui.Text("Animation: "..tostring(ninja:getCurrentAnimationName()))
+					v:set(200, 64)
+					MOAIImGui.BeginChild(1, v)
+						MOAIImGui.TextColored(red, "Animation: ")
+						MOAIImGui.Text(tostring(ninja:getCurrentAnimationName()))
 					MOAIImGui.EndChild()
 					MOAIImGui.Text("Animation: "..tostring(ninja:getCurrentAnimationName()))
 				MOAIImGui.End()
