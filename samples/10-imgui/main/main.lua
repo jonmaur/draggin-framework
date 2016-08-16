@@ -27,6 +27,7 @@ Display:init(Draggin.appTitle, 1920/8, 1080/8, 1920/2, 1080/2, false)
 
 local GameStateManager = require "draggin/gamestatemanager"
 local SpritePreviewState = require "spritepreviewstate"
+-- local ImGuiTestState = require "ImGuiTestState"
 
 --- Main MOAIThread function of the application.
 -- The whole application starts here to make sure you can always call coroutine.yield()
@@ -34,9 +35,12 @@ local function mainFunc()
 
 	print("mainFunc")
 	local spritepreviewstate = SpritePreviewState.new()
+	-- local imguiteststate = ImGuiTestState.new()
 
 	GameStateManager.pushState(spritepreviewstate)
+	-- GameStateManager.pushState(imguiteststate)
 	while GameStateManager.isStateOnStack(spritepreviewstate) do
+	-- while GameStateManager.isStateOnStack(imguiteststate) do
 		coroutine.yield()
 	end
 
