@@ -114,9 +114,9 @@ class TileMap:
 	# look for the tile in the list of tiles, if not found then add it
 	def findTile(self, tile):
 		i = 0
-		tileStr = tile.tostring()
+		tileStr = tile.tobytes()
 		for t in self.tiles:
-			if t.tostring() == tileStr:
+			if t.tobytes() == tileStr:
 				return i
 			i += 1
 

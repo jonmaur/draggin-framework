@@ -24,10 +24,17 @@ local SpriteManager = {}
 local spriteData = {}
 
 -- TODO: Figure out a better way to do this so filtering can be set per sprite, maybe
-local defultFilter = MOAITexture.GL_NEAREST
+local defultFilter = MOAITexture.GL_LINEAR_MIPMAP_LINEAR
 
 function SpriteManager.setDefaultFilter(_filter)
 	defultFilter = _filter
+end
+
+--- Get the entire sprite data table.
+-- BE CAREFUL! This table should really be read only.
+-- Usefull for queries and tracking.
+function SpriteManager.getSpriteDataTable()
+	return spriteData
 end
 
 --- Get sprite data.

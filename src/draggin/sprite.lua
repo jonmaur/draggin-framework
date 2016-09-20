@@ -61,8 +61,21 @@ function Sprite.new(_strSprite)
 	function sprite:setSpriteData(_strSpriteData, _strAnim, _speed, _mode)
 
 		--self.anim:stop()
-		spriteData = SpriteManager.getSpriteData(_strSpriteData)
+		self.spriteData = SpriteManager.getSpriteData(_strSpriteData)
+		self:setDeck(self.spriteData.deck)
+
 		sprite.sig_spritechanged:emit(_strSpriteData)
+
+		if not _strAnim then
+			if self.spriteData.curves[currAnimationName] then
+				_strAnim = currAnimationName
+			else
+				for k, v in pairs(self.spriteData.curves) do
+					_strAnim = k
+					break
+				end
+			end
+		end
 
 		self:playAnimation(_strAnim, _speed, _mode)
 	end

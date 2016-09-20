@@ -23,7 +23,10 @@ THE SOFTWARE.
 local ImGuiExt = {}
 
 local grey = MOAIImVec4.new()
-grey:set(0.5,0.5,0.5,1)
+grey:set(0.4,0.4,0.4,1)
+
+local lightgrey = MOAIImVec4.new()
+lightgrey:set(0.65,0.65,1,1)
 
 -- take anything and make an ImGui widget for it
 function ImGuiExt.tablewidgets(lable, obj)
@@ -102,11 +105,37 @@ function ImGuiExt.tablewidgets(lable, obj)
 			MOAIImGui.TreePop()
 		end
 	elseif type(obj) == "function" then
-		MOAIImGui.Text(tostring(lable)..":")
+		
+		MOAIImGui.PushStyleColor(MOAIImGui.Col_Text, lightgrey);
+		local open = MOAIImGui.TreeNode(tostring(lable))
+		MOAIImGui.PopStyleColor();
 		MOAIImGui.SameLine()
 		MOAIImGui.TextColored(grey, tostring(obj))
+		if open then
+			local info = debug.getinfo(obj)
+			local count = 0
+			for k, v in pairs(info) do
+				count = count + 1
+				ImGuiExt.tablewidgets(k, v)
+			end
+			if count == 0 then
+				MOAIImGui.TextColored(grey, "<empty>")
+			end
+			MOAIImGui.TreePop()
+		end
+
+		-- -- todo: coloured bullettext here!
+		-- MOAIImGui.PushStyleColor(MOAIImGui.Col_Text, lightgrey);
+		-- MOAIImGui.BulletText(tostring(lable)..":")
+		-- MOAIImGui.PopStyleColor();
+		-- MOAIImGui.SameLine()
+		-- MOAIImGui.TextColored(grey, tostring(obj))
+
+
 	else
-		MOAIImGui.Text(tostring(lable)..": "..tostring(obj))
+		MOAIImGui.PushStyleColor(MOAIImGui.Col_Text, lightgrey);
+		MOAIImGui.BulletText(tostring(lable)..": "..tostring(obj))
+		MOAIImGui.PopStyleColor();
 		MOAIImGui.SameLine()
 		MOAIImGui.TextColored(grey, "<"..type(obj)..">")
 	end

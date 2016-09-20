@@ -32,7 +32,7 @@ local RADIANS_TO_DEGREES = 180 / math.pi
 local Physics = {}
 
 
-function Physics.new(_gravity, _unitsToMeters, _debuglayer)
+function Physics.new(_gravity, _unitsToMeters)
 	local Phys = {}
 
 	_gravity = _gravity or {x=0, y=-10}
@@ -63,11 +63,6 @@ function Physics.new(_gravity, _unitsToMeters, _debuglayer)
 	world.images = {}
 
 	Phys.world = world
-
-	if _debuglayer then
-		print("Debug Physics Draws on")
-		_debuglayer:setBox2DWorld(world)
-	end
 
 	function Phys:addRect(_type, x, y, w, h, r)
 
@@ -400,6 +395,8 @@ function Physics.new(_gravity, _unitsToMeters, _debuglayer)
 					massI = v["massData-I"] * world.metersToUnits * world.metersToUnits
 				end
 
+				body.startx = x
+				body.starty = y
 				body:setTransform(x, y, angle)
 				body:resetMassData()
 				if mass ~= nil then
@@ -410,7 +407,20 @@ function Physics.new(_gravity, _unitsToMeters, _debuglayer)
 				table.insert(bodies, body)
 
 				-- keep a reference in the world by name
-				world.bodies[v.name] = body
+				if type(world.bodies[v.name]) == "nil" then
+					-- nothing yet
+					world.bodies[v.name] = body
+				elseif type(world.bodies[v.name]) ~= "table" then
+					-- more than 1 body with the same name, put into a table
+					local oldbody = world.bodies[v.name]
+					world.bodies[v.name] = {}
+					table.insert(world.bodies[v.name], oldbody)
+					table.insert(world.bodies[v.name], body)
+					
+				elseif type(world.bodies[v.name]) == "table" then
+					-- table of bodies with the same name
+					table.insert(world.bodies[v.name], body)
+				end
 				body.name = v.name
 
 			end -- bodies
@@ -538,6 +548,21 @@ function Physics.new(_gravity, _unitsToMeters, _debuglayer)
 					-- keep a reference in the world by name
 					world.joints[j.name] = revoluteJoint
 
+				elseif j.type == "rope" then
+
+					print("Found ropejoint", j.name)
+					-- "maxLength" : 0,
+					local maxLength = 0
+					if type(j.maxLength) == "number" then
+						maxLength = j.maxLength * world.metersToUnits
+					end
+
+					-- local ropeJoint = world:addRopeJoint(bodyA, bodyB, maxLength, bodyAX+anchorAX, bodyAY+anchorAY, collideConnected)
+					local ropeJoint = world:addRopeJoint(bodyA, bodyB, maxLength, bodyAX+anchorAX, bodyAY+anchorAY, bodyBX+anchorBX, bodyBY+anchorBX, collideConnected)
+					
+					-- keep a reference in the world by name
+					world.joints[j.name] = ropeJoint
+
 				elseif j.type == "distance" then
 
 					-- "dampingRatio" : 0,
@@ -551,8 +576,7 @@ function Physics.new(_gravity, _unitsToMeters, _debuglayer)
 						frequency = j.frequency
 					end
 
-					local distanceJoint = world:addDistanceJoint(bodyA, bodyB, bodyAX+anchorAX, bodyAY+anchorAY, 
-						frequency, dampingRatio, collideConnected)
+					local distanceJoint = world:addDistanceJoint(bodyA, bodyB, bodyAX+anchorAX, bodyAY+anchorAY, bodyBX+anchorBX, bodyBY+anchorBY, frequency, dampingRatio, collideConnected)
 					
 					-- "length" : 0,
 					if type(j.length) == "number" then
@@ -620,7 +644,6 @@ function Physics.new(_gravity, _unitsToMeters, _debuglayer)
 				-- "body" : 0, zero-based index of body in bodies array
 				-- img.body might be -1 which results in body being nil
 				local body = bodies[img.body + 1]
-
 				-- "center" : 0,
 				local centerX = 0
 				local centerY = 0
@@ -649,6 +672,12 @@ function Physics.new(_gravity, _unitsToMeters, _debuglayer)
 				_layer:insertProp(spr)
 				spr:setParent(body)
 				spr:setLoc(centerX, centerY)
+				
+				-- "angle" : -0.6880475878715515,
+				if type(img.angle) == "number" then
+					local rot = img.angle * RADIANS_TO_DEGREES
+					spr:setRot(rot)
+				end
 
 				if type(img.glVertexPointer) == "table" then
 
@@ -661,7 +690,7 @@ function Physics.new(_gravity, _unitsToMeters, _debuglayer)
 				if type(img.flip) == "boolean" then
 					if img.flip then
 						local sx, sy = spr:getScl()
-						spr:setScl(-sx, sy)
+						spr:setScl(sx, -sy)
 					end
 				end
 
@@ -676,10 +705,11 @@ function Physics.new(_gravity, _unitsToMeters, _debuglayer)
 					a = img.colorTint[4] / 255
 				end
 				if type(img.opacity) == "number" then
+					print("opacity", img.opacity, r, g, b, a)
 					a = a * img.opacity
 				end
 
-				spr:setColor(r, g, b, a)
+				spr:setColor(r*a, g*a, b*a, a)
 
 				if body then
 					body.sprites = body.sprites or {}

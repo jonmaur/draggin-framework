@@ -77,7 +77,7 @@ local function resetViewports()
 		Display.screenOffsetY = ( deviceHeight - Display.screenHeight ) * 0.5
 	end
 
-	print("resize Display", Display.screenOffsetX, Display.screenOffsetY)
+	print("resize Display offset", Display.screenOffsetX, Display.screenOffsetY)
 	-- the "game" viewport
 	Display.viewport:setSize(Display.screenOffsetX, Display.screenOffsetY, Display.screenOffsetX + Display.screenWidth, Display.screenOffsetY + Display.screenHeight)
 	Display.viewport:setScale(Display.virtualWidth, Display.virtualHeight)
@@ -89,16 +89,16 @@ local function resetViewports()
 	Display.guiViewport:setOffset(-1, -1)
 end
 
---- Initialize the Sledge host display.
--- The Sledge host has support for fullscreen modes, set that up here.
-local function initSledge()
-	print("initSledge")
+--- Initialize the SDL host display.
+-- The SDL host has support for fullscreen modes, set that up here.
+local function initDisplaySDL()
+	print("initDisplaySDL")
 	-- we're on a PC
 	-- if you don't open a window you'll get garbage!
 	MOAISim.openWindow(Display.appTitle, Display.windowWidth, Display.windowHeight)
 
 	-- gather all the Display info
-	local cmode, dmode, allmodes = SledgeGraphicsHandler.getCurrentMode()
+	local cmode, dmode, allmodes = MOAIDisplaySDL.getCurrentMode()
 
 	-- tables look like this:
 	-- w
@@ -151,21 +151,31 @@ local function initSledge()
 	local i = 1
 	local scale = 1
 
-	while Display.virtualWidth * scale <= Display.windowWidth do
-		windowmodes[i] = {w = Display.virtualWidth * scale, h = Display.virtualHeight * scale, bpp = dmode.bpp, refresh = dmode.refresh}
-		i = i + 1
-		scale = scale + 0.5
+	if Display.virtualWidth <= Display.windowWidth then
+		-- virtual is smaller than window, scale up
+		while Display.virtualWidth * scale <= Display.windowWidth do
+			windowmodes[i] = {w = Display.virtualWidth * scale, h = Display.virtualHeight * scale, bpp = dmode.bpp, refresh = dmode.refresh}
+			i = i + 1
+			scale = scale + 0.5
+		end
+	else
+		-- virtual is bigger than window, scale down
+		while scale > 0 do
+			windowmodes[i] = {w = Display.virtualWidth * scale, h = Display.virtualHeight * scale, bpp = dmode.bpp, refresh = dmode.refresh}
+			i = i + 1
+			scale = scale - 0.25
+		end
 	end
 
 	Display.windowmodes = windowmodes
 
 
 	if not Display.fullscreen then
-		SledgeGraphicsHandler.setMode(Display.windowWidth, Display.windowHeight, dmode.refresh, dmode.bpp, 0)
+		MOAIDisplaySDL.setMode(Display.windowWidth, Display.windowHeight, dmode.refresh, dmode.bpp, 0)
 		Display.screenWidth = Display.windowWidth
 		Display.screenHeight = Display.windowHeight
 	else
-		SledgeGraphicsHandler.setMode(dmode.w, dmode.h, dmode.refresh, dmode.bpp, 1)
+		MOAIDisplaySDL.setMode(dmode.w, dmode.h, dmode.refresh, dmode.bpp, 1)
 		Display.screenWidth = dmode.w
 		Display.screenHeight = dmode.h
 	end
@@ -204,6 +214,15 @@ function Display:init(_appTitle, _virtualWidth, _virtualHeight, _screenWidth, _s
 	print("Requested screen res", Display.screenWidth, Display.screenHeight, Display.fullscreen)
 	
 	MOAISim.openWindow(Display.appTitle, Display.windowWidth, Display.windowHeight)
+	
+	if MOAIDisplaySDL then
+		initDisplaySDL()
+	end
+
+	MOAISim.setStep(1 / 60) -- run sim at 60hz
+	MOAISim.clearLoopFlags()
+	MOAISim.setLoopFlags(MOAISim.LOOP_FLAGS_FIXED) -- one update per timer event; no sim throttling
+
 
 	resetViewports()
 
@@ -216,22 +235,22 @@ function Display:init(_appTitle, _virtualWidth, _virtualHeight, _screenWidth, _s
 end
 
 --- Toggle fullscreen mode.
--- Currently only does something if running in a Sledge host
+-- Currently only does something if running in a SDL host
 function Display:toggleFullscreen()
 
-	-- this should really only be called on a Sledge host
-	if SledgeGraphicsHandler == nil then
-		print("Trying to toggle fullscreen mode but not running on a Sledge host.")
+	-- this should really only be called on a SDL host
+	if MOAIDisplaySDL == nil then
+		print("Trying to toggle fullscreen mode but not running on a SDL host.")
 		return
 	end
 
 	local dmode = Display.dmode
 	if Display.fullscreen then
-		SledgeGraphicsHandler.setMode(Display.windowWidth, Display.windowHeight, dmode.refresh, dmode.bpp, 0)
+		MOAIDisplaySDL.setMode(Display.windowWidth, Display.windowHeight, dmode.refresh, dmode.bpp, 0)
 		Display.screenWidth = Display.windowWidth
 		Display.screenHeight = Display.windowHeight
 	else
-		SledgeGraphicsHandler.setMode(dmode.w, dmode.h, dmode.refresh, dmode.bpp, 1)
+		MOAIDisplaySDL.setMode(dmode.w, dmode.h, dmode.refresh, dmode.bpp, 1)
 		Display.screenWidth = dmode.w
 		Display.screenHeight = dmode.h
 	end
@@ -248,8 +267,8 @@ end
 -- @param _bFullscreen boolean true if the mode should be fullscreen
 function Display:setDisplayMode(_dmode, _bFullscreen)
 	-- hopefully _dmode is a table reference to an entry in Display.modes or this isn't going to work...
-	if SledgeGraphicsHandler == nil then
-		print("Trying to set a display mode but not running on a Sledge host.")
+	if MOAIDisplaySDL == nil then
+		print("Trying to set a display mode but not running on a SDL host.")
 		return
 	end
 
@@ -263,13 +282,13 @@ function Display:setDisplayMode(_dmode, _bFullscreen)
 	end
 
 	if _bFullscreen then
-		SledgeGraphicsHandler.setMode(_dmode.w, _dmode.h, _dmode.refresh, _dmode.bpp, 1)
+		MOAIDisplaySDL.setMode(_dmode.w, _dmode.h, _dmode.refresh, _dmode.bpp, 1)
 		Display.screenWidth = _dmode.w
 		Display.screenHeight = _dmode.h
 	else
-		SledgeGraphicsHandler.setMode(_dmode.w, _dmode.h, _dmode.refresh, _dmode.bpp, 0)
-		Display.screenWidth = Display.windowWidth
-		Display.screenHeight = Display.windowHeight
+		MOAIDisplaySDL.setMode(_dmode.w, _dmode.h, _dmode.refresh, _dmode.bpp, 0)
+		Display.screenWidth = _dmode.w
+		Display.screenHeight = _dmode.h
 		Display.windowWidth = _dmode.w
 		Display.windowHeight = _dmode.h
 	end
