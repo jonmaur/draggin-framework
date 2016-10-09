@@ -28,6 +28,18 @@ grey:set(0.4,0.4,0.4,1)
 local lightgrey = MOAIImVec4.new()
 lightgrey:set(0.65,0.65,1,1)
 
+local red = MOAIImVec4.new()
+red:set(0.6,0.2,0.2,1)
+
+local green = MOAIImVec4.new()
+green:set(0.2,0.6,0.2,1)
+
+local blue = MOAIImVec4.new()
+blue:set(0.2,0.6,0.6,1)
+
+local yellow = MOAIImVec4.new()
+yellow:set(0.6,0.6,0.2,1)
+
 -- take anything and make an ImGui widget for it
 function ImGuiExt.tablewidgets(lable, obj)
 	local ret
@@ -35,7 +47,8 @@ function ImGuiExt.tablewidgets(lable, obj)
 	if type(obj) == "table" then
 		local open = MOAIImGui.TreeNode(tostring(lable))
 		MOAIImGui.SameLine()
-		MOAIImGui.TextColored(grey, tostring(obj))
+		MOAIImGui.SetCursorPosX(MOAIImGui.GetWindowContentRegionWidth() - MOAIImGui.CalcTextSize(tostring(obj)))
+		MOAIImGui.TextColored(blue, tostring(obj))
 		if open then
 			local count = 0
 			for k, v in pairs(obj) do
@@ -43,20 +56,21 @@ function ImGuiExt.tablewidgets(lable, obj)
 				ImGuiExt.tablewidgets(k, v)
 			end
 			if count == 0 then
-				MOAIImGui.TextColored(grey, "<empty>")
+				MOAIImGui.TextColored(red, "{empty}")
 			end
 			MOAIImGui.TreePop()
 		end
 	elseif type(obj) == "userdata" then
 		local open = MOAIImGui.TreeNode(tostring(lable))
 		MOAIImGui.SameLine()
-		MOAIImGui.TextColored(grey, tostring(obj))
+		MOAIImGui.SetCursorPosX(MOAIImGui.GetWindowContentRegionWidth() - MOAIImGui.CalcTextSize(tostring(obj)))
+		MOAIImGui.TextColored(green, tostring(obj))
 		if open then
-			-- todo text colored right here
 			if obj.getClassTable then
 				local open = MOAIImGui.TreeNode(tostring(lable).." class")
 				MOAIImGui.SameLine()
-				MOAIImGui.TextColored(grey, tostring(obj:getClassTable()))
+				MOAIImGui.SetCursorPosX(MOAIImGui.GetWindowContentRegionWidth() - MOAIImGui.CalcTextSize(tostring(obj:getClassTable())))
+				MOAIImGui.TextColored(blue, tostring(obj:getClassTable()))
 				if open then
 					local count = 0
 					for k, v in pairs(obj:getClassTable()) do
@@ -64,7 +78,7 @@ function ImGuiExt.tablewidgets(lable, obj)
 						ImGuiExt.tablewidgets(k, v)
 					end
 					if count == 0 then
-						MOAIImGui.TextColored(grey, "<empty>")
+						MOAIImGui.TextColored(red, "{empty}")
 					end
 					MOAIImGui.TreePop()
 				end
@@ -72,7 +86,8 @@ function ImGuiExt.tablewidgets(lable, obj)
 			if obj.getMemberTable then
 				local open = MOAIImGui.TreeNode(tostring(lable).." member")
 				MOAIImGui.SameLine()
-				MOAIImGui.TextColored(grey, tostring(obj:getMemberTable()))
+				MOAIImGui.SetCursorPosX(MOAIImGui.GetWindowContentRegionWidth() - MOAIImGui.CalcTextSize(tostring(obj:getMemberTable())))
+				MOAIImGui.TextColored(blue, tostring(obj:getMemberTable()))
 				if open then
 					local count = 0
 					for k, v in pairs(obj:getMemberTable()) do
@@ -80,7 +95,7 @@ function ImGuiExt.tablewidgets(lable, obj)
 						ImGuiExt.tablewidgets(k, v)
 					end
 					if count == 0 then
-						MOAIImGui.TextColored(grey, "<empty>")
+						MOAIImGui.TextColored(red, "{empty}")
 					end
 					MOAIImGui.TreePop()
 				end
@@ -88,7 +103,8 @@ function ImGuiExt.tablewidgets(lable, obj)
 			if obj.getRefTable then
 				local open = MOAIImGui.TreeNode(tostring(lable).." ref")
 				MOAIImGui.SameLine()
-				MOAIImGui.TextColored(grey, tostring(obj:getRefTable()))
+				MOAIImGui.SetCursorPosX(MOAIImGui.GetWindowContentRegionWidth() - MOAIImGui.CalcTextSize(tostring(obj:getRefTable())))
+				MOAIImGui.TextColored(blue, tostring(obj:getRefTable()))
 				if open then
 					local count = 0
 					for k, v in pairs(obj:getRefTable()) do
@@ -96,7 +112,7 @@ function ImGuiExt.tablewidgets(lable, obj)
 						ImGuiExt.tablewidgets(k, v)
 					end
 					if count == 0 then
-						MOAIImGui.TextColored(grey, "<empty>")
+						MOAIImGui.TextColored(red, "{empty}")
 					end
 					MOAIImGui.TreePop()
 				end
@@ -106,38 +122,44 @@ function ImGuiExt.tablewidgets(lable, obj)
 		end
 	elseif type(obj) == "function" then
 		
+		local info = debug.getinfo(obj)
+
 		MOAIImGui.PushStyleColor(MOAIImGui.Col_Text, lightgrey);
 		local open = MOAIImGui.TreeNode(tostring(lable))
+		if info.what == "Lua" then
+			if MOAIImGui.BeginPopupContextItem(tostring(lable)) then
+				if MOAIImGui.Selectable("Open script") then
+					os.execute("START "..info.short_src)
+				end
+				MOAIImGui.EndPopup()
+			end
+		end
 		MOAIImGui.PopStyleColor();
 		MOAIImGui.SameLine()
-		MOAIImGui.TextColored(grey, tostring(obj))
+		MOAIImGui.SetCursorPosX(MOAIImGui.GetWindowContentRegionWidth() - MOAIImGui.CalcTextSize(tostring(obj)))
+		MOAIImGui.TextColored(yellow, tostring(obj))
 		if open then
-			local info = debug.getinfo(obj)
 			local count = 0
 			for k, v in pairs(info) do
 				count = count + 1
 				ImGuiExt.tablewidgets(k, v)
 			end
 			if count == 0 then
-				MOAIImGui.TextColored(grey, "<empty>")
+				MOAIImGui.TextColored(red, "{empty}")
 			end
 			MOAIImGui.TreePop()
 		end
-
-		-- -- todo: coloured bullettext here!
-		-- MOAIImGui.PushStyleColor(MOAIImGui.Col_Text, lightgrey);
-		-- MOAIImGui.BulletText(tostring(lable)..":")
-		-- MOAIImGui.PopStyleColor();
-		-- MOAIImGui.SameLine()
-		-- MOAIImGui.TextColored(grey, tostring(obj))
-
-
 	else
 		MOAIImGui.PushStyleColor(MOAIImGui.Col_Text, lightgrey);
-		MOAIImGui.BulletText(tostring(lable)..": "..tostring(obj))
+		if type(obj) == "string" then
+			MOAIImGui.BulletText(tostring(lable)..' = "'..tostring(obj)..'"')
+		else
+			MOAIImGui.BulletText(tostring(lable).." = "..tostring(obj))
+		end
 		MOAIImGui.PopStyleColor();
 		MOAIImGui.SameLine()
-		MOAIImGui.TextColored(grey, "<"..type(obj)..">")
+		MOAIImGui.SetCursorPosX(MOAIImGui.GetWindowContentRegionWidth() - MOAIImGui.CalcTextSize(type(obj)))
+		MOAIImGui.TextColored(blue, type(obj))
 	end
 end
 
