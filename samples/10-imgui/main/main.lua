@@ -10,7 +10,14 @@ if not MOAIImGui then
 	os.exit()
 end
 
-MOAISim.setLoopFlags(MOAISim.LOOP_FLAGS_FIXED)
+
+-- MOAISim.SIM_LOOP_FORCE_STEP
+-- MOAISim.SIM_LOOP_ALLOW_BOOST
+-- MOAISim.SIM_LOOP_ALLOW_SPIN
+-- MOAISim.SIM_LOOP_NO_DEFICIT
+-- MOAISim.SIM_LOOP_NO_SURPLUS
+-- MOAISim.SIM_LOOP_RESET_CLOCK
+-- MOAISim.setLoopFlags(MOAISim.LOOP_FLAGS_FIXED)
 
 local Draggin = require "draggin/draggin"
 local Display = require "draggin/display"
@@ -22,7 +29,7 @@ Draggin.appTitle = "Sprite Preview"
 ----------------------------------------------------------------
 -- Display
 -- params: <string> window text, <number> virtual width, <number> virtual height, <number> screen width, <number> screen height
-Display:init(Draggin.appTitle, 1920/8, 1080/8, 1920/2, 1080/2, false)
+Display:init(Draggin.appTitle, 1920/2, 1080/2, 1920/2, 1080/2, false)
 
 
 local GameStateManager = require "draggin/gamestatemanager"
