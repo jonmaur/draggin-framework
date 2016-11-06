@@ -121,14 +121,22 @@ def getAnimationAndFrameFromFilename(_filename):
 	filename = os.path.basename(_filename)
 
 	m = re.match(r"([A-Za-z0-9]*)(?:[_\-\.]*)(\d+)", filename)
-	# did we fine something like "walking_001.png"
+	# did we fine something like "walking_1.png"
 	if m:
 		animation = m.group(1)
 		frame = int(m.group(2))
 	else:
-		m = re.match(r"(\w+)", filename)
-		animation = m.group(1)
-		frame = 1
+		m = re.match(r"([A-Za-z0-9_\-\.]*)(\d+)", filename)
+		# did we fine something like "walk_ing_1.png"
+		if m:
+			animation = m.group(1)
+			if animation[-1] == '_':
+				animation = animation[:-1]
+			frame = int(m.group(2))
+		else:
+			m = re.match(r"(\w+)", filename)
+			animation = m.group(1)
+			frame = 1
 
 	# this is a case where the filenames are only numbers, 1.png 2.png... so make the animation name the same as the sprite
 	if (not animation):
