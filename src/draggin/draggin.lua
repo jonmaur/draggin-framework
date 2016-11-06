@@ -137,7 +137,7 @@ end
 -- CAN ONLY BE CALLED FROM A THREAD! Asserts if it's not. Other coroutines continue.
 -- @param _secs the number of seconds to wait.
 function Draggin:wait(_secs)
-	assert(MOAIThread.currentThread() ~= nil, "Trying to wait without running in a coroutine!\n")
+	-- assert(MOAIThread.currentThread() ~= nil, "Trying to wait without running in a coroutine!\n")
 
 	local prevElapsedTime = MOAISim.getElapsedTime()
 	local elapsedTime = 0
@@ -158,7 +158,7 @@ end
 -- TODO: a better way to do this? There has to be a better way...
 -- @param _secs the number of seconds to wait
 -- @param _funct optional function to call when the wait is over
--- @return the MOAIThread which was created so you can cancle the callback
+-- @return the MOAICoroutine which was created so you can cancle the callback
 function Draggin:waitThenCallback(_secs, _funct)
 
 	local function mainFunc()
@@ -166,7 +166,7 @@ function Draggin:waitThenCallback(_secs, _funct)
 		_funct()
 	end
 
-	local thread = MOAIThread.new()
+	local thread = MOAICoroutine.new()
 	thread:run(mainFunc)
 
 	return thread
@@ -561,9 +561,9 @@ end
 --- Callback after any input buttons or touch events
 -- Supports pointers, keyboards, and joysticks
 -- @param _callback	callback function.
--- @return the MOAIThread that was created, so you can cancle it.
+-- @return the MOAICoroutine that was created, so you can cancle it.
 function Draggin:callbackOnAnyInput(_callback)
-	local thread = MOAIThread.new()
+	local thread = MOAICoroutine.new()
 	thread:run(function ()
 		Draggin:waitForAnyInput()
 		_callback()
