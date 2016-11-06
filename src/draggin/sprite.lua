@@ -44,6 +44,7 @@ function Sprite.new(_strSprite)
 
 	sprite.spriteData = spriteData
 
+	local currSpriteDataName = _strSprite
 	local currAnimationName = ""
 
 
@@ -68,6 +69,7 @@ function Sprite.new(_strSprite)
 
 		if not _strAnim then
 			if self.spriteData.curves[currAnimationName] then
+				print("reuse anim")
 				_strAnim = currAnimationName
 			else
 				for k, v in pairs(self.spriteData.curves) do
@@ -77,6 +79,10 @@ function Sprite.new(_strSprite)
 			end
 		end
 
+		currSpriteDataName = _strSpriteData
+
+		-- force playAnimation to make a new animation
+		currAnimationName = ""
 		self:playAnimation(_strAnim, _speed, _mode)
 	end
 
@@ -112,6 +118,12 @@ function Sprite.new(_strSprite)
 		currAnimationName = _strAnim
 
 		sprite.sig_animationchanged:emit(_strAnim)
+	end
+
+	--- Get the current spritedata name.
+	-- @return string, the current spritedata name of this Sprite.
+	function sprite:getCurrentSpriteDataName()
+		return currSpriteDataName
 	end
 
 	--- Get the current animation name.

@@ -43,7 +43,7 @@ end
 -- @return the sprite data
 function SpriteManager.getSpriteData(_strSpriteData)
 
-	assert(type(_strSpriteData) == "string")
+	assert(type(_strSpriteData) == "string", "_strSpriteData type is "..type(_strSpriteData))
 
 	local data
 
