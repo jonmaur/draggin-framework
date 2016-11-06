@@ -188,6 +188,7 @@ function ActionMap.new()
 	-- @param _action string, the action to check
 	-- @return the state of the action: "down", "held", or "up"
 	function map:stateOf(_action)
+		assert(actionMap[_action], tostring(_action).." does not exist in this action map!")
 		return actionMap[_action].state
 	end
 
