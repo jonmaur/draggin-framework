@@ -4,12 +4,6 @@ local Sprite = require "draggin/sprite"
 local Sound = require "draggin/sound"
 local StateMachine = require "draggin/statemachine/statemachine"
 
--- globals to locals
-local abs = math.abs
-local floor = math.floor
-local mod = math.mod
-local lerp = Draggin.lerp
-
 local Ninja = {}
 
 function Ninja.new()
