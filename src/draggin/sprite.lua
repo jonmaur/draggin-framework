@@ -100,6 +100,8 @@ function Sprite.new(_strSprite)
 			self.anim:setSpeed(_speed)
 			return
 		end
+		
+		_strAnim = _strAnim or currAnimationName
 
 		self.anim:stop()
 
