@@ -154,22 +154,22 @@ function Draggin:wait(_secs)
 	end
 end
 
---- Spawns a new thread to wait for seconds and then calls the callback.
+--- Spawns a new coroutine to wait for seconds and then calls the callback.
 -- TODO: a better way to do this? There has to be a better way...
 -- @param _secs the number of seconds to wait
 -- @param _funct optional function to call when the wait is over
 -- @return the MOAICoroutine which was created so you can cancle the callback
 function Draggin:waitThenCallback(_secs, _funct)
 
-	local function mainFunc()
+	local function waitFunc()
 		Draggin:wait(_secs)
 		_funct()
 	end
 
-	local thread = MOAICoroutine.new()
-	thread:run(mainFunc)
+	local coroutine = MOAICoroutine.new()
+	coroutine:run(waitFunc)
 
-	return thread
+	return coroutine
 end
 
 --- Create a fullscreen textured prop.
