@@ -20,6 +20,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ]]
 
+local random = math.random
+
 --- A group of functions for tables that aren't in the table library.
 local TableExt = {}
 
@@ -121,7 +123,7 @@ TableExt.merge = merge
 --- Grab a random entry from the table. Table must be an array.
 -- @param t the table to choose from
 local function randomentry(t)
-	return t[math.random(1, #t)]
+	return t[random(1, #t)]
 end
 TableExt.randomentry = randomentry
 
