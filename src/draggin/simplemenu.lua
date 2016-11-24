@@ -187,8 +187,11 @@ end
 --
 -- The configuration table overrides default menu configs as such:
 -- _config.normalColor an array of the normal text color
+-- _config.normalShadowColor an array of the normal text shadow color
 -- _config.selectedColor the selected text color
+-- _config.selectedShadowColor the selected text shadow color
 -- _config.disabledColor the disabled text color
+-- _config.disabledShadowColor the disabled text shadow color
 -- _config.sndnavigate a Sound object to play when navigating the menu
 -- _config.sndchoose a Sound object to play when choosing an item in the menu
 -- _config.fontname the name of the font to use for this menu
@@ -218,8 +221,11 @@ function SimpleMenu.new(_entries, _layer, _config)
 	local menu = {}
 
 	local normalColor = config.normalColor or {0.5, 0.5, 0.5, 1}
+	local normalShadowColor = config.normalShadowColor or {0, 0, 0, 0.75}
 	local selectedColor = config.selectedColor or {59/255, 182/255, 209/255, 1}
+	local selectedShadowColor = config.selectedShadowColor or {0, 0, 0, 0.75}
 	local disabledColor = config.disabledColor or {0.15, 0.15, 0.15, 0.75}
+	local disabledShadowColor = config.disabledShadowColor or {0, 0, 0, 0.75}
 
 	local sndnavigate = config.sndnavigate
 	local sndchoose = config.sndchoose
@@ -399,15 +405,19 @@ function SimpleMenu.new(_entries, _layer, _config)
 			if items[_item] ~= nil and items[_item].enabled and not items[_item].label then
 				if items[selected] ~= nil then
 					items[selected]:setColor(normalColor)
+					items[selected]:setShadowColor(normalShadowColor)
 					if items[selected].subtxt then
 						items[selected].subtxt:setColor(normalColor)
+						items[selected].subtxt:setShadowColor(normalShadowColor)
 					end
 				end
 
 				selected = _item
 				items[selected]:setColor(selectedColor)
+				items[selected]:setShadowColor(selectedShadowColor)
 				if items[selected].subtxt then
 					items[selected].subtxt:setColor(selectedColor)
+					items[selected].subtxt:setShadowColor(selectedShadowColor)
 				end
 
 				-- success!
@@ -480,11 +490,15 @@ function SimpleMenu.new(_entries, _layer, _config)
 
 		if _disabled then
 			item:setColor(disabledColor)
+			item:setShadowColor(disabledShadowColor)
 			item.subtxt:setColor(disabledColor)
+			item.subtxt:setShadowColor(disabledShadowColor)
 			item.enabled = false
 		else
 			item:setColor(normalColor)
+			item:setShadowColor(normalShadowColor)
 			item.subtxt:setColor(normalColor)
+			item.subtxt:setShadowColor(normalShadowColor)
 			item.enabled = true
 		end
 	end
@@ -556,6 +570,7 @@ function SimpleMenu.new(_entries, _layer, _config)
 
 			subtxt:setString(t.options[1])
 			subtxt:setColor(normalColor)
+			subtxt:setShadowColor(normalShadowColor)
 			subtxt.options = t.options
 			subtxt.option = 1
 		end
@@ -571,11 +586,14 @@ function SimpleMenu.new(_entries, _layer, _config)
 		txtBox.onChange = t.onChange
 
 		txtBox:setColor(normalColor)
+		txtBox:setShadowColor(normalShadowColor)
 
 		if t.enabled == false then
 			txtBox:setColor(disabledColor)
+			txtBox:setShadowColor(disabledShadowColor)
 			if txtBox.subtxt ~= nil then
 				txtBox.subtxt:setColor(disabledColor)
+				txtBox.subtxt:setShadowColor(disabledShadowColor)
 			end
 		elseif selected == nil and not (type(t.label) == "boolean" and t.label == true) then
 			-- this is the first enabled item, so it is selected
