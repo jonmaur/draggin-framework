@@ -322,13 +322,56 @@ for i = 1, #joysticks do
 	if joysticks[i] then
 		--print("joystick setCallback", i)
 		joysticks[i].buttons:setCallback(onJoystickButtonEvent)
+
+		local vx, vy = joysticks[i].stickLeft:getVector()
+		joysticks[i].stickLeftOld = {vx, vy}
+
+		vx, vy = joysticks[i].stickRight:getVector()
+		joysticks[i].stickRightOld = {vx, vy}
 	end
 end
 
--- TODO: is there even a point to this?
--- function Draggin:injectJoystickEvent(_padnumber, _key, _down)
--- 	onKeyboardEvent(_key, _down)
--- end
+--- Inject default directional analog joystick actions.
+-- @param _actions an action map table
+-- @param _oldxs the array of previous x values for each joystick, nil to ignore
+-- @param _oldys the array of previous y values for each joystick, nil to ignore
+-- @param _padnumber the joystick number, nil for all joysticks
+-- @return true on success, nil on fail
+function Draggin.injectJoystickAnalogEvents(_actions, _padnumber)
+
+	local function inject_action(i)
+		-- inject some actions from the controllers
+		local joystick = Draggin.joysticks[i].stickLeft
+		local vx, vy = joystick:getVector()
+		vx = Draggin.cleanNumber(vx)
+		vy = Draggin.cleanNumber(vy)
+
+		local stickLeftOld = joysticks[i].stickLeftOld
+
+		if vx > 0.5 and stickLeftOld[1] < 0.5 then
+			_actions:injectAction("right", "down")
+		elseif vx < -0.5 and stickLeftOld[1] > -0.5 then
+			_actions:injectAction("left", "down")
+		end
+		if vy > 0.5 and stickLeftOld[2] < 0.5 then
+			_actions:injectAction("down", "down")
+		elseif vy < -0.5 and stickLeftOld[2] > -0.5 then
+			_actions:injectAction("up", "down")
+		end
+
+		stickLeftOld[1] = vx
+		stickLeftOld[2] = vy
+	end
+
+	if _padnumber then
+		inject_action(_padnumber)
+	else
+		for i = 1, #Draggin.joysticks do
+			inject_action(i)
+		end
+	end
+end
+
 
 
 -- input = {[1] = {x, y, tapCount, state}}

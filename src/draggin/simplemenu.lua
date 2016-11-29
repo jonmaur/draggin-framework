@@ -44,28 +44,17 @@ local SimpleMenu = {}
 --- Add default menu joystick actions.
 -- Quick default action setup using standard joystick menu keys.
 -- @param _actions an action map table
--- @param _oldxs the array to hold old x values for each joystick, nil to ignore
--- @param _oldys the array to hold old y values for each joystick, nil to ignore
 -- @param _padnumber the joystick number, nil for all joysticks
 -- @return true on success, nil on fail
-function SimpleMenu.addJoystickActions(_actions, _oldxs, _oldys, _padnumber)
+function SimpleMenu.addJoystickActions(_actions, _padnumber)
 
 	if not (_actions and _actions.addAction) then
 		return false
 	end
 
 	local function add_action_to_joy(i)
-		local joystick = Draggin.joysticks[i].stickLeft
-		local oldx, oldy = joystick:getVector()
-		if _oldxs then
-			_oldxs[i] = cleanNumber(oldx)
-		end
-		if _oldys then
-			_oldys[i] = cleanNumber(oldy)
-		end
-
 		_actions:addAction("ok", nil, nil, i, 7) -- start
-		_actions:addAction("ok", nil, nil, i, 0) -- A
+		_actions:addAction("ok", nil, nil, i, 1) -- A
 
 		-- TODO: these
 		-- _actions:addAction("cancle", 27, nil)
@@ -87,45 +76,6 @@ function SimpleMenu.addJoystickActions(_actions, _oldxs, _oldys, _padnumber)
 	end
 
 	return true
-end
-
---- Inject default menu analog joystick actions.
--- @param _actions an action map table
--- @param _oldxs the array of previous x values for each joystick, nil to ignore
--- @param _oldys the array of previous y values for each joystick, nil to ignore
--- @param _padnumber the joystick number, nil for all joysticks
--- @return true on success, nil on fail
-function SimpleMenu.injectJoystickAnalogEvents(_actions, _oldxs, _oldys, _padnumber)
-
-	local function inject_action(i)
-		-- inject some actions from the controllers
-		local joystick = Draggin.joysticks[i].stickLeft
-		local vx, vy = joystick:getVector()
-		vx = cleanNumber(vx)
-		vy = cleanNumber(vy)
-
-		if vy > 0.5 and _oldys[i] < 0.5 then
-			_actions:injectAction("down", "down")
-		elseif vy < -0.5 and _oldys[i] > -0.5 then
-			_actions:injectAction("up", "down")
-		end
-		if vx > 0.5 and _oldxs[i] < 0.5 then
-			_actions:injectAction("right", "down")
-		elseif vx < -0.5 and _oldxs[i] > -0.5 then
-			_actions:injectAction("left", "down")
-		end
-
-		_oldxs[i] = vx
-		_oldys[i] = vy
-	end
-
-	if _padnumber then
-		inject_action(_padnumber)
-	else
-		for i = 1, #Draggin.joysticks do
-			inject_action(i)
-		end
-	end
 end
 
 --- Add default menu keyboad actions.
