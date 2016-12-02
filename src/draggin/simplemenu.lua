@@ -55,16 +55,12 @@ function SimpleMenu.addJoystickActions(_actions, _padnumber)
 	local function add_action_to_joy(i)
 		_actions:addAction("ok", nil, nil, i, 7) -- start
 		_actions:addAction("ok", nil, nil, i, 1) -- A
-
-		-- TODO: these
-		-- _actions:addAction("cancle", 27, nil)
-		-- _actions:addAction("cancle", 8, nil)
-		-- _actions:addAction("ok", 13, nil)
-		-- _actions:addAction("ok", ' ', nil)
-		-- _actions:addAction("left", 'a', nil)
-		-- _actions:addAction("right", 'd', nil)
-		-- _actions:addAction("up", 'w', nil)
-		-- _actions:addAction("down", 's', nil)
+		_actions:addAction("cancle", nil, nil, i, 2) -- B
+		_actions:addAction("cancle", nil, nil, i, 5) -- select
+		_actions:addAction("up", nil, nil, i, 12) -- dpad up
+		_actions:addAction("down", nil, nil, i, 13) -- dpad down
+		_actions:addAction("left", nil, nil, i, 14) -- dpad left
+		_actions:addAction("right", nil, nil, i, 15) -- dpad right
 	end
 
 	if _padnumber then
@@ -85,9 +81,9 @@ end
 function SimpleMenu.addKeyboardActions(_actions)
 
 	if _actions and _actions.addAction then
-		_actions:addAction("cancle", 27, nil)
-		_actions:addAction("cancle", 8, nil)
-		_actions:addAction("ok", 13, nil)
+		_actions:addAction("cancle", 283, nil) -- esc
+		_actions:addAction("cancle", 264, nil) -- backspace
+		_actions:addAction("ok", 269, nil) -- enter
 		_actions:addAction("ok", ' ', nil)
 		_actions:addAction("left", 'a', nil)
 		_actions:addAction("right", 'd', nil)
@@ -95,10 +91,10 @@ function SimpleMenu.addKeyboardActions(_actions)
 		_actions:addAction("down", 's', nil)
 
 		-- arrow keys
-		_actions:addAction("left", 1073741904, nil)
-		_actions:addAction("right", 1073741903, nil)
-		_actions:addAction("up", 1073741906, nil)
-		_actions:addAction("down", 1073741905, nil)
+		_actions:addAction("left", 293, nil) -- left arrow
+		_actions:addAction("right", 295, nil) -- right arrow
+		_actions:addAction("up", 294, nil) -- up arrow
+		_actions:addAction("down", 296, nil) -- down arrow
 
 		return true
 	end
