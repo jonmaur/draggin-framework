@@ -64,6 +64,7 @@ function ActionMap.new()
 		print("creating new action:", _action, _key, _index, _joystick, _button)
 		actionMap[_action] = actionMap[_action] or {}
 		actionMap[_action].state = "up"
+		actionMap[_action].prevstate = "up"
 		if not actionMap[_action].keyboardCallbacks then
 			actionMap[_action].keyboardCallbacks = {}
 		end
@@ -192,6 +193,16 @@ function ActionMap.new()
 		return actionMap[_action].state
 	end
 
+	--- Get the previous state of an action.
+	-- This is what you use to check the previous state of an action, almost as you
+	-- would check the state of a button press.
+	-- @param _action string, the action to check
+	-- @return the previous state of the action: "down", "held", or "up"
+	function map:prevStateOf(_action)
+		assert(actionMap[_action], tostring(_action).." does not exist in this action map!")
+		return actionMap[_action].prevstate
+	end
+
 	--- Update the action map.
 	-- You need to call this AFTER you check all the states, so at the end of
 	-- your game loop. This function turns "down" events into "held"
@@ -202,6 +213,7 @@ function ActionMap.new()
 
 		-- check other stuff here
 		for _, action in pairs(actionMap) do
+			action.prevstate = action.state
 			if action.state == "down" then
 				action.state = "held"
 			end
@@ -222,6 +234,7 @@ function ActionMap.new()
 	function map:clear()
 		for _, action in pairs(actionMap) do
 			action.state = "up"
+			action.prevstate = "up"
 		end
 	end
 
