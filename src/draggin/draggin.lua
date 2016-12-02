@@ -285,6 +285,23 @@ function Draggin:removeJoystickCallback(_padnumber, _func)
 	sig_joysticks[_padnumber]:remove(_func)
 end
 
+
+-- joystick buttons
+-- 1 A
+-- 2 B
+-- 3 X
+-- 4 Y
+-- 5 Back/Select/Menu
+-- 7 Start
+-- 8 L3
+-- 9 R3
+-- 10 LB
+-- 11 RB
+-- 12 dpad up
+-- 13 dpad down
+-- 14 dpad left
+-- 15 dpad right
+
 --local buttonstates = {[0] = {}, [1] = {}, [2] = {}, [3] = {}}
 for i = 1, #joysticks do
 	local buttonstate = {}
@@ -348,15 +365,31 @@ function Draggin.injectJoystickAnalogEvents(_actions, _padnumber)
 
 		local stickLeftOld = joysticks[i].stickLeftOld
 
-		if vx > 0.5 and stickLeftOld[1] < 0.5 then
+		if vx > 0.5 and stickLeftOld[1] <= 0.5 then
 			_actions:injectAction("right", "down")
-		elseif vx < -0.5 and stickLeftOld[1] > -0.5 then
+		
+		elseif vx < -0.5 and stickLeftOld[1] >= -0.5 then
 			_actions:injectAction("left", "down")
+
+		elseif vx < 0.5 and stickLeftOld[1] >= 0.5 then
+			_actions:injectAction("right", "up")
+
+		elseif vx > -0.5 and stickLeftOld[1] <= -0.5 then
+			_actions:injectAction("left", "up")
 		end
-		if vy > 0.5 and stickLeftOld[2] < 0.5 then
+
+
+		if vy > 0.5 and stickLeftOld[2] <= 0.5 then
 			_actions:injectAction("down", "down")
-		elseif vy < -0.5 and stickLeftOld[2] > -0.5 then
+
+		elseif vy < -0.5 and stickLeftOld[2] >= -0.5 then
 			_actions:injectAction("up", "down")
+
+		elseif vy > -0.5 and stickLeftOld[2] <= -0.5 then
+			_actions:injectAction("up", "up")
+
+		elseif vy < 0.5 and stickLeftOld[2] >= 0.5 then
+			_actions:injectAction("down", "up")
 		end
 
 		stickLeftOld[1] = vx
