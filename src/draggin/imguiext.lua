@@ -41,10 +41,12 @@ local yellow = MOAIImVec4.new()
 yellow:set(0.6,0.6,0.2,1)
 
 -- take anything and make an ImGui widget for it
-function ImGuiExt.tablewidgets(lable, obj)
+function ImGuiExt.tablewidgets(lable, obj, hidetypes)
 	local ret
 
-	if type(obj) == "table" then
+	hidetypes = hidetypes or {}
+
+	if type(obj) == "table" and not hidetypes["table"] then
 		local open = MOAIImGui.TreeNode(tostring(lable))
 		MOAIImGui.SameLine()
 		MOAIImGui.SetCursorPosX(MOAIImGui.GetWindowContentRegionWidth() - MOAIImGui.CalcTextSize(tostring(obj)))
@@ -53,14 +55,14 @@ function ImGuiExt.tablewidgets(lable, obj)
 			local count = 0
 			for k, v in pairs(obj) do
 				count = count + 1
-				ImGuiExt.tablewidgets(k, v)
+				ImGuiExt.tablewidgets(k, v, hidetypes)
 			end
 			if count == 0 then
 				MOAIImGui.TextColored(red, "{empty}")
 			end
 			MOAIImGui.TreePop()
 		end
-	elseif type(obj) == "userdata" then
+	elseif type(obj) == "userdata" and not hidetypes["userdata"] then
 		local open = MOAIImGui.TreeNode(tostring(lable))
 		MOAIImGui.SameLine()
 		MOAIImGui.SetCursorPosX(MOAIImGui.GetWindowContentRegionWidth() - MOAIImGui.CalcTextSize(tostring(obj)))
@@ -75,7 +77,7 @@ function ImGuiExt.tablewidgets(lable, obj)
 					local count = 0
 					for k, v in pairs(obj:getClassTable()) do
 						count = count + 1
-						ImGuiExt.tablewidgets(k, v)
+						ImGuiExt.tablewidgets(k, v, hidetypes)
 					end
 					if count == 0 then
 						MOAIImGui.TextColored(red, "{empty}")
@@ -92,7 +94,7 @@ function ImGuiExt.tablewidgets(lable, obj)
 					local count = 0
 					for k, v in pairs(obj:getMemberTable()) do
 						count = count + 1
-						ImGuiExt.tablewidgets(k, v)
+						ImGuiExt.tablewidgets(k, v, hidetypes)
 					end
 					if count == 0 then
 						MOAIImGui.TextColored(red, "{empty}")
@@ -109,7 +111,7 @@ function ImGuiExt.tablewidgets(lable, obj)
 					local count = 0
 					for k, v in pairs(obj:getRefTable()) do
 						count = count + 1
-						ImGuiExt.tablewidgets(k, v)
+						ImGuiExt.tablewidgets(k, v, hidetypes)
 					end
 					if count == 0 then
 						MOAIImGui.TextColored(red, "{empty}")
@@ -120,7 +122,7 @@ function ImGuiExt.tablewidgets(lable, obj)
 
 			MOAIImGui.TreePop()
 		end
-	elseif type(obj) == "function" then
+	elseif type(obj) == "function" and not hidetypes["function"] then
 		
 		local info = debug.getinfo(obj)
 
@@ -142,16 +144,16 @@ function ImGuiExt.tablewidgets(lable, obj)
 			local count = 0
 			for k, v in pairs(info) do
 				count = count + 1
-				ImGuiExt.tablewidgets(k, v)
+				ImGuiExt.tablewidgets(k, v, hidetypes)
 			end
 			if count == 0 then
 				MOAIImGui.TextColored(red, "{empty}")
 			end
 			MOAIImGui.TreePop()
 		end
-	else
+	elseif not hidetypes[type(obj)] then
 		MOAIImGui.PushStyleColor(MOAIImGui.Col_Text, lightgrey);
-		if type(obj) == "string" then
+		if type(obj) == "string" and not hidetypes["string"] then
 			MOAIImGui.BulletText(tostring(lable)..' = "'..tostring(obj)..'"')
 		else
 			MOAIImGui.BulletText(tostring(lable).." = "..tostring(obj))
@@ -164,7 +166,7 @@ function ImGuiExt.tablewidgets(lable, obj)
 end
 
 
-function ImGuiExt.window(lable, obj, open)
+function ImGuiExt.window(lable, obj, open, hidetypes)
 	if type(open) == "nil" then
 		open = true
 	end
@@ -172,7 +174,7 @@ function ImGuiExt.window(lable, obj, open)
 	if open then
 		_, open = MOAIImGui.Begin(lable, open)
 		if open then
-			ImGuiExt.tablewidgets(lable, obj)
+			ImGuiExt.tablewidgets(lable, obj, hidetypes)
 		end
 		MOAIImGui.End()
 	end
