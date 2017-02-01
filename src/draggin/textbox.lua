@@ -405,6 +405,9 @@ function TextBox.new(_strFont, _fontSize, _bShadow)
 			blinktimer = nil
 		end
 		txt:removeFromLayer()
+
+		layer = nil
+		partition = nil
 	end
 
 	txt:setFont(_strFont, _fontSize)

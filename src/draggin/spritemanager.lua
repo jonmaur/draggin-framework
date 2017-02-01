@@ -71,6 +71,9 @@ end
 -- whether or not some other sprite is using the same data
 -- @param _strSpriteData the name of the sprite data to clear from the SpriteManager
 function SpriteManager.clearSpriteData(_strSpriteData)
+	-- spriteData[_strSpriteData].texture = nil
+	spriteData[_strSpriteData].deck:setTexture(nil)
+	spriteData[_strSpriteData].texture:release()
 	spriteData[_strSpriteData] = nil
 end
 

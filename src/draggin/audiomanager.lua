@@ -23,6 +23,10 @@ THE SOFTWARE.
 local AudioManager = {}
 local groups = {}
 
+function AudioManager:getGroupsTable()
+	return groups
+end
+
 --- Add a Sound instance to the manager.
 -- @param _sound a Sound instance made with Draggin's Sound.new()
 -- @param _group string, the group the Sound goes in

@@ -104,6 +104,7 @@ function Sprite.new(_strSprite)
 		_strAnim = _strAnim or currAnimationName
 
 		self.anim:stop()
+		self.anim:clear()
 
 		self.anim = MOAIAnim:new()
 		self.anim:reserveLinks(1)
@@ -150,6 +151,11 @@ function Sprite.new(_strSprite)
 		bounds[4] = bounds[4] * sy
 
 		return bounds
+	end
+
+	function sprite:cleanup()
+		self.anim:stop()
+		self.anim:clear()
 	end
 
 	return sprite

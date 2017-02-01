@@ -41,6 +41,9 @@ function Sound.new(_strSound, _group)
 
 	local sound = {}
 
+	sound.name = _strSound
+	sound.group = _group
+
 	-- make a MOAIUntzSound if possible, if not just go on and make empty sound stuff
 	local usound = nil
 	local enabled = true
