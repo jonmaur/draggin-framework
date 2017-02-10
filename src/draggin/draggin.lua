@@ -244,6 +244,13 @@ local function onKeyboardEvent(_key, _down)
 	end
 end
 
+function Draggin:getKeyState(_key)
+	if type(_key) == "string" then
+		_key = string.byte(_key)
+	end
+	return keystate[_key]
+end
+
 --- Inject a keyboard event as if the user actually used the keyboard
 -- Only fakes it for the callbacks that were registered, it's not low level
 -- MOAI stuff.
