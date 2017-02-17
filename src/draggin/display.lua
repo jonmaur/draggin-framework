@@ -151,9 +151,9 @@ local function initDisplaySDL()
 	local i = 1
 	local scale = 1
 
-	if Display.virtualWidth <= Display.windowWidth then
+	if (Display.virtualWidth <= Display.screenWidth) and (Display.virtualHeight <= Display.screenHeight) then
 		-- virtual is smaller than window, scale up
-		while Display.virtualWidth * scale <= Display.windowWidth do
+		while (Display.virtualWidth * scale <= Display.screenWidth) and Display.virtualHeight * scale <= Display.screenHeight do
 			windowmodes[i] = {w = Display.virtualWidth * scale, h = Display.virtualHeight * scale, bpp = dmode.bpp, refresh = dmode.refresh}
 			i = i + 1
 			scale = scale + 0.5
