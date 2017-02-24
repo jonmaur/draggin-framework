@@ -146,6 +146,10 @@ function GameStateManager.getTopName()
 	end
 end
 
+function GameStateManager.getTopState()
+	return topState
+end
+
 function GameStateManager.isStateOnStack(_state)
 	for i = 1, #states do
 		if states[i] == _state then
