@@ -587,8 +587,10 @@ function SimpleMenu.new(_entries, _layer, _config)
 	-- @see menu:enableTouch
 	function menu:disableTouch()
 		-- mouse pointer and touch
-		Draggin:removePointerCallback(menu.onPointerCallback)
-		menu.onPointerCallback = nil
+		if menu.onPointerCallback then
+			Draggin:removePointerCallback(menu.onPointerCallback)
+			menu.onPointerCallback = nil
+		end
 	end
 
 	--- Destroy this menu.
