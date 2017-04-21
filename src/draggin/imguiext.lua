@@ -22,6 +22,8 @@ THE SOFTWARE.
 
 local ImGuiExt = {}
 
+local serializer = MOAISerializer.new()
+
 local grey = MOAIImVec4.new()
 grey:set(0.4,0.4,0.4,1)
 
@@ -41,7 +43,7 @@ local yellow = MOAIImVec4.new()
 yellow:set(0.6,0.6,0.2,1)
 
 -- take anything and make an ImGui widget for it
-function ImGuiExt.tablewidgets(lable, obj, hidetypes)
+function ImGuiExt.tablewidgets(lable, obj, hidetypes, editable, parenttable)
 	local ret
 
 	hidetypes = hidetypes or {}
@@ -55,7 +57,7 @@ function ImGuiExt.tablewidgets(lable, obj, hidetypes)
 			local count = 0
 			for k, v in pairs(obj) do
 				count = count + 1
-				ImGuiExt.tablewidgets(k, v, hidetypes)
+				ImGuiExt.tablewidgets(k, v, hidetypes, editable, obj)
 			end
 			if count == 0 then
 				MOAIImGui.TextColored(red, "{empty}")
@@ -154,7 +156,17 @@ function ImGuiExt.tablewidgets(lable, obj, hidetypes)
 	elseif not hidetypes[type(obj)] then
 		MOAIImGui.PushStyleColor(MOAIImGui.Col_Text, lightgrey);
 		if type(obj) == "string" and not hidetypes["string"] then
-			MOAIImGui.BulletText(tostring(lable)..' = "'..tostring(obj)..'"')
+			if editable then
+				_, parenttable[lable] = MOAIImGui.InputText(tostring(lable), parenttable[lable])
+			else
+				MOAIImGui.BulletText(tostring(lable)..' = "'..tostring(obj)..'"')
+			end
+		elseif type(obj) == "number" and not hidetypes["number"] then
+			if editable then
+				_, parenttable[lable] = MOAIImGui.InputFloat(tostring(lable), parenttable[lable])
+			else
+				MOAIImGui.BulletText(tostring(lable)..' = "'..tostring(obj)..'"')
+			end
 		else
 			MOAIImGui.BulletText(tostring(lable).." = "..tostring(obj))
 		end
@@ -180,6 +192,34 @@ function ImGuiExt.window(lable, obj, open, hidetypes)
 	end
 
 	return open
+end
+
+
+function ImGuiExt.tableeditor(lable, t, open, filename, hidetypes)
+	if type(open) == nil then
+		open = true
+	end
+
+	if open then
+		_, open = MOAIImGui.Begin(lable, open)
+		if open then
+			if filename then
+				_, filename = MOAIImGui.InputText("filename", filename)
+				-- MOAIImGui.SameLine()
+				if MOAIImGui.Button("Save") then
+					serializer:serializeToFile(filename, t)
+				end
+
+				ImGuiExt.tablewidgets(lable, t, hidetypes, true)
+			end
+		end
+		MOAIImGui.End()
+	end
+
+	for k, v in pairs(t) do
+	end
+
+	return open, filename
 end
 
 return ImGuiExt
