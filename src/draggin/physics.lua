@@ -183,6 +183,7 @@ function Physics.new(_gravity, _unitsToMeters)
 		local jsonStr = jsonFile:read()
 
 		local json = MOAIJsonParser.decode(jsonStr)
+		Phys.json = json
 		--TableExt.print(json)
 
 		-- World settings
@@ -674,8 +675,9 @@ function Physics.new(_gravity, _unitsToMeters)
 				spr:setLoc(centerX, centerY)
 				
 				-- "angle" : -0.6880475878715515,
+				local rot = 0
 				if type(img.angle) == "number" then
-					local rot = img.angle * RADIANS_TO_DEGREES
+					rot = img.angle * RADIANS_TO_DEGREES
 					spr:setRot(rot)
 				end
 
@@ -690,7 +692,11 @@ function Physics.new(_gravity, _unitsToMeters)
 				if type(img.flip) == "boolean" then
 					if img.flip then
 						local sx, sy = spr:getScl()
-						spr:setScl(sx, -sy)
+						if rot == 0 then
+							spr:setScl(-sx, sy)
+						else
+							spr:setScl(sx, -sy)
+						end
 					end
 				end
 
