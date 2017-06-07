@@ -309,9 +309,12 @@ end
 -- 14 dpad left
 -- 15 dpad right
 
---local buttonstates = {[0] = {}, [1] = {}, [2] = {}, [3] = {}}
+Draggin.buttonstates = {}
+
 for i = 1, #joysticks do
 	local buttonstate = {}
+	Draggin.buttonstates[i] = buttonstate
+
 	local function onJoystickButtonEvent(_key, _down)
 
 		--local buttonstate = buttonstates[i]
@@ -589,9 +592,10 @@ end
 
 --- Make a coroutine wait for any input from any source.
 -- Supports pointers, keyboards, and joysticks
-function Draggin:waitForAnyInput()
+-- optional: _maxsecs time to wait before done
+function Draggin:waitForAnyInput(_maxsecs)
 
-	local input
+	local input = false
 
 	local function pointerInputFunc(_index, _x, _y, _state, _tapCount)
 		--print("waitForAnyInput", _state)
@@ -628,7 +632,20 @@ function Draggin:waitForAnyInput()
 	Draggin:registerJoystickCallback(3, joystickInputFunc)
 	Draggin:registerJoystickCallback(4, joystickInputFunc)
 
-	while input == nil do
+
+	local prevElapsedTime = MOAISim.getElapsedTime()
+	local elapsedTime = 0
+	local timeover = false
+
+	while not input and not timeover do
+		if type(_maxsecs) == "number" then
+			elapsedTime = MOAISim.getElapsedTime() - prevElapsedTime
+
+			--print(elapsedTime)
+			if elapsedTime >= _maxsecs then
+				timeover = true
+			end
+		end
 		coroutine.yield()
 	end
 
@@ -639,6 +656,9 @@ function Draggin:waitForAnyInput()
 	Draggin:removeJoystickCallback(2, joystickInputFunc)
 	Draggin:removeJoystickCallback(3, joystickInputFunc)
 	Draggin:removeJoystickCallback(4, joystickInputFunc)
+
+	-- let the caller know if this wait is over due to input or time out
+	return input
 end
 
 --- Callback after any input buttons or touch events
