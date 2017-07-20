@@ -20,8 +20,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ]]
 
---local Draggin = require "draggin/draggin"
---local signal = require "draggin/signal"
+-- local Draggin = require "draggin/draggin"
+-- local signal = require "draggin/signal"
 
 local Display = {}
 
@@ -92,10 +92,10 @@ end
 --- Initialize the SDL host display.
 -- The SDL host has support for fullscreen modes, set that up here.
 local function initDisplaySDL()
-	print("initDisplaySDL")
+	print("initDisplaySDL", Display.windowWidth, Display.windowHeight)
 	-- we're on a PC
 	-- if you don't open a window you'll get garbage!
-	MOAISim.openWindow(Display.appTitle, Display.windowWidth, Display.windowHeight)
+	MOAISim.openWindow(Display.appTitle, Display.windowWidth/2, Display.windowHeight/2)
 
 	-- gather all the Display info
 	local cmode, dmode, allmodes = MOAIDisplaySDL.getCurrentMode()
@@ -169,16 +169,11 @@ local function initDisplaySDL()
 
 	Display.windowmodes = windowmodes
 
-
-	if not Display.fullscreen then
-		MOAIDisplaySDL.setMode(Display.windowWidth, Display.windowHeight, dmode.refresh, dmode.bpp, 0)
-		Display.screenWidth = Display.windowWidth
-		Display.screenHeight = Display.windowHeight
-	else
-		MOAIDisplaySDL.setMode(dmode.w, dmode.h, dmode.refresh, dmode.bpp, 1)
-		Display.screenWidth = dmode.w
-		Display.screenHeight = dmode.h
-	end
+	-- Forcing a windowed display mode first, otherwise switching to a windowed mode later is missing the window titlebar
+	MOAIDisplaySDL.setMode(Display.windowWidth/2, Display.windowHeight/2, dmode.refresh, dmode.bpp, 0)
+	-- MOAIDisplaySDL.setMode(modes[2].w, modes[2].h, modes[2].refresh, modes[2].bpp, 1)
+	Display.screenWidth = Display.windowWidth
+	Display.screenHeight = Display.windowHeight
 end
 
 --- Initialize the Display.
@@ -213,16 +208,15 @@ function Display:init(_appTitle, _virtualWidth, _virtualHeight, _screenWidth, _s
 	print("Virtual res", Display.virtualWidth, Display.virtualHeight)
 	print("Requested screen res", Display.screenWidth, Display.screenHeight, Display.fullscreen)
 	
-	MOAISim.openWindow(Display.appTitle, Display.windowWidth, Display.windowHeight)
-	
 	if MOAIDisplaySDL then
 		initDisplaySDL()
+		local dmode = Display:findDisplayMode(_screenWidth, _screenHeight, _bFullscreen)
+		Display:setDisplayMode(dmode, _bFullscreen)
 	end
 
 	MOAISim.setStep(1 / 60) -- run sim at 60hz
 	MOAISim.clearLoopFlags()
 	MOAISim.setLoopFlags(MOAISim.LOOP_FLAGS_FIXED) -- one update per timer event; no sim throttling
-
 
 	resetViewports()
 
@@ -232,6 +226,29 @@ function Display:init(_appTitle, _virtualWidth, _virtualHeight, _screenWidth, _s
 	end
 
 	print("Display initialized")
+end
+
+-- TODO: finish this, add fallbacks and support for closest match
+function Display:findDisplayMode(_width, _height, _fullscreen)
+	if _fullscreen then
+		for index, mode in ipairs(Display.modes) do
+			if _width == mode.w and _height == mode.h then
+				-- found
+				return mode
+			end
+		end
+		-- fallback to default display mode
+		return Display.dmode
+	else
+		for index, mode in ipairs(Display.windowmodes) do
+			if _width == mode.w and _height == mode.h then
+				-- found
+				return mode
+			end
+		end
+		-- fallback to the first window mode
+		return Display.windowmodes[1]
+	end
 end
 
 --- Toggle fullscreen mode.
@@ -262,7 +279,7 @@ function Display:toggleFullscreen()
 end
 
 --- Set the display mode.
--- Currently only does anything on a Sledge host
+-- Currently only does anything on an SDL host
 -- @param _dmode A reference to an entry in the Display.modes table or this whole function will blow up!
 -- @param _bFullscreen boolean true if the mode should be fullscreen
 function Display:setDisplayMode(_dmode, _bFullscreen)
