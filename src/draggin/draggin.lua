@@ -139,6 +139,8 @@ end
 function Draggin:wait(_secs)
 	-- assert(MOAIThread.currentThread() ~= nil, "Trying to wait without running in a coroutine!\n")
 
+	_secs = _secs or 0
+
 	local prevElapsedTime = MOAISim.getElapsedTime()
 	local elapsedTime = 0
 
